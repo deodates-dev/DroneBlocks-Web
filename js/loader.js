@@ -46,18 +46,22 @@ function loadScript(url, dataType) {
 
 function findLanguage() {
     let lang = 'en';
+
     const searchStr = location.search.substr(1);
-    const keyValues = searchStr.split('=');
-    if (keyValues.length && keyValues[0] === 'language') {
-        lang = keyValues[1];
-    }
+    searchStr.split("&").forEach(keyValue => {
+        const keyValues = keyValue.split('=');
+        if (keyValues.length && keyValues[0] === 'language') {
+            lang = keyValues[1];
+        }        
+    });
+
     return lang;
 }
 
 function findAircraftType() {
     let aircraftType = "dji";
     
-    if (document.location.href.toLowerCase().includes("tello")) {
+    if (location.pathname.includes("tello") || location.pathname.includes("chrome_app")) {
         return "tello";
     }
 

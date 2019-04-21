@@ -392,6 +392,7 @@ Blockly.Msg.CATEGORY_VARIABLES = "Variables";
 Blockly.Msg.CATEGORY_LAND = "Tierra";
 
 // block labels
+Blockly.Msg.TAKEOFF = "quitarse";
 Blockly.Msg.TAKEOFF_TO = "quitarse a";
 Blockly.Msg.TAKEOFF_FT = "pies";
 
@@ -406,6 +407,7 @@ Blockly.Msg.NAVIGATION_DEG = "°";
 Blockly.Msg.NAVIGATION_AT = "en";
 Blockly.Msg.NAVIGATION_DEG_PER_SEC = "°/segundo";
 Blockly.Msg.NAVIGATION_YAW_LEFT = "yaw izquierda";
+Blockly.Msg.NAVIGATION_DEGREES = "grados";
 
 Blockly.Msg.CAMERA_PITCH_GIMBAL = "cardán de tono a";
 Blockly.Msg.CAMERA_DEGREES = "grados";

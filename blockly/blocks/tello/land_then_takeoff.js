@@ -6,7 +6,7 @@ Blockly.Blocks['land_then_takeoff'] = {
     init: function() {
       this.jsonInit(
         {
-          "message0": "land for %1 seconds then takeoff",
+          "message0": Blockly.Msg.LAND_LAND_THEN_TAKEOFF,
           "args0": [
             {
                 "type": "input_value",

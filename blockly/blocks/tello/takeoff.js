@@ -6,7 +6,7 @@ Blockly.Blocks['takeoff'] = {
   init: function() {
     this.jsonInit(
       {
-        "message0": Blockly.Msg.TAKEOFF_TO,
+        "message0": Blockly.Msg.TAKEOFF,
         "nextStatement": true,
         "colour": "#264653"
       });

@@ -384,7 +384,7 @@ Blockly.Msg.LISTS_SET_INDEX_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 Blockly.Msg.CATEGORY_TAKEOFF = "離陸";
 Blockly.Msg.CATEGORY_NAVIGATION = "ナビゲーション";
 Blockly.Msg.CATEGORY_CAMERA = "Camera";
-Blockly.Msg.CATEGORY_FLIP = "フリップ";
+Blockly.Msg.CATEGORY_FLIP = "宙返り";
 Blockly.Msg.CATEGORY_LOOPS = "繰り返し";
 Blockly.Msg.CATEGORY_LOGIC = "論理式";
 Blockly.Msg.CATEGORY_MATH = "数式";
@@ -392,28 +392,30 @@ Blockly.Msg.CATEGORY_VARIABLES = "変数";
 Blockly.Msg.CATEGORY_LAND = "着陸";
 
 // block labels
+Blockly.Msg.TAKEOFF = "離陸";
 Blockly.Msg.TAKEOFF_TO = "離陸";
 Blockly.Msg.TAKEOFF_FT = "ft";
 
 Blockly.Msg.NAVIGATION_SET_SPEED = "スピード設定";
-Blockly.Msg.NAVIGATION_FLY_FORWARD = "前進";
-Blockly.Msg.NAVIGATION_FLY_BACKWARD = "後退";
-Blockly.Msg.NAVIGATION_FLY_LEFT = "左へ";
-Blockly.Msg.NAVIGATION_FLY_RIGHT = "右へ";
-Blockly.Msg.NAVIGATION_FLY_UP = "上昇";
-Blockly.Msg.NAVIGATION_FLY_DOWN = "下降";
-Blockly.Msg.NAVIGATION_FLY_TO_XYZ = "方向へ";
-Blockly.Msg.NAVIGATION_FLY_CURVE = "カーブ";
+Blockly.Msg.NAVIGATION_FLY_FORWARD = "前へ進む";
+Blockly.Msg.NAVIGATION_FLY_BACKWARD = "後ろへ下がる";
+Blockly.Msg.NAVIGATION_FLY_LEFT = "左へ進む";
+Blockly.Msg.NAVIGATION_FLY_RIGHT = "右へ進む";
+Blockly.Msg.NAVIGATION_FLY_UP = "上昇する";
+Blockly.Msg.NAVIGATION_FLY_DOWN = "下降する";
+Blockly.Msg.NAVIGATION_FLY_TO_XYZ = "指定した座標へ進む";
+Blockly.Msg.NAVIGATION_FLY_CURVE = "カーブする";
 Blockly.Msg.NAVIGATION_FT_AT = "ft at";
 Blockly.Msg.NAVIGATION_MPH = "mph";
 Blockly.Msg.NAVIGATION_CHANGE_ALTITUDE = "change altitude to";
-Blockly.Msg.NAVIGATION_HOVER = "ホバリング";
-Blockly.Msg.NAVIGATION_SECONDS = "seconds";
-Blockly.Msg.NAVIGATION_YAW_RIGHT = "右回転";
+Blockly.Msg.NAVIGATION_HOVER = "空中でとどまる";
+Blockly.Msg.NAVIGATION_SECONDS = "秒";
+Blockly.Msg.NAVIGATION_YAW_RIGHT = "右に向きを変える";
 Blockly.Msg.NAVIGATION_DEG = "°";
 Blockly.Msg.NAVIGATION_AT = "at";
 Blockly.Msg.NAVIGATION_DEG_PER_SEC = "°/sec";
-Blockly.Msg.NAVIGATION_YAW_LEFT = "左回転";
+Blockly.Msg.NAVIGATION_YAW_LEFT = "左に向きを変える";
+Blockly.Msg.NAVIGATION_DEGREES = "度";
 
 Blockly.Msg.CAMERA_PITCH_GIMBAL = "pitch gimbal to";
 Blockly.Msg.CAMERA_DEGREES = "degrees";
@@ -427,10 +429,11 @@ Blockly.Msg.CAMERA_LIST_STOP = "stop";
 Blockly.Msg.CAMERA_RECORD_VIDEO_FOR = "record video for";
 Blockly.Msg.CAMERA_RECORD_SECONDS = "seconds";
 
-Blockly.Msg.FLIP_FORWARD = "前方フリップ";
-Blockly.Msg.FLIP_BACKWARD = "後方フリップ";
-Blockly.Msg.FLIP_LEFT = "左フリップ";
-Blockly.Msg.FLIP_RIGHT = "右フリップ";
+Blockly.Msg.FLIP_FORWARD = "前に宙返り";
+Blockly.Msg.FLIP_BACKWARD = "後ろに宙返り";
+Blockly.Msg.FLIP_LEFT = "左に宙返り";
+Blockly.Msg.FLIP_RIGHT = "右に宙返り";
 
 Blockly.Msg.LAND_LAND = "着陸";
+Blockly.Msg.LAND_LAND_THEN_TAKEOFF = "%1 秒間着陸してからもう一度離陸";
 Blockly.Msg.LAND_RETURN_HOME = "return home and land";

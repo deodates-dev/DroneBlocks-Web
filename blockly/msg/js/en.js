@@ -403,11 +403,19 @@ Blockly.Msg.CATEGORY_VARIABLES = "Variables";
 Blockly.Msg.CATEGORY_LAND = "Land";
 
 // block labels
+Blockly.Msg.TAKEOFF = "takeoff";
 Blockly.Msg.TAKEOFF_TO = "takeoff to";
 Blockly.Msg.TAKEOFF_FT = "ft";
 
 Blockly.Msg.NAVIGATION_SET_SPEED = "set speed to";
 Blockly.Msg.NAVIGATION_FLY_FORWARD = "fly forward";
+Blockly.Msg.NAVIGATION_FLY_BACKWARD = "fly backward";
+Blockly.Msg.NAVIGATION_FLY_LEFT = "fly left";
+Blockly.Msg.NAVIGATION_FLY_RIGHT = "fly right";
+Blockly.Msg.NAVIGATION_FLY_UP = "fly up";
+Blockly.Msg.NAVIGATION_FLY_DOWN = "fly down";
+Blockly.Msg.NAVIGATION_FLY_TO_XYZ = "fly to";
+Blockly.Msg.NAVIGATION_FLY_CURVE = "curve";
 Blockly.Msg.NAVIGATION_FT_AT = "ft at";
 Blockly.Msg.NAVIGATION_MPH = "mph";
 Blockly.Msg.NAVIGATION_CHANGE_ALTITUDE = "change altitude to";
@@ -418,6 +426,7 @@ Blockly.Msg.NAVIGATION_DEG = "°";
 Blockly.Msg.NAVIGATION_AT = "at";
 Blockly.Msg.NAVIGATION_DEG_PER_SEC = "°/sec";
 Blockly.Msg.NAVIGATION_YAW_LEFT = "yaw left";
+Blockly.Msg.NAVIGATION_DEGREES = "degrees";
 
 Blockly.Msg.CAMERA_PITCH_GIMBAL = "pitch gimbal to";
 Blockly.Msg.CAMERA_DEGREES = "degrees";
@@ -437,6 +446,7 @@ Blockly.Msg.FLIP_LEFT = "flip left";
 Blockly.Msg.FLIP_RIGHT = "flip right";
 
 Blockly.Msg.LAND_LAND = "land";
+Blockly.Msg.LAND_LAND_THEN_TAKEOFF = "land for %1 seconds then takeoff";
 Blockly.Msg.LAND_RETURN_HOME = "return home and land";
 
 

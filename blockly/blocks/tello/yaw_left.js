@@ -2,7 +2,7 @@ Blockly.Blocks['yaw_left'] = {
   init: function() {
     this.jsonInit(
       {
-        "message0": Blockly.Msg.NAVIGATION_YAW_LEFT + " %1 degrees",
+        "message0": Blockly.Msg.NAVIGATION_YAW_LEFT + " %1 " + Blockly.Msg.NAVIGATION_DEGREES,
         "args0": [
           {
             "type": "input_value",
