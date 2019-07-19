@@ -71,8 +71,8 @@
     };*/
     firebase.initializeApp(config);
 
-    function setImperialUnits() {
-      localStorage.setItem('units', 'imperial');
+    function setStandardUnits() {
+      localStorage.setItem('units', 'standard');
       document.location.href = "tello.html";
     }
   </script>
@@ -95,7 +95,7 @@
     <li class="divider" id="d2"></li>
     <li><a href="tello_missions.html" id="myMissions">My Missions</a></li>
     <li class="divider" id="d3"></li>
-    <li><a onclick="setImperialUnits();">Switch to Imperial Units</a></li>
+    <li><a onclick="setStandardUnits();">Switch to Standard Units</a></li>
     <li class="divider" id="d3"></li>
     <li><a href="#" id="connectTo">DJI Blocks</a></li>
     <li class="divider" id="d4"></li>

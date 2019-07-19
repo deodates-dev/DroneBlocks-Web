@@ -66,6 +66,14 @@
       localStorage.setItem('units', 'metric');
       document.location.href = "tello_metric.html";
     }
+
+    // For Tello metric/standard units
+    if(localStorage.getItem('units') != null) {
+      var units = localStorage.getItem('units');
+      if (units == "metric") {
+        document.location.href = "tello_metric.html";
+      }
+    }
   </script>
 </head>
 <body>
