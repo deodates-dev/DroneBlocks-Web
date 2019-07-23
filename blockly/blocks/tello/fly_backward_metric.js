@@ -2,7 +2,7 @@ Blockly.Blocks['fly_backward'] = {
   init: function() {
     this.jsonInit(
       {
-        "message0": Blockly.Msg.NAVIGATION_FLY_BACKWARD + " %1 %2",
+        "message0": "fly backward %1 %2",
         "args0": [
           {
             "type": "input_value",
@@ -12,8 +12,8 @@ Blockly.Blocks['fly_backward'] = {
             "type": "field_dropdown",
             "name": "units",
             "options":
-                [["cm", "cm"],
-                ["in", "in"]]
+              [["cm", "cm"],
+              ["in", "in"]]
           }
         ],
         "previousStatement": true,

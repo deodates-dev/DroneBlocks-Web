@@ -337,3 +337,27 @@ function getUrlParam(param) {
     }
   }
 }
+
+//
+
+function setUnits(units) {
+  if (units == 'metric') {
+    localStorage.setItem('units', 'metric');
+
+    if (document.location.href.match(/chrome_app/i)) {
+      document.location.href = "chrome_app_metric.html";
+    } else {
+      document.location.href = "tello_metric.html";
+    }
+  } else if (units == 'standard') {
+    localStorage.setItem('units', 'standard');
+
+    if (document.location.href.match(/chrome_app/i)) {
+      document.location.href = "chrome_app.html";
+    } else {
+      document.location.href = "tello.html";
+    }
+    
+  }
+
+}

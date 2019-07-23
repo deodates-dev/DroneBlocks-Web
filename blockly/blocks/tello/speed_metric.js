@@ -2,7 +2,7 @@ Blockly.Blocks['set_speed'] = {
   init: function() {
     this.jsonInit(
       {
-        "message0": Blockly.Msg.NAVIGATION_SET_SPEED + " %1 %2",
+        "message0": "set speed to %1 %2",
         "args0": [
           {
             "type": "input_value",
@@ -12,8 +12,8 @@ Blockly.Blocks['set_speed'] = {
             "type": "field_dropdown",
             "name": "units",
             "options":
-               [["cm/s", "cm/s"],
-               ["in/s", "in/s"]]
+              [["cm/s", "cm/s"],
+              ["in/s", "in/s"]]
           }
         ],
         "previousStatement": true,
