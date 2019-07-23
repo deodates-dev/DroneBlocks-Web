@@ -2,7 +2,7 @@ Blockly.Blocks['curve'] = {
   init: function() {
     this.jsonInit(
       {
-        "message0": Blockly.Msg.NAVIGATION_FLY_CURVE + " x1 %1 y1 %2 z1 %3 x2 %4 y2 %5 z2 %6 %7",
+        "message0": "curve x1 %1 y1 %2 z1 %3 x2 %4 y2 %5 z2 %6 %7",
         "args0": [
           {
             "type": "input_value",
@@ -32,8 +32,8 @@ Blockly.Blocks['curve'] = {
             "type": "field_dropdown",
             "name": "units",
             "options":
-                [["cm", "cm"],
-                ["in", "in"]]
+              [["cm", "cm"],
+              ["in", "in"]]
           },
         ],
         "previousStatement": true,
