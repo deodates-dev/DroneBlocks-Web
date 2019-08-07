@@ -66,7 +66,7 @@
     if(localStorage.getItem('units') != null) {
       var units = localStorage.getItem('units');
       if (units == "metric") {
-        document.location.href = "tello_metric.html";
+        document.location.href = "tello_metric.html" + document.location.search;
       }
     }
   </script>

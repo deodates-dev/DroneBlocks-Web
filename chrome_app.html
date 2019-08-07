@@ -65,7 +65,7 @@
     if(localStorage.getItem('units') != null) {
       var units = localStorage.getItem('units');
       if (units == "metric") {
-        document.location.href = "chrome_app_metric.html";
+        document.location.href = "chrome_app_metric.html" + document.location.search;
       }
     }
   </script>
