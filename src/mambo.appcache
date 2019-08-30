@@ -1,0 +1,49 @@
+CACHE MANIFEST
+mambo.html
+mambo_missions.html
+blockly/blockly_compressed.js
+blockly/blocks_compressed.js
+blockly/javascript_compressed.js
+blockly/python_compressed.js
+blockly/storage.js
+blockly/prettify.css
+blockly/run_prettify.js
+blockly/generators/javascript/mambo.js
+blockly/generators/python/mambo.js
+blockly/msg/js/en.js
+blockly/blocks/mambo/takeoff.js
+blockly/blocks/tello/speed.js
+blockly/blocks/mambo/land.js
+blockly/blocks/mambo/fly_forward.js
+blockly/blocks/mambo/fly_backward.js
+blockly/blocks/mambo/fly_left.js
+blockly/blocks/mambo/fly_right.js
+blockly/blocks/mambo/fly_up.js
+blockly/blocks/mambo/fly_down.js
+blockly/blocks/mambo/hover.js
+blockly/blocks/mambo/yaw_right.js
+blockly/blocks/mambo/yaw_left.js
+blockly/blocks/mambo/flip_forward.js
+blockly/blocks/mambo/flip_backward.js
+blockly/blocks/mambo/flip_right.js
+blockly/blocks/mambo/flip_left.js
+blockly/blocks/mambo/loop_with_variable.js
+css/mambo.css
+blockly/prettify.css
+materialize/css/materialize.min.css
+materialize/js/materialize.min.js
+js/droneblocks.js
+js/missions.js
+js/jquery-2.2.3.min.js
+js/firebase.js
+blockly/media/sprites.png
+blockly/media/click.mp3
+blockly/media/disconnect.wav
+blockly/media/delete.mp3
+
+# Use from network if available
+NETWORK:
+*
+
+# Auto expire app cache when deploying
+# 08-06-2018

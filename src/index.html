@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<!-- <html manifest="tello.appcache"> --><html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <title>DroneBlocks</title>
+  <script src="./js/jquery-2.2.3.min.js"></script>
+  <script src="./blockly/blockly_compressed.js"></script>
+  <script src="./blockly/blocks_compressed.js"></script>
+  <script src="./blockly/javascript_compressed.js"></script>
+  <script src="./blockly/python_compressed.js"></script>
+  <script src="./blockly/storage.js"></script>
+  <script src="./blockly/run_prettify.js"></script>
+  <script src="./blockly/generators/javascript/droneblocks.js"></script>
+  <script src="./blockly/generators/python/droneblocks.js"></script>
+  <script src="./blockly/msg/js/en.js"></script>
+  <script src="./blockly/blocks/droneblocks/takeoff.js"></script>
+  <script src="./blockly/blocks/droneblocks/land.js"></script>
+  <script src="./blockly/blocks/droneblocks/land_home.js"></script>
+  <script src="./blockly/blocks/droneblocks/hover.js"></script>
+  <script src="./blockly/blocks/droneblocks/yaw_right.js"></script>
+  <script src="./blockly/blocks/droneblocks/yaw_left.js"></script>
+  <script src="./blockly/blocks/droneblocks/photo.js"></script>
+  <script src="./blockly/blocks/droneblocks/photo_interval.js"></script>
+  <script src="./blockly/blocks/droneblocks/pitch_gimbal.js"></script>
+  <script src="./blockly/blocks/droneblocks/fly_forward.js"></script>
+  <script src="./blockly/blocks/droneblocks/change_altitude.js"></script>
+  <script src="./blockly/blocks/droneblocks/video.js"></script>
+  <script src="./blockly/blocks/droneblocks/video_duration.js"></script>
+  <script src="./blockly/blocks/droneblocks/orbit.js"></script>
+  <script src="./blockly/blocks/droneblocks/loop_with_variable.js"></script>
+  <script src="./blockly/blocks/droneblocks/follow.js"></script>
+  <link rel="stylesheet" type="text/css" href="./css/droneblocks.css">
+  <link rel="stylesheet" type="text/css" href="./blockly/prettify.css">
+  
+  <!-- Material -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="./lib/materialize/css/materialize.min.css"  media="screen,projection"/>
+  
+  <!-- Firebase -->
+  <!-- <script src="https://www.gstatic.com/firebasejs/3.7.2/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.4.2/firebase-firestore.js"></script> -->
+  <script src="./lib/firebase/firebase.js"></script>
+  <script src="./lib/firebase/firebase-firestore.js"></script>
+  <script> 
+    var aircraft = "DJI";
+    // Initialize Firebase
+    // var config = {
+    //   apiKey: "AIzaSyBcbAt69BGUjPiOucQbkcNNbcdaSmE-G0o",
+    //   authDomain: "fiery-inferno-4972.firebaseapp.com",
+    //   databaseURL: "https://fiery-inferno-4972.firebaseio.com",
+    //   storageBucket: "",
+    // };
+    var config = {
+      apiKey: "AIzaSyAGgqla_TWV4wVgaQ87HG3VDT0igLA8KhU",
+      authDomain: "droneblocks-staging.firebaseapp.com",
+      databaseURL: "https://droneblocks-staging.firebaseio.com",
+      projectId: "droneblocks-staging",
+      storageBucket: "droneblocks-staging.appspot.com",
+    };
+    firebase.initializeApp(config);
+  </script>
+</head>
+<body>
+  
+  <!-- Side nav -->
+  <ul id="nav-mobile" class="side-nav">
+    <li class="center-align" id="login"><span class="waves-effect waves-light btn z-depth-0 light-blue">Login</span></li>
+    <li class="divider"></li>
+    <li><a href="#" id="newMission">New Mission</a></li>
+    <li class="divider"></li>
+    <li><a href="#" id="previewMission">Preview Mission</a></li>
+    <li class="divider"></li>
+    <li><a href="#" id="showCode">Show Mission Code</a></li>
+    <li class="divider"></li>
+    <li><a href="#" id="saveMission">Save Mission</a></li>
+    <li class="divider" id="d1"></li>
+    <li><a href="#" id="saveMissionAs">Save Mission As...</a></li>
+    <li class="divider" id="d2"></li>
+    <li><a href="missions.html" id="myMissions">My Missions</a></li>
+    <li class="divider" id="d3"></li>
+    <li><a href="#" id="connectTo">Tello Blocks</a></li>
+    <li class="divider" id="d4"></li>
+    <li class="center-align" id="logout"><span class="waves-effect waves-light btn z-depth-0 light-blue">Logout</span></li>
+    
+  </ul>
+  
+  <!-- Hamburger icon -->
+  <a href="#" data-activates="nav-mobile" class="right button-collapse show-on-large" id="hamburger"><i class="medium material-icons">menu</i></a>
+  
+  <div id="missionTitle">Untitled Mission</div>
+  
+  <!-- Save modal -->
+  <div id="saveMissionModal" class="modal">
+    
+    <div class="modal-content">
+      <h6>Please enter a mission title below and click SAVE</h6>
+      <div class="input-field">
+        <input placeholder="Mission Title" id="title" type="text" />
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <a href="#!" class=" modal-action waves-effect waves-light btn z-depth-0" id="saveModal">Save</a>
+      <a href="#!" class=" modal-action modal-close waves-effect waves-light btn-flat">Cancel</a>
+    </div>
+    
+  </div>
+  
+  <!-- Map preview modal -->
+  <div id="mapPreviewModal" class="modal" style="width: 95% !important; height: 100% !important">
+    
+  </div>
+  
+  <div id="blocklyArea"></div>
+  
+  <!-- Code preview -->
+  <div id="codeView">
+    <pre id="code" class="prettyprint linenums"></pre>
+  </div>
+
+  <div id="blocklyDiv" style="position: absolute"></div>
+
+  <xml id="toolbox" style="display: none">
+    <category name="Takeoff">
+      <block type="takeoff">
+        <value name="altitude">
+          <block type="math_number">
+            <field name="NUM">25</field>
+          </block>
+        </value>
+      </block>
+      <!--<block type="flight_path"></block>-->
+      <!--<block type="heading_mode"></block>-->
+    </category>
+    <category name="Navigation">
+      <block type="fly_forward">
+        <value name="distance">
+          <block type="math_number">
+            <field name="NUM">25</field>
+          </block>
+        </value>
+      </block>
+      <block type="change_altitude">
+        <value name="altitude">
+          <block type="math_number">
+            <field name="NUM">25</field>
+          </block>
+        </value>
+      </block>
+      <block type="hover">
+        <value name="duration">
+          <block type="math_number">
+            <field name="NUM">5</field>
+          </block>
+        </value>
+      </block>
+      <block type="yaw_right">
+        <value name="angle">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+      </block>
+      <block type="yaw_left">
+        <value name="angle">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+      </block>
+    </category>
+    <category name="Camera">
+      <block type="pitch_gimbal_to">
+        <value name="angle">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+      <block type="photo"></block>
+      <block type="photo_interval"></block>
+      <block type="video"></block>
+      <block type="video_duration"></block>
+    </category>
+    <category name="Loops">
+      <block type="loop">
+        <value name="TIMES">
+          <block type="math_number">
+            <field name="NUM">3</field>
+          </block>
+        </value>
+      </block>
+    </category>
+    <!--<category name="Flight Modes">
+      <block type="orbit"></block>
+      <block type="follow"></block>
+    </category>-->
+    <category name="Logic">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+    </category>
+    <category name="Math">
+      <block type="math_number">
+        <field name="NUM">10</field>
+      </block>
+      <block type="math_arithmetic"></block>
+      <block type="math_number_property"></block>
+      <block type="math_single"></block>
+      <block type="math_trig"></block>
+      <block type="math_constant"></block>
+    </category>
+    <category name="Variables" custom="VARIABLE">
+    </category>
+    
+    <category name="Land">
+      <block type="land"></block>
+      <block type="land_home"></block>
+    </category>
+  </xml>
+  
+  <script type="text/javascript" src="./lib/materialize/js/materialize.min.js"></script>
+  <script type="text/javascript" src="./js/droneblocks.js"></script>
+  <script type="text/javascript" src="./js/firebase.js"></script>
+</body>
+</html>
