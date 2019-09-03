@@ -1,10 +1,25 @@
-// var isUserLoggedIn = false;
-var missionId;
-// var userId;
+// // var isUserLoggedIn = false;
+// var missionId;
+// // var userId;
 
-var ref = firebase.database().ref();
-var db = firebase.firestore();
-firebase.firestore().enablePersistence();
+// var ref = firebase.database().ref();
+// var db = firebase.firestore();
+// firebase.firestore().enablePersistence();
+
+// This gets called from iOS after token is received
+function loginFromiOS(idToken) {
+  var credential = firebase.auth.GoogleAuthProvider.credential(idToken);
+  firebase.auth().signInWithCredential(credential).catch(function(error) {
+    //Materialize.toast("Error with signinWithCredential", 3000);
+  });
+}
+
+// Called from Android onActivityResult
+function loginFromAndroid(idToken) {
+  var credential = firebase.auth.GoogleAuthProvider.credential(idToken);
+  firebase.auth().signInWithCredential(credential).catch(function(error) {
+  });
+}
 
 // function login() {
   
@@ -34,20 +49,20 @@ firebase.firestore().enablePersistence();
 //   }
 // }
 
-// This gets called from iOS after token is received
-function loginFromiOS(idToken) {
-  var credential = firebase.auth.GoogleAuthProvider.credential(idToken);
-  firebase.auth().signInWithCredential(credential).catch(function(error) {
-    //Materialize.toast("Error with signinWithCredential", 3000);
-  });
-}
+// // This gets called from iOS after token is received
+// function loginFromiOS(idToken) {
+//   var credential = firebase.auth.GoogleAuthProvider.credential(idToken);
+//   firebase.auth().signInWithCredential(credential).catch(function(error) {
+//     //Materialize.toast("Error with signinWithCredential", 3000);
+//   });
+// }
 
-// Called from Android onActivityResult
-function loginFromAndroid(idToken) {
-  var credential = firebase.auth.GoogleAuthProvider.credential(idToken);
-  firebase.auth().signInWithCredential(credential).catch(function(error) {
-  });
-}
+// // Called from Android onActivityResult
+// function loginFromAndroid(idToken) {
+//   var credential = firebase.auth.GoogleAuthProvider.credential(idToken);
+//   firebase.auth().signInWithCredential(credential).catch(function(error) {
+//   });
+// }
 
 // function initAuth(name) {
 
