@@ -53,14 +53,14 @@ gulp.task('views', () => {
 });
 
 gulp.task('js', () => {
-    gulp.src(['src/js/missions.js'])
+    gulp.src(['src/js/main.js', 'src/js/missions.js'])
         .pipe(webpackStream(webpackConfig))
         .pipe(gulp.dest('dist/js/lib/'));
 })
 
 gulp.task('watch', () => {
     gulp.watch('src/js/**/*.js', ['js']);
-    gulp.watch('src/**/*.html', ['views']);
+    gulp.watch('src/**/*.*', ['views']);
 })
 
 gulp.task('default', ['serve', 'watch', 'views', 'js'])

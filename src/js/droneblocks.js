@@ -1,106 +1,106 @@
 var isCodeViewOpen = false;
 
-var blocklyArea = document.getElementById('blocklyArea');
-var blocklyDiv = document.getElementById('blocklyDiv');
-var workspace = Blockly.inject(blocklyDiv,
-    {media: 'blockly/media/',
-     toolbox: document.getElementById('toolbox'),
-      zoom:{controls: true,
-          startScale: 1.0,
-          maxScale: 3,
-          minScale: 0.3,
-        scaleSpeed: 1.2}});
+// var blocklyArea = document.getElementById('blocklyArea');
+// var blocklyDiv = document.getElementById('blocklyDiv');
+// var workspace = Blockly.inject(blocklyDiv,
+//     {media: 'blockly/media/',
+//      toolbox: document.getElementById('toolbox'),
+//       zoom:{controls: true,
+//           startScale: 1.0,
+//           maxScale: 3,
+//           minScale: 0.3,
+//         scaleSpeed: 1.2}});
 
-var onresize = function(e) {
-  // Compute the absolute coordinates and dimensions of blocklyArea.
-  var element = blocklyArea;
-  var x = 0;
-  var y = 0;
-  do {
-    x += element.offsetLeft;
-    y += element.offsetTop;
-    element = element.offsetParent;
-  } while (element);
-  // Position blocklyDiv over blocklyArea.
-  blocklyDiv.style.left = x + 'px';
-  blocklyDiv.style.top = y + 'px';
-  blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
-  blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
-  Blockly.svgResize(workspace); // Added to resize when code view is clicked
-};
-window.addEventListener('resize', onresize, false);
-onresize();
+// var onresize = function(e) {
+//   // Compute the absolute coordinates and dimensions of blocklyArea.
+//   var element = blocklyArea;
+//   var x = 0;
+//   var y = 0;
+//   do {
+//     x += element.offsetLeft;
+//     y += element.offsetTop;
+//     element = element.offsetParent;
+//   } while (element);
+//   // Position blocklyDiv over blocklyArea.
+//   blocklyDiv.style.left = x + 'px';
+//   blocklyDiv.style.top = y + 'px';
+//   blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+//   blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+//   Blockly.svgResize(workspace); // Added to resize when code view is clicked
+// };
+// window.addEventListener('resize', onresize, false);
+// onresize();
 
-function getMobileOS() {
-  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-  if( userAgent.match( /iPad/i ) || userAgent.match( /iPhone/i ) || userAgent.match( /iPod/i ) ) {
-    return 'iOS';
-  }
-  else if( userAgent.match( /Android/i ) ) {
-    return 'Android';
-  }
-  else {
-    return 'unknown';
-  }
-}
+// function getMobileOS() {
+//   var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+//   if( userAgent.match( /iPad/i ) || userAgent.match( /iPhone/i ) || userAgent.match( /iPod/i ) ) {
+//     return 'iOS';
+//   }
+//   else if( userAgent.match( /Android/i ) ) {
+//     return 'Android';
+//   }
+//   else {
+//     return 'unknown';
+//   }
+// }
 
-function previewMission() {
+// function previewMission() {
   
-  var code = 'var mission="";'
-  code += Blockly.JavaScript.workspaceToCode(workspace);
-  code = eval(code);
-  console.log(code);
+//   var code = 'var mission="";'
+//   code += Blockly.JavaScript.workspaceToCode(workspace);
+//   code = eval(code);
+//   console.log(code);
   
-  var os = getMobileOS();
+//   var os = getMobileOS();
   
-  if(os == 'iOS') {
+//   if(os == 'iOS') {
     
-    window.webkit.messageHandlers.observe.postMessage(code);
+//     window.webkit.messageHandlers.observe.postMessage(code);
     
-  } else if (os == 'Android') {
+//   } else if (os == 'Android') {
 
-  	Android.confirmMission(code);
+//   	Android.confirmMission(code);
     
-  } else if (aircraft == "DJI") {
+//   } else if (aircraft == "DJI") {
     
-    $("#mapPreviewModal").html("<iframe src='map_preview.html?code=" + escape(code) + "' width='100%' height='100%'></iframe>");
-    $("#mapPreviewModal").openModal();
+//     $("#mapPreviewModal").html("<iframe src='map_preview.html?code=" + escape(code) + "' width='100%' height='100%'></iframe>");
+//     $("#mapPreviewModal").openModal();
   
-  // Chrome App case
-  }  else {
+//   // Chrome App case
+//   }  else {
 
-    // Appwindow is so we can post to the chrome app
-    appWindow.postMessage(code, appOrigin);
+//     // Appwindow is so we can post to the chrome app
+//     appWindow.postMessage(code, appOrigin);
 
-  }
-}
+//   }
+// }
 
 // This will toggle new view in iOS to allow the user to connect to Tello
-function connectTo(drone) {
+// function connectTo(drone) {
   
-  var os = getMobileOS();
+//   var os = getMobileOS();
   
-  if(os == 'iOS') {
+//   if(os == 'iOS') {
     
-    window.webkit.messageHandlers.observe.postMessage("connectTo" + drone);
+//     window.webkit.messageHandlers.observe.postMessage("connectTo" + drone);
     
-  } else if (os == 'Android') {
+//   } else if (os == 'Android') {
 
-  // Chrome App
-  } else if (os == 'unknown') {
+//   // Chrome App
+//   } else if (os == 'unknown') {
 
-    if (document.location.href.match(/chrome_app/i)) {
-      appWindow.postMessage("hideTelemetryBar", appOrigin);
-      setTimeout(function() {
-        document.location.href = "index.html";
-      }, 1000);
-    } else {
-      document.location.href = "chrome_app.html";
-    }
+//     if (document.location.href.match(/chrome_app/i)) {
+//       appWindow.postMessage("hideTelemetryBar", appOrigin);
+//       setTimeout(function() {
+//         document.location.href = "index.html";
+//       }, 1000);
+//     } else {
+//       document.location.href = "chrome_app.html";
+//     }
 
-  }
+//   }
   
-}
+// }
 
 // Called from the map preview iframe
 function getMapPreviewCode() {
@@ -110,33 +110,32 @@ function getMapPreviewCode() {
   return code;
 }
 
-function toggleCodeView() {
-  if(!isCodeViewOpen) {
-    isCodeViewOpen = true;
-    $("#blocklyArea").removeClass("full");
-    $("#blocklyArea").addClass("half");
-    $("#codeView").removeClass("hidden");
-    $("#codeView").addClass("block");
-    $("#codeViewButton a").html("X");
-    $("#code").html(PR.prettyPrintOne(Blockly.Python.workspaceToCode(workspace)));
-    $("#showCode").text("Hide Mission Code");
-  } else {
-    $("#showCode").text("Show Mission Code");
-    closeCodeView();
-  }
+// function toggleCodeView() {
+//   if(!isCodeViewOpen) {
+//     isCodeViewOpen = true;
+//     $("#blocklyArea").removeClass("full");
+//     $("#blocklyArea").addClass("half");
+//     $("#codeView").removeClass("hidden");
+//     $("#codeView").addClass("block");
+//     $("#codeViewButton a").html("X");
+//     $("#code").html(PR.prettyPrintOne(Blockly.Python.workspaceToCode(workspace)));
+//     $("#showCode").text("Hide Mission Code");
+//   } else {
+//     $("#showCode").text("Show Mission Code");
+//     closeCodeView();
+//   }
   
-  // Call to redraw the view
-  onresize();
-  
-}
+//   // Call to redraw the view
+//   onresize();
+// }
 
-function closeCodeView() {
-  isCodeViewOpen = false;
-  $("#blocklyArea").removeClass("half");
-  $("#blocklyArea").addClass("full");
-  $("#codeView").addClass("hidden");
-  $("#codeViewButton a").html("{ Code }");
-}
+// function closeCodeView() {
+//   isCodeViewOpen = false;
+//   $("#blocklyArea").removeClass("half");
+//   $("#blocklyArea").addClass("full");
+//   $("#codeView").addClass("hidden");
+//   $("#codeViewButton a").html("{ Code }");
+// }
 
 var blockIndex = 0;
 
@@ -168,216 +167,214 @@ function highlightBlockFromAndroid(id) {
   blocks[id].select();
 }
 
-// Listen for workspace changes and save blocks
-function saveBlocks() {
-  BlocklyStorage.backupBlocks_(Blockly.getMainWorkspace());
+// // Listen for workspace changes and save blocks
+// function saveBlocks() {
+//   BlocklyStorage.backupBlocks_(Blockly.getMainWorkspace());
   
-  if(isCodeViewOpen) {
-    document.getElementById("code").innerHTML = PR.prettyPrintOne(Blockly.Python.workspaceToCode(workspace));
-  }
+//   if(isCodeViewOpen) {
+//     document.getElementById("code").innerHTML = PR.prettyPrintOne(Blockly.Python.workspaceToCode(workspace));
+//   }
   
-  // Update text field for debugging
-  //document.getElementById("textarea").value = Blockly.JavaScript.workspaceToCode(workspace);
-}
+//   // Update text field for debugging
+//   //document.getElementById("textarea").value = Blockly.JavaScript.workspaceToCode(workspace);
+// }
 
-// Save the blocks in local storage when dragged onto the canvas
-workspace.addChangeListener(saveBlocks);
+// // Save the blocks in local storage when dragged onto the canvas
+// workspace.addChangeListener(saveBlocks);
 
 // Initialize some elements
-$(document).ready(function() {
-  setTimeout(function() {
+// $(document).ready(function() {
+//   setTimeout(function() {
     
-    // Let's detect iphone and make the category blocks shorter
-    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    // // Let's detect iphone and make the category blocks shorter
+    // var userAgent = navigator.userAgent || navigator.vendor || window.opera;
     
-    // Let's reduce the padding to 5px for the category blocks
-    // Not the prettiest way but we'll go with it for now
-    if(userAgent.match( /iPhone/i ) || (userAgent.match( /Android/i ) && userAgent.match( /Mobile\sSafari/i))) {
-      $("div#\\:1").css("cssText", "padding: 3px !important");
-      $("div#\\:2").css("cssText", "padding: 3px !important");
-      $("div#\\:3").css("cssText", "padding: 3px !important");
-      $("div#\\:4").css("cssText", "padding: 3px !important");
-      $("div#\\:5").css("cssText", "padding: 3px !important");
-      $("div#\\:6").css("cssText", "padding: 3px !important");
-      $("div#\\:7").css("cssText", "padding: 3px !important");
-      $("div#\\:8").css("cssText", "padding: 3px !important");
-    }
+    // // Let's reduce the padding to 5px for the category blocks
+    // // Not the prettiest way but we'll go with it for now
+    // if(userAgent.match( /iPhone/i ) || (userAgent.match( /Android/i ) && userAgent.match( /Mobile\sSafari/i))) {
+    //   $("div#\\:1").css("cssText", "padding: 3px !important");
+    //   $("div#\\:2").css("cssText", "padding: 3px !important");
+    //   $("div#\\:3").css("cssText", "padding: 3px !important");
+    //   $("div#\\:4").css("cssText", "padding: 3px !important");
+    //   $("div#\\:5").css("cssText", "padding: 3px !important");
+    //   $("div#\\:6").css("cssText", "padding: 3px !important");
+    //   $("div#\\:7").css("cssText", "padding: 3px !important");
+    //   $("div#\\:8").css("cssText", "padding: 3px !important");
+    // }
   
-    $("#codeView").addClass("hidden");
+    // $("#codeView").addClass("hidden");
     
-    // For now let's not show an option to connect to DJI since Android only supports Tello
-    if(userAgent.match( /Android/i ) && aircraft == "Tello") {
-      $("#connectTo").parent().remove();
-      $("#d4").remove();
-    }
+    // // For now let's not show an option to connect to DJI since Android only supports Tello
+    // if(userAgent.match( /Android/i ) && aircraft == "Tello") {
+    //   $("#connectTo").parent().remove();
+    //   $("#d4").remove();
+    // }
     
-    $("#newMission").click(function() {
-      missionId = null;
-      $("#missionTitle").text("Untitled Mission");
-      Blockly.getMainWorkspace().clear();
-    });
+    // $("#newMission").click(function() {
+    //   missionId = null;
+    //   $("#missionTitle").text("Untitled Mission");
+    //   Blockly.getMainWorkspace().clear();
+    // });
   
-    $("#previewMission").click(function() {
-      previewMission();
-    });
+    // $("#previewMission").click(function() {
+    //   previewMission();
+    // });
   
-    $("#showCode").click(function() {
-      toggleCodeView();
-    });
+    // $("#showCode").click(function() {
+    //   toggleCodeView();
+    // });
     
-    $("#connectTo").click(function(e) {
-      var text = $(e.target).text();
-      if (text.includes("Tello")) {
-        connectTo('Tello');
-      } else {
-        connectTo('DJI');
-      }
-    });
+    // $("#connectTo").click(function(e) {
+    //   var text = $(e.target).text();
+    //   if (text.includes("Tello")) {
+    //     connectTo('Tello');
+    //   } else {
+    //     connectTo('DJI');
+    //   }
+    // });
   
-    $("#saveMission").click(function() {
+    // $("#saveMission").click(function() {
       
-      // Clear out the mission title from the dialog
-      $("#title").text("");
+    //   // Clear out the mission title from the dialog
+    //   $("#title").text("");
       
-      // We only prompt on the first save of the mission
-      if(missionId == null) {
+    //   // We only prompt on the first save of the mission
+    //   if(missionId == null) {
         
-        // Update the save text in the modal
-        var h6 = $("#saveMissionModal").find("h6");
-        h6.text("Please enter a mission title below and click SAVE");
-        h6.css({"color": "black"});
+    //     // Update the save text in the modal
+    //     var h6 = $("#saveMissionModal").find("h6");
+    //     h6.text("Please enter a mission title below and click SAVE");
+    //     h6.css({"color": "black"});
         
-        $('#saveMissionModal').openModal();
-      } else {
-        saveMission();
-      }
+    //     $('#saveMissionModal').openModal();
+    //   } else {
+    //     saveMission();
+    //   }
       
-    });
+    // });
     
     // Save mission as a new one
-    $("#saveMissionAs").click(function() {
+    // $("#saveMissionAs").click(function() {
       
-      // Null out the mission id so a new one will be created
-      missionId = null;
+    //   // Null out the mission id so a new one will be created
+    //   missionId = null;
       
-      // We need to figure out what to do if the user hits the cancel button
-      $('#saveMissionModal').openModal();
+    //   // We need to figure out what to do if the user hits the cancel button
+    //   $('#saveMissionModal').openModal();
       
-    });
+    // });
     
-    $("#saveModal").click(function() {
-      saveMission();
-    });
+    // $("#saveModal").click(function() {
+    //   saveMission();
+    // });
   
-    $('.button-collapse').sideNav({
-      edge: 'right',
-      closeOnClick: true
-    });
+    // $('.button-collapse').sideNav({
+    //   edge: 'right',
+    //   closeOnClick: true
+    // });
   
-    $("#logout").click(function() {
-      $(".button-collapse").sideNav("hide");
-      $("#login").html('<span class="waves-effect waves-light btn z-depth-0 light-blue">Login</span>');
-      $("#login").addClass("center-align");
-      $("#logout").hide();
-      $("#d1").hide();
-      $("#d2").hide();
-      $("#d3").hide();
-      $("#saveMission").hide();
-      $("#saveMissionAs").hide();
-      //$("#shareMission").hide();
-      $("#myMissions").hide();
+    // $("#logout").click(function() {
+    //   $(".button-collapse").sideNav("hide");
+    //   $("#login").html('<span class="waves-effect waves-light btn z-depth-0 light-blue">Login</span>');
+    //   $("#login").addClass("center-align");
+    //   $("#logout").hide();
+    //   $("#d1").hide();
+    //   $("#d2").hide();
+    //   $("#d3").hide();
+    //   $("#saveMission").hide();
+    //   $("#saveMissionAs").hide();
+    //   //$("#shareMission").hide();
+    //   $("#myMissions").hide();
       
-      // Send the logout message to iOS
-      if(getMobileOS() == "iOS") {
-        window.webkit.messageHandlers.observe.postMessage("logout");
-      }
+    //   // Send the logout message to iOS
+    //   if(getMobileOS() == "iOS") {
+    //     window.webkit.messageHandlers.observe.postMessage("logout");
+    //   }
       
-      userId = '';
-      firebase.auth().signOut();
-    });
+    //   userId = '';
+    //   firebase.auth().signOut();
+    // });
     
-    $("#login").click(function() {
-      login();
-    });
+    // $("#login").click(function() {
+    //   login();
+    // });
   
     // Log the user in if necessary
-    initAuth();
+    // initAuth();
     
     // Let's setup the block canvas
     // See if this is a shared mission
-    if(getUrlParam("share") != null || getUrlParam("view") != null) {
+//     if(getUrlParam("share") != null || getUrlParam("view") != null) {
   
-      // This is local and not a global
-      var id = getUrlParam("missionId");
+//       // This is local and not a global
+//       var id = getUrlParam("missionId");
       
-      var missionsRef;
+//       var missionsRef;
       
-      if (aircraft == "Tello") {
-        missionsRef = ref.child("droneblocks/tello_missions/" + id);        
-      } else {
-        missionsRef = ref.child("droneblocks/missions/" + id);
-      }
+//       if (aircraft == "Tello") {
+//         missionsRef = ref.child("droneblocks/tello_missions/" + id);        
+//       } else {
+//         missionsRef = ref.child("droneblocks/missions/" + id);
+//       }
       
       
-      // Update the mission id global so this mission can be updated
-      missionId = id;
+//       // Update the mission id global so this mission can be updated
+//       missionId = id;
       
-      missionsRef.once("value", function(snapshot) {
+//       missionsRef.once("value", function(snapshot) {
         
-        var xml = Blockly.Xml.textToDom(snapshot.val().missionXML);
-        Blockly.Xml.domToWorkspace(xml, workspace);
+//         var xml = Blockly.Xml.textToDom(snapshot.val().missionXML);
+//         Blockly.Xml.domToWorkspace(xml, workspace);
         
-        $("#missionTitle").text(snapshot.val().title);
+//         $("#missionTitle").text(snapshot.val().title);
 
-      });
+//       });
       
-    // Load last set of blocks from local storage
-    } else {
+//     // Load last set of blocks from local storage
+//     } else {
       
-      window.setTimeout(BlocklyStorage.restoreBlocks, 1000);
+//       window.setTimeout(BlocklyStorage.restoreBlocks, 1000);
   
-    }
+//     }
   
-  }, 1000); // Let's remove this delay later
+//   }, 1000); // Let's remove this delay later
   
-});
+// });
 
-// Utility function to get url param
-function getUrlParam(param) {
-  var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-    sURLVariables = sPageURL.split('&'),
-    sParameterName,
-    i;
+// // Utility function to get url param
+// function getUrlParam(param) {
+//   var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+//     sURLVariables = sPageURL.split('&'),
+//     sParameterName,
+//     i;
 
-  for (i = 0; i < sURLVariables.length; i++) {
-    sParameterName = sURLVariables[i].split('=');
+//   for (i = 0; i < sURLVariables.length; i++) {
+//     sParameterName = sURLVariables[i].split('=');
 
-    if (sParameterName[0] === param) {
-      return sParameterName[1] === undefined ? true : sParameterName[1];
-    }
-  }
-}
+//     if (sParameterName[0] === param) {
+//       return sParameterName[1] === undefined ? true : sParameterName[1];
+//     }
+//   }
+// }
 
-//
+// //
 
-function setUnits(units) {
-  if (units == 'metric') {
-    localStorage.setItem('units', 'metric');
+// function setUnits(units) {
+//   if (units == 'metric') {
+//     localStorage.setItem('units', 'metric');
 
-    if (document.location.href.match(/chrome_app/i)) {
-      document.location.href = "chrome_app_metric.html";
-    } else {
-      document.location.href = "tello_metric.html";
-    }
-  } else if (units == 'standard') {
-    localStorage.setItem('units', 'standard');
+//     if (document.location.href.match(/chrome_app/i)) {
+//       document.location.href = "chrome_app_metric.html";
+//     } else {
+//       document.location.href = "tello_metric.html";
+//     }
+//   } else if (units == 'standard') {
+//     localStorage.setItem('units', 'standard');
 
-    if (document.location.href.match(/chrome_app/i)) {
-      document.location.href = "chrome_app.html";
-    } else {
-      document.location.href = "tello.html";
-    }
-    
-  }
-
-}
+//     if (document.location.href.match(/chrome_app/i)) {
+//       document.location.href = "chrome_app.html";
+//     } else {
+//       document.location.href = "tello.html";
+//     } 
+//   }
+// }

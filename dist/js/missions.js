@@ -1,11 +1,11 @@
 import Vue from '../lib/vue/vue.min';
-import config from '../../env/config.json';
 import * as moment from 'moment';
 
-firebase.initializeApp(config);
-firebase.firestore().enablePersistence();
-
 $(document).ready(() => {
+  if(!location.pathname.match(/missions.html/)){
+    return;
+  }
+
   console.log('ready');
   const db = firebase.firestore();
 
@@ -19,7 +19,7 @@ $(document).ready(() => {
 
               <div class="card">
                 <div class="card-content">
-                  <table>
+                  <table class="highlight">
                     <thead>
                       <tr>
                         <th>#</th>
@@ -34,7 +34,10 @@ $(document).ready(() => {
                         <td>{{mission.title}}</td>
                         <td>{{mission.createdAt}}</td>
                         <td style="text-align: right;">
-                          <button class="waves-effect waves-light btn z-depth-0 light-blue">
+                          <button v-on:click="select(mission.id)" class="waves-effect waves-light btn z-depth-0 light-blue">
+                            <i class="material-icons">edit</i>
+                          </button>
+                          <button v-on:click="share(mission.id)" class="waves-effect waves-light btn z-depth-0 light-blue">
                             <i class="material-icons">share</i>
                           </button>
                           <button v-on:click="removeItem(mission.id)" class="waves-effect waves-light btn z-depth-0 materialize-red">
@@ -62,6 +65,10 @@ $(document).ready(() => {
         this.getData();
       },
       methods: {
+        select: function(id) {
+          localStorage.setItem('missionId', id);
+          location.href = aircraft === 'Tello' ? '/tello.html' : '/';
+        },
         removeItem: function(id) {
           const that = this;
 
@@ -72,8 +79,23 @@ $(document).ready(() => {
               db.collection('users').doc(user.uid).update({missions: missions.filter(v => v.id !== id)});
               $('#deleteMissionModal').closeModal();
               that.getData();
+
+              if(localStorage.getItem('missionId') === id){
+                localStorage.removeItem('missionId');
+              }
             })
           })
+        },
+        share: function(id){
+          $("#shareModal").openModal();
+  
+          if (aircraft == "Tello") {
+            $("#iPadShareLink").val(`droneblocks://?missionId=${id}&uid=${user.uid}&aircraft=tello`);
+            $("#desktopShareLink").val(`https://dev.droneblocks.io/tello.html?share=1&missionId=${id}&uid=${user.uid}`);
+          } else {
+            $("#iPadShareLink").val(`droneblocks://?missionId=${id}&uid=${user.uid}`);
+            $("#desktopShareLink").val(`https://dev.droneblocks.io?share=1&missionId=${id}&uid=${user.uid}`);
+          }
         },
         getData: function() {
 
@@ -82,7 +104,12 @@ $(document).ready(() => {
               this.missions = (v.data().missions || []).map(v => ({
                 ...v,
                 createdAt: moment(v.createdAt.toDate()).format('LLL')
-              }))
+              })).filter((v) => {
+                if(v.aircraft === aircraft){
+                  return true;
+                }
+                return false;
+              })
             }else{
               this.missions = [];
             }

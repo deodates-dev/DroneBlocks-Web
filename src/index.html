@@ -32,6 +32,7 @@
   <script src="./blockly/blocks/droneblocks/follow.js"></script>
   <link rel="stylesheet" type="text/css" href="./css/droneblocks.css">
   <link rel="stylesheet" type="text/css" href="./blockly/prettify.css">
+  <link rel="stylesheet" href="./css/style.css">
   
   <!-- Material -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -42,6 +43,9 @@
   <script src="https://www.gstatic.com/firebasejs/6.4.2/firebase-firestore.js"></script> -->
   <script src="./lib/firebase/firebase.js"></script>
   <script src="./lib/firebase/firebase-firestore.js"></script>
+
+  <script src="./js/lib/main.min.js"></script>
+  
   <script> 
     var aircraft = "DJI";
     // Initialize Firebase
@@ -51,14 +55,14 @@
     //   databaseURL: "https://fiery-inferno-4972.firebaseio.com",
     //   storageBucket: "",
     // };
-    var config = {
-      apiKey: "AIzaSyAGgqla_TWV4wVgaQ87HG3VDT0igLA8KhU",
-      authDomain: "droneblocks-staging.firebaseapp.com",
-      databaseURL: "https://droneblocks-staging.firebaseio.com",
-      projectId: "droneblocks-staging",
-      storageBucket: "droneblocks-staging.appspot.com",
-    };
-    firebase.initializeApp(config);
+    // var config = {
+    //   apiKey: "AIzaSyAGgqla_TWV4wVgaQ87HG3VDT0igLA8KhU",
+    //   authDomain: "droneblocks-staging.firebaseapp.com",
+    //   databaseURL: "https://droneblocks-staging.firebaseio.com",
+    //   projectId: "droneblocks-staging",
+    //   storageBucket: "droneblocks-staging.appspot.com",
+    // };
+    // firebase.initializeApp(config);
   </script>
 </head>
 <body>
@@ -221,7 +225,7 @@
   </xml>
   
   <script type="text/javascript" src="./lib/materialize/js/materialize.min.js"></script>
-  <script type="text/javascript" src="./js/droneblocks.js"></script>
-  <script type="text/javascript" src="./js/firebase.js"></script>
+  <!-- <script type="text/javascript" src="./js/droneblocks.js"></script> -->
+  <!-- <script type="text/javascript" src="./js/firebase.js"></script> -->
 </body>
 </html>

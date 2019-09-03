@@ -15,44 +15,27 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link type="text/css" rel="stylesheet" href="./lib/materialize/css/materialize.min.css"  media="screen,projection"/>
   
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/3.7.2/firebase.js"></script>
   <script>
     var aircraft = "Tello";
-    // Initialize Firebase
-    // var config = {
-    //   apiKey: "AIzaSyBcbAt69BGUjPiOucQbkcNNbcdaSmE-G0o",
-    //   authDomain: "fiery-inferno-4972.firebaseapp.com",
-    //   databaseURL: "https://fiery-inferno-4972.firebaseio.com",
-    //   storageBucket: "",
-    // };
-    var config = {
-      apiKey: "AIzaSyAGgqla_TWV4wVgaQ87HG3VDT0igLA8KhU",
-      authDomain: "droneblocks-staging.firebaseapp.com",
-      databaseURL: "https://droneblocks-staging.firebaseio.com",
-      projectId: "droneblocks-staging",
-      storageBucket: "droneblocks-staging.appspot.com",
-    };
-    firebase.initializeApp(config);
   </script>
+  <script src="./lib/firebase/firebase.js"></script>
+  <script src="./lib/firebase/firebase-firestore.js"></script>
+
+  <script src="./js/jquery-2.2.3.min.js"></script>
+  <script src="./lib/materialize/js/materialize.min.js"></script>
+  <script src="./js/lib/main.min.js"></script>
 </head>
 <body>
-  <h5 class="card-panel light-blue darken-1 white-text z-depth-0">My Tello Missions</h5>
-  <table id="missionsTable">
-    <thead>
-      <tr>
-        <th style="padding-left: 25px">Title</th>
-        <th>Created</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="tbody">
-    </tbody>
-  </table>
-  
-  <div style="padding: 20px;">
-    <a class="waves-effect waves-light btn z-depth-0 light-blue" onclick="window.history.back();">Back</a>
-  </div>
+  <header style="margin-top: 0px;" class="light-blue card-panel darken-1 white-text z-depth-0">
+    <div class="container" style="display: flex; align-items: center; justify-content: space-between;">
+      <h5>My Tello Missions</h5>
+
+      <div>
+        <a href="/" class="waves-effect waves-dark btn z-depth-0" style="background-color: transparent">Home</a>
+      </div>
+    </div>
+  </header>
+  <div id="missions"></div>
   
   <div id="deleteMissionModal" class="modal">
     
@@ -94,6 +77,5 @@
   </div>
   
   <script type="text/javascript" src="./lib/materialize/js/materialize.min.js"></script>
-  <script type="text/javascript" src="./js/missions.js"></script>
 </body>
 </html>

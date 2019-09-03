@@ -15,6 +15,13 @@ Number.prototype.toDeg = function() {
    return this * 180 / Math.PI;
 }
 
+function getMapPreviewCode() {
+  var code = 'var mission="";'
+  code += Blockly.JavaScript.workspaceToCode(workspace);
+  code = eval(code);
+  return code;
+}
+
 function initMapPreview() {
   
   // Initialize the info window

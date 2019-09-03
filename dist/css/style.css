@@ -1,3 +1,7 @@
 .pt-20{
     padding-top: 20px!important;
 }
+
+#d1, #d2, #d3, #saveMission, #myMissions, #logout, #saveMissionAs{
+    display: none;
+}
