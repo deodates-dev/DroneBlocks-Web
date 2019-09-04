@@ -216,7 +216,8 @@ $(document).ready(() => {
     // Init firebase
     firebase.init(() => {
         if(window.Blockly){
-            firebase.auth().onAuthStateChanged((user) => {
+            firebase.onAuthStateChanged((user) => {
+                console.log(user);
                 if(user){
                     // Callback after user is initialized
                     if(localStorage.getItem('missionId')){

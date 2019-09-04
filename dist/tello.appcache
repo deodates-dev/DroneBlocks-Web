@@ -41,9 +41,10 @@ blockly/blocks/tello/flip_right.js
 blockly/blocks/tello/flip_left.js
 blockly/blocks/tello/loop_with_variable.js
 css/tello.css
+css/style.css
 blockly/prettify.css
-materialize/css/materialize.min.css
-materialize/js/materialize.min.js
+lib/materialize/css/materialize.min.css
+lib/materialize/js/materialize.min.js
 js/droneblocks.js
 js/missions.js
 js/jquery-2.2.3.min.js
@@ -54,6 +55,9 @@ blockly/media/sprites.png
 blockly/media/click.mp3
 blockly/media/disconnect.wav
 blockly/media/delete.mp3
+lib/firebase/firebase.js
+lib/firebase/firebase-firestore.js
+js/lib/main.min.js
 
 # Use from network if available
 NETWORK:

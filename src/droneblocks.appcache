@@ -27,6 +27,7 @@ blockly/blocks/droneblocks/orbit.js
 blockly/blocks/droneblocks/loop.js
 blockly/blocks/droneblocks/follow.js
 css/droneblocks.css
+css/style.css
 js/droneblocks.js
 js/missions.js
 js/jquery-2.2.3.min.js
@@ -35,8 +36,11 @@ blockly/media/sprites.png
 blockly/media/click.mp3
 blockly/media/disconnect.wav
 blockly/media/delete.mp3
-materialize/css/materialize.min.css
-materialize/js/materialize.min.js
+lib/materialize/css/materialize.min.css
+lib/materialize/js/materialize.min.js
+lib/firebase/firebase.js
+lib/firebase/firebase-firestore.js
+js/lib/main.min.js
 
 # Use from network if available
 NETWORK:

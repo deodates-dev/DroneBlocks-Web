@@ -6,7 +6,26 @@ firebase.initializeApp(config);
 const db = firebase.firestore();
 const auth = firebase.auth;
 
-db.enablePersistence();
+db.enablePersistence({synchronizeTabs:true});
+
+const onAuthStateChanged = (callback) => {
+    const connectedRef = firebase.database().ref(".info/connected");
+    connectedRef.on('value', (snap) => {
+        const uid = localStorage.getItem('uid');
+        if (snap.val() === false && uid) {
+            callback({uid});
+        }
+    });
+    
+
+    auth().onAuthStateChanged((user) => {
+        if(user){
+            localStorage.setItem('uid', user.uid);
+        }
+
+        callback(user);
+    });
+}
 
 const init = (onAfterInit = () => {}) => {
     const launchScreen = (name) => {
@@ -28,7 +47,7 @@ const init = (onAfterInit = () => {}) => {
         $("#logout").css('display', 'block');
     }
     
-    firebase.auth().onAuthStateChanged((user) => {
+    onAuthStateChanged((user) => {
         console.log('user', user);
 
         if (user) {      
@@ -190,6 +209,7 @@ export {
     saveMission,
     getMission,
     login,
+    onAuthStateChanged,
     db,
     auth
 };
