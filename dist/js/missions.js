@@ -109,7 +109,7 @@ $(document).ready(() => {
                   return true;
                 }
                 return false;
-              })
+              }).sort((a,b) => a.createdAt > b.createdAt ? -1 : 1);
             }else{
               this.missions = [];
             }

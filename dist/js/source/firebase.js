@@ -19,13 +19,13 @@ const init = (onAfterInit = () => {}) => {
         
         $("#login").removeClass("center-align");
 
-        $("#d1").show();
-        $("#d2").show();
-        $("#d3").show();
-        $("#saveMission").show();
-        $("#saveMissionAs").show();
-        $("#myMissions").show();
-        $("#logout").show();
+        $("#d1").css('display', 'block');
+        $("#d2").css('display', 'block');
+        $("#d3").css('display', 'block');
+        $("#saveMission").css('display', 'block');
+        $("#saveMissionAs").css('display', 'block');
+        $("#myMissions").css('display', 'block');
+        $("#logout").css('display', 'block');
     }
     
     firebase.auth().onAuthStateChanged((user) => {
