@@ -37,6 +37,7 @@
   
   <link rel="stylesheet" type="text/css" href="./css/tello.css">
   <link rel="stylesheet" type="text/css" href="./blockly/prettify.css">
+  <link rel="stylesheet" href="./css/style.css">
   
   <!-- Material -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -44,21 +45,7 @@
   
   <script> 
     var aircraft = "Tello";
-    // Initialize Firebase
-    // var config = {
-    //   apiKey: "AIzaSyBcbAt69BGUjPiOucQbkcNNbcdaSmE-G0o",
-    //   authDomain: "fiery-inferno-4972.firebaseapp.com",
-    //   databaseURL: "https://fiery-inferno-4972.firebaseio.com",
-    //   storageBucket: "",
-    // };
-    // var config = {
-    //   apiKey: "AIzaSyAGgqla_TWV4wVgaQ87HG3VDT0igLA8KhU",
-    //   authDomain: "droneblocks-staging.firebaseapp.com",
-    //   databaseURL: "https://droneblocks-staging.firebaseio.com",
-    //   projectId: "droneblocks-staging",
-    //   storageBucket: "droneblocks-staging.appspot.com",
-    // };
-    // firebase.initializeApp(config);
+    
     // For Tello metric/standard units
     if(localStorage.getItem('units') != null) {
       var units = localStorage.getItem('units');
