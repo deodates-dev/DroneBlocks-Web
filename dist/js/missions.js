@@ -97,8 +97,10 @@ $(document).ready(() => {
           }
         },
         getData: function() {
+          db.collection('missions').where('aircraft', '==', 'Tello').get().then((v) => console.log(v));
+
           db.collection('missions').where('uid', '==', user.uid).get().then((v) => {
-            console.log(v);
+            console.log('missions', v);
             if(!v.empty){
               this.missions = v.docs
                 .map(v => ({
