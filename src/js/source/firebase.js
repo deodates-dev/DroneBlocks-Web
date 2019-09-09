@@ -68,8 +68,7 @@ const init = (onAfterInit = () => {}) => {
                         photoURL: providerData.photoURL,
                         email: providerData.email,
                         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        loginAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        missions: []
+                        loginAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
 
                     launchScreen(providerData.displayName);
@@ -107,26 +106,22 @@ const saveMission = (workspace) => {
             var _missionId = missionId;
 
             if(!_missionId){
-                _missionId = Math.random().toString(36).substring(2);
+                _missionId = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
 
-                missions.push({
-                id: _missionId,
-                aircraft,
-                title: $("#title").val(),
-                missionXML,
-                createdAt: new Date()
+                db.collection('missions').doc(_missionId).set({
+                    uid: user.uid,
+                    aircraft,
+                    title: $("#title").val(),
+                    missionXML,
+                    createdAt: new Date()
                 })
             }else{
-                missions = missions.map((v) => {
-                    if(v.id === _missionId){
-                        v.missionXML = missionXML;
-                    }
-
-                    return v;
+                db.collection('missions').doc(_missionId).update({
+                    missionXML
                 })
             }
             
-            db.collection('users').doc(user.uid).update({missions});
+            // db.collection('users').doc(user.uid).update({missions});
 
             if($("#title").val()){
                 $("#missionTitle").text($("#title").val());
@@ -147,18 +142,7 @@ const getMission = (id) => {
     }
 
     return new Promise((resolve, reject) => {
-        db.collection('users').doc(user.uid).get().then((v) => {
-            const missions = v.data().missions || [];
-    
-            
-            for(let mission of missions){
-                if(mission.id === id){
-                    return resolve(mission);
-                }
-            }
-
-            resolve('');
-        }).catch(e => reject(e));
+        db.collection('missions').doc(id).get().then((v) => v.data()).catch(e => reject(e));
     })
 }
 

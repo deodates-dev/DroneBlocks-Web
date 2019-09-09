@@ -75,15 +75,14 @@ $(document).ready(() => {
           $('#deleteMissionModal').openModal();
 
           $('#deleteMissionButton').off().click(() => {
-            db.collection('users').doc(user.uid).get().then((v) => v.data().missions).then((missions) => {
-              db.collection('users').doc(user.uid).update({missions: missions.filter(v => v.id !== id)});
-              $('#deleteMissionModal').closeModal();
-              that.getData();
+            db.collection('missions').doc(id).delete();
 
-              if(localStorage.getItem('missionId') === id){
-                localStorage.removeItem('missionId');
-              }
-            })
+            $('#deleteMissionModal').closeModal();
+            that.getData();
+
+            if(localStorage.getItem('missionId') === id){
+              localStorage.removeItem('missionId');
+            }
           })
         },
         share: function(id){
@@ -98,18 +97,26 @@ $(document).ready(() => {
           }
         },
         getData: function() {
-
-          db.collection('users').doc(user.uid).get().then((v) => {
-            if(v.exists){
-              this.missions = (v.data().missions || []).map(v => ({
-                ...v,
-                createdAt: moment(v.createdAt.toDate()).format('LLL')
-              })).filter((v) => {
-                if(v.aircraft === aircraft){
-                  return true;
-                }
-                return false;
-              }).sort((a,b) => a.createdAt > b.createdAt ? -1 : 1);
+          db.collection('missions').where('uid', '==', user.uid).get().then((v) => {
+            console.log(v);
+            if(!v.empty){
+              this.missions = v.docs
+                .map(v => ({
+                  id: v.ref.id,
+                  ...v.data()
+                }))
+                .map(v => ({
+                  ...v,
+                  createdAt: moment(v.createdAt.toDate()).format('LLL')
+                }))
+                .filter(v => {
+                  console.log(v);
+                  if(v.aircraft === aircraft){
+                    return true;
+                  }
+                  return false;
+                })
+                .sort((a,b) => a.createdAt > b.createdAt ? -1 : 1)
             }else{
               this.missions = [];
             }

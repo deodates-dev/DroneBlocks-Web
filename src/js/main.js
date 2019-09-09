@@ -174,6 +174,7 @@ const bind = () => {
         
         firebase.auth().signOut();
         localStorage.removeItem('missionId');
+        localStorage.removeItem('uid');
     });
 
     $("#login").click(function() {
@@ -217,11 +218,12 @@ $(document).ready(() => {
     firebase.init(() => {
         if(window.Blockly){
             firebase.onAuthStateChanged((user) => {
-                console.log(user);
+                console.log('user', user);
                 if(user){
                     // Callback after user is initialized
                     if(localStorage.getItem('missionId')){
                         firebase.getMission(localStorage.getItem('missionId')).then((v) => {
+                            console.log('entering another mission', v);
                             if(v){
                                 $("#missionTitle").text(v.title);
                                 console.log(v);
