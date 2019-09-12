@@ -142,7 +142,7 @@ const getMission = (id) => {
     }
 
     return new Promise((resolve, reject) => {
-        db.collection('missions').doc(id).get().then((v) => v.data()).catch(e => reject(e));
+        db.collection('missions').doc(id).get().then((v) => resolve(v.data())).catch(e => reject(e));
     })
 }
 

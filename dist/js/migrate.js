@@ -9,6 +9,8 @@ firebase.initializeApp({
 const db = firebase.firestore();
 const rdb = firebase.database();
 
+return;
+
 rdb.ref('droneblocks/tello_missions').on('value', snap => {
     const missions = []
     snap.forEach((v) => {
@@ -25,7 +27,7 @@ rdb.ref('droneblocks/tello_missions').on('value', snap => {
     missions.forEach((mission) => {
         const _missionId = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
 
-        // db.collection('missions').doc(_missionId).set(mission);
+        db.collection('missions').doc(_missionId).set(mission);
     })
 })
 
@@ -45,7 +47,7 @@ rdb.ref('droneblocks/missions').on('value', snap => {
     missions.forEach((mission) => {
         const _missionId = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
 
-        // db.collection('missions').doc(_missionId).set(mission);
+        db.collection('missions').doc(_missionId).set(mission);
     })
 })
 
@@ -58,7 +60,7 @@ rdb.ref('droneblocks/users').on('value', snap => {
         });
     })
 
-    users.forEach((v) => {
+    users.forEach((v, i) => {
         // if(v.missions){
         //     for(let key in v.tello_missions){
         //         new Promise(async(resolve, reject) => {
@@ -99,14 +101,16 @@ rdb.ref('droneblocks/users').on('value', snap => {
         //     }
         // }
 
-        // db.collection('users').doc(v.id).set({
-        //     createdAt: new Date(v.createdAt),
-        //     displayName: v.displayName || '',
-        //     email: v.email,
-        //     loginAt: new Date(v.loginAt),
-        //     photoURL: v.photoURL,
-        //     providerId: v.providerId,
-        //     uid: v.uid
-        // })
+        db.collection('users').doc(v.id).set({
+            createdAt: new Date(v.createdAt),
+            displayName: v.displayName || '',
+            email: v.email,
+            loginAt: new Date(v.loginAt),
+            photoURL: v.photoURL,
+            providerId: v.providerId,
+            uid: v.uid
+        });
+
+        console.log('Migrated user', i, v.id);
     })
 });

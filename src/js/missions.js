@@ -19,7 +19,7 @@ $(document).ready(() => {
 
               <div class="card">
                 <div class="card-content">
-                  <table class="highlight">
+                  <table class="highlight missions-table">
                     <thead>
                       <tr>
                         <th>#</th>
@@ -33,6 +33,7 @@ $(document).ready(() => {
                         <td>{{index + 1}}</td>
                         <td>{{mission.title}}</td>
                         <td>{{mission.createdAt}}</td>
+                        <td>{{mission.createdAtShort}}</td>
                         <td style="text-align: right;">
                           <button v-on:click="select(mission.id)" class="waves-effect waves-light btn z-depth-0 light-blue">
                             <i class="material-icons">edit</i>
@@ -109,7 +110,8 @@ $(document).ready(() => {
                 }))
                 .map(v => ({
                   ...v,
-                  createdAt: moment(v.createdAt.toDate()).format('LLL')
+                  createdAt: moment(v.createdAt.toDate()).format('LLL'),
+                  createdAtShort: moment(v.createdAt.toDate()).format('l LT')
                 }))
                 .filter(v => {
                   console.log(v);

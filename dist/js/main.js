@@ -227,7 +227,10 @@ $(document).ready(() => {
                             if(v){
                                 $("#missionTitle").text(v.title);
                                 console.log(v);
-                                Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(v.missionXML), blockly.workspace);
+
+                                setTimeout(() => {
+                                    Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(v.missionXML), blockly.workspace);                                    
+                                }, 1000);
                             }
                         })
                     }
