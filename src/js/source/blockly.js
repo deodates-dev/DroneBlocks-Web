@@ -71,7 +71,7 @@ const init = () => {
                         console.log(m);
                         if(m.id === id){
                             Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(m.missionXML), workspace);
-                            
+
                             $("#missionTitle").text(m.title);
                         }
                     })

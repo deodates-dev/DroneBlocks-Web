@@ -184,8 +184,6 @@ const bind = () => {
     $("#setUnits").click((e) => {
         const units = $(e.currentTarget).data('units');
 
-        console.log(units);
-
         if (units == 'metric') {
             localStorage.setItem('units', 'metric');
         
@@ -218,17 +216,15 @@ $(document).ready(() => {
     firebase.init(() => {
         if(window.Blockly){
             firebase.onAuthStateChanged((user) => {
-                console.log('user', user);
                 if(user){
                     // Callback after user is initialized
                     if(localStorage.getItem('missionId')){
                         firebase.getMission(localStorage.getItem('missionId')).then((v) => {
-                            console.log('entering another mission', v);
                             if(v){
                                 $("#missionTitle").text(v.title);
-                                console.log(v);
 
                                 setTimeout(() => {
+                                    blockly.workspace.clear();
                                     Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(v.missionXML), blockly.workspace);                                    
                                 }, 1000);
                             }
