@@ -68,7 +68,7 @@ $(document).ready(() => {
       methods: {
         select: function(id) {
           localStorage.setItem('missionId', id);
-          location.href = aircraft === 'Tello' ? '/tello.html' : '/';
+          location.href = aircraft === 'Tello' ? '/chrome_app.html' : '/';
         },
         removeItem: function(id) {
           const that = this;
