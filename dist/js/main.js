@@ -208,6 +208,26 @@ const bind = () => {
 
 // Run on document ready
 $(document).ready(() => {
+    const {pathname} = location;
+
+    if(pathname === '/chrome_app.html' || pathname === '/' || pathname === '/tello.html'){
+        if(aircraft === 'DJI'){
+            if(pathname !== '/'){
+                location.href = '/';
+            }
+        }else{
+            if(helpers.getMobileOS() !== 'unknown'){
+                if(pathname !== '/tello.html'){
+                    location.href = '/tello.html';
+                }
+            }else{
+                if(pathname !== '/chrome_app.html'){
+                location.href = '/chrome_app.html';
+                }
+            }
+        }
+    }
+
 
     if(window.Blockly){
         // Init blockly
@@ -229,6 +249,7 @@ $(document).ready(() => {
                                 console.log(v);
 
                                 setTimeout(() => {
+                                    Blockly.getMainWorkspace().clear();
                                     Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(v.missionXML), blockly.workspace);                                    
                                 }, 1000);
                             }
