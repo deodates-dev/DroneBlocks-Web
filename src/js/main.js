@@ -4,6 +4,8 @@ import * as helpers from './source/helpers';
 
 const connectTo = (drone) => {
     var os = helpers.getMobileOS();
+
+    console.log(os);
     
     if(os == 'iOS') {
         
@@ -20,6 +22,9 @@ const connectTo = (drone) => {
                 document.location.href = "index.html";
             }, 1000);
         } else {
+
+            console.log('redirect to chrome_app');
+
             document.location.href = "chrome_app.html";
         }
     }
