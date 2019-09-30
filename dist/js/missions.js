@@ -6,7 +6,6 @@ $(document).ready(() => {
     return;
   }
 
-  console.log('ready');
   const db = firebase.firestore();
 
   firebase.auth().onAuthStateChanged(user => {
@@ -67,6 +66,7 @@ $(document).ready(() => {
       },
       methods: {
         select: function(id) {
+          localStorage.removeItem('backup');
           localStorage.setItem('missionId', id);
           location.href = aircraft === 'Tello' ? '/chrome_app.html' : '/';
         },

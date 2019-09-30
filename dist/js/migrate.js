@@ -76,10 +76,6 @@ const rdb = firebase.database();
 
     let i = 0;
 
-    users = users.slice(9000);
-
-    console.log(users.length);
-
     for(let v of users){
         if(!v.displayName || !v.email || !v.loginAt || !v.createdAt || !v.photoURL || !v.providerId || !v.uid){
             console.warn('User error', v);
@@ -106,50 +102,3 @@ const rdb = firebase.database();
 
     console.log('Done');
 })();
-
-// rdb.ref('droneblocks/users').on('value', async snap => {
-//     const users = []
-//     snap.forEach((v) => {
-//         users.push({
-//             ...v.val(),
-//             id: v.ref.key
-//         });
-//     })
-
-//     let i = 0;
-
-//     for(let v of users){
-//         if(!v.displayName || !v.email || !v.loginAt || !v.createdAt || !v.photoURL || !v.providerId || !v.uid){
-//             console.warn('User error', v);
-//         }
-
-//         // await db.collection('users').doc(v.id).set({
-//         //     createdAt: new Date(v.createdAt) || new Date(),
-//         //     displayName: v.displayName || '',
-//         //     email: v.email || '',
-//         //     loginAt: new Date(v.loginAt) || new Date(),
-//         //     photoURL: v.photoURL || '',
-//         //     providerId: v.providerId || '',
-//         //     uid: v.uid
-//         // });
-
-//         console.log('Migrated user', i, v.id);
-
-//         i++;
-//     }
-
-//     console.log('Done');
-
-//     // users.forEach((v, i) => {
-//         // db.collection('users').doc(v.id).set({
-//         //     createdAt: new Date(v.createdAt),
-//         //     displayName: v.displayName || '',
-//         //     email: v.email,
-//         //     loginAt: new Date(v.loginAt),
-//         //     photoURL: v.photoURL,
-//         //     providerId: v.providerId,
-//         //     uid: v.uid
-//         // });
-
-//     // })
-// });

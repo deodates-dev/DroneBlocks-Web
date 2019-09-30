@@ -29,7 +29,6 @@ const onAuthStateChanged = (callback) => {
 
 const init = (onAfterInit = () => {}) => {
     const launchScreen = (name) => {
-        console.log('launchScreen');
         // Change the login button with the user's name if it exists
         if (!name)
             $("#login").html('<a href="#" id="userInfo" class="light-blue lighten-3 white-text">Hi!</a>');
@@ -84,6 +83,8 @@ const saveMission = (workspace) => {
     const user = firebase.auth().currentUser;
 
     if (user) {
+        localStorage.removeItem('backup');
+        
         var missionXML = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
         const missionId = localStorage.getItem('missionId');
 

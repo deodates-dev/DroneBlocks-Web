@@ -51,7 +51,11 @@ const init = () => {
     onresize();
 
     workspace.addChangeListener(() => {
-        BlocklyStorage.backupBlocks_(Blockly.getMainWorkspace());
+        const xml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
+
+        if(xml !== '<xml xmlns="http://www.w3.org/1999/xhtml"></xml>'){
+            localStorage.setItem('backup', xml);
+        }
   
         if(document.getElementById("code")) {
             document.getElementById("code").innerHTML = PR.prettyPrintOne(Blockly.Python.workspaceToCode(workspace));

@@ -245,8 +245,14 @@ $(document).ready(() => {
             firebase.onAuthStateChanged((user) => {
                 console.log('user', user);
                 if(user){
+                    if(localStorage.getItem('backup')){
+                        setTimeout(() => {
+                            Blockly.getMainWorkspace().clear();
+                            Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(localStorage.getItem('backup')), blockly.workspace);                                    
+                        }, 1000);
+                    }
                     // Callback after user is initialized
-                    if(localStorage.getItem('missionId')){
+                    else if(localStorage.getItem('missionId')){
                         firebase.getMission(localStorage.getItem('missionId')).then((v) => {
                             console.log('entering another mission', v);
                             if(v){
