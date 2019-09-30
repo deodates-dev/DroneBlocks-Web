@@ -237,6 +237,15 @@ $(document).ready(() => {
     if(window.Blockly){
         // Init blockly
         blockly.init();
+
+        if(localStorage.getItem('backup')){
+            console.log('Loading canvas from backup.');
+
+            setTimeout(() => {
+                Blockly.getMainWorkspace().clear();
+                Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(localStorage.getItem('backup')), blockly.workspace);                                    
+            }, 1000);
+        }
     }
 
     // Init firebase
@@ -244,28 +253,20 @@ $(document).ready(() => {
         if(window.Blockly){
             firebase.onAuthStateChanged((user) => {
                 console.log('user', user);
-                if(user){
-                    if(localStorage.getItem('backup')){
-                        setTimeout(() => {
-                            Blockly.getMainWorkspace().clear();
-                            Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(localStorage.getItem('backup')), blockly.workspace);                                    
-                        }, 1000);
-                    }
-                    // Callback after user is initialized
-                    else if(localStorage.getItem('missionId')){
-                        firebase.getMission(localStorage.getItem('missionId')).then((v) => {
-                            console.log('entering another mission', v);
-                            if(v){
-                                $("#missionTitle").text(v.title);
-                                console.log(v);
 
-                                setTimeout(() => {
-                                    Blockly.getMainWorkspace().clear();
-                                    Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(v.missionXML), blockly.workspace);                                    
-                                }, 1000);
-                            }
-                        })
-                    }
+                if(localStorage.getItem('missionId') && !localStorage.getItem('backup')){
+                    firebase.getMission(localStorage.getItem('missionId')).then((v) => {
+                        console.log('entering another mission', v);
+                        if(v){
+                            $("#missionTitle").text(v.title);
+                            console.log(v);
+
+                            setTimeout(() => {
+                                Blockly.getMainWorkspace().clear();
+                                Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(v.missionXML), blockly.workspace);                                    
+                            }, 1000);
+                        }
+                    })
                 }
             })
         }
