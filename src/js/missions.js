@@ -107,6 +107,7 @@ $(document).ready(() => {
                 }))
                 .map(v => ({
                   ...v,
+                  createdAtTime: v.createdAt ? new Date(v.createdAt.toDate()) : new Date(),
                   createdAt: moment(v.createdAt.toDate()).format('LLL'),
                   createdAtShort: moment(v.createdAt.toDate()).format('l LT')
                 }))
@@ -116,7 +117,7 @@ $(document).ready(() => {
                   }
                   return false;
                 })
-                .sort((a,b) => a.createdAt > b.createdAt ? -1 : 1)
+                .sort((a,b) => a.createdAtTime > b.createdAtTime ? -1 : 1);
             }else{
               this.missions = [];
             }
