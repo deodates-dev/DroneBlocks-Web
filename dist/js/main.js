@@ -213,21 +213,31 @@ const bind = () => {
 
 // Run on document ready
 $(document).ready(() => {
-    const {pathname} = location;
+    let {pathname, search} = location;
 
-    if(pathname === '/chrome_app.html' || pathname === '/' || pathname === '/tello.html'){
-        if(aircraft === 'DJI'){
-            if(pathname !== '/'){
-                location.href = '/';
-            }
-        }else{
-            if(helpers.getMobileOS() !== 'unknown'){
-                if(pathname !== '/tello.html'){
-                    location.href = '/tello.html';
+    let query;
+
+    search = search.split('?')[1];
+
+    if(search && search.length === 2){
+        query = search.split('&');
+    }
+    
+    if(query && query.indexOf('share=1') !== -1){
+        if(pathname === '/chrome_app.html' || pathname === '/' || pathname === '/tello.html'){
+            if(aircraft === 'DJI'){
+                if(pathname !== '/'){
+                    location.href = '/';
                 }
             }else{
-                if(pathname !== '/chrome_app.html'){
-                location.href = '/chrome_app.html';
+                if(helpers.getMobileOS() !== 'unknown'){
+                    if(pathname !== '/tello.html'){
+                        location.href = '/tello.html';
+                    }
+                }else{
+                    if(pathname !== '/chrome_app.html'){
+                    location.href = '/chrome_app.html';
+                    }
                 }
             }
         }
@@ -253,6 +263,9 @@ $(document).ready(() => {
         if(window.Blockly){
             firebase.onAuthStateChanged((user) => {
                 console.log('user', user);
+                if(query && query.indexOf('share=1') !== -1){
+                    return;
+                }
 
                 if(localStorage.getItem('missionId') && !localStorage.getItem('backup')){
                     firebase.getMission(localStorage.getItem('missionId')).then((v) => {

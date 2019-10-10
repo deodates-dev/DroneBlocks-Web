@@ -71,13 +71,15 @@ const init = () => {
         if(id && uid){
             firebase.db.collection('users').doc(uid).get().then((user) => {
                 if(user){
-                    user.data().missions.forEach(m => {
-                        console.log(m);
-                        if(m.id === id){
-                            Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(m.missionXML), workspace);
-                            
-                            $("#missionTitle").text(m.title);
-                        }
+                    firebase.db.collection('missions').doc(id).get().then((mission) => {
+                        const {missionXML, title} = mission.data();
+
+                        Blockly.getMainWorkspace().clear();
+                        Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(missionXML), workspace);
+
+                        $("#missionTitle").text('');
+                        $('#saveMission').hide();
+                        $('#d1').hide();
                     })
                 }
             })

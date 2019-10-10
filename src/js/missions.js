@@ -30,7 +30,7 @@ $(document).ready(() => {
                     <tbody>
                       <tr v-for="(mission, index) in missions">
                         <td>{{index + 1}}</td>
-                        <td>{{mission.title}}</td>
+                        <td><div>{{mission.title}}</div></td>
                         <td>{{mission.createdAt}}</td>
                         <td>{{mission.createdAtShort}}</td>
                         <td style="text-align: right;">

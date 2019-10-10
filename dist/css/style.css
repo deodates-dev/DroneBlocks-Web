@@ -10,6 +10,25 @@
     display: none;
 }
 
+@media only screen and (min-width: 601px){
+    .container{
+        width: 95%;
+    }
+}
+
+.missions-table td button{
+    padding: 0 16px;
+    height: 30px;
+    line-height: 30px;
+}
+
+@media only screen and (max-width: 991px){
+    .missions-table td:nth-child(2) div{
+        max-width: 330px!important;
+        white-space: normal;
+    }
+}
+
 @media (max-width: 768px){
     .missions-table{
         display: block;
