@@ -215,29 +215,25 @@ const bind = () => {
 $(document).ready(() => {
     let {pathname, search} = location;
 
-    let query;
+    let query, searchSplit = search.split('?')[1];
 
-    search = search.split('?')[1];
-
-    if(search && search.length === 2){
-        query = search.split('&');
+    if(searchSplit && searchSplit.length === 2){
+        query = searchSplit.split('&');
     }
     
-    if(query && query.indexOf('share=1') !== -1){
-        if(pathname === '/chrome_app.html' || pathname === '/' || pathname === '/tello.html'){
-            if(aircraft === 'DJI'){
-                if(pathname !== '/'){
-                    location.href = '/';
+    if(pathname === '/chrome_app.html' || pathname === '/' || pathname === '/tello.html'){
+        if(aircraft === 'DJI'){
+            if(pathname !== '/'){
+                location.href = '/' + search;
+            }
+        }else{
+            if(helpers.getMobileOS() !== 'unknown'){
+                if(pathname !== '/tello.html'){
+                    location.href = '/tello.html' + search;
                 }
             }else{
-                if(helpers.getMobileOS() !== 'unknown'){
-                    if(pathname !== '/tello.html'){
-                        location.href = '/tello.html';
-                    }
-                }else{
-                    if(pathname !== '/chrome_app.html'){
-                    location.href = '/chrome_app.html';
-                    }
+                if(pathname !== '/chrome_app.html'){
+                    location.href = '/chrome_app.html' + search;
                 }
             }
         }
