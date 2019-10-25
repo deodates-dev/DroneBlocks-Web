@@ -77,7 +77,8 @@ const init = () => {
                         Blockly.getMainWorkspace().clear();
                         Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(missionXML), workspace);
 
-                        $("#missionTitle").text('');
+
+                        $("#missionTitle").text(title);
                         $('#saveMission').hide();
                         $('#d1').hide();
                     })
