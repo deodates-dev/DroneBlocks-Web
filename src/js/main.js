@@ -50,12 +50,6 @@ const bind = () => {
     }
   
     $("#codeView").addClass("hidden");
-    
-    // For now let's not show an option to connect to DJI since Android only supports Tello
-    if(userAgent.match( /Android/i ) && aircraft == "Tello") {
-      $("#connectTo").parent().remove();
-      $("#d4").remove();
-    }
 
     $('.button-collapse').sideNav({
         edge: 'right',
