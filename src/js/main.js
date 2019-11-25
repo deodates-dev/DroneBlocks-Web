@@ -6,16 +6,16 @@ const connectTo = (drone) => {
     var os = helpers.getMobileOS();
 
     console.log(os);
-    
+
     if(os == 'iOS') {
-        
+
         window.webkit.messageHandlers.observe.postMessage("connectTo" + drone);
-        
+
     } else if (os == 'Android') {
-    
+
     // Chrome App
     } else if (os == 'unknown') {
-    
+
         if (document.location.href.match(/chrome_app/i)) {
             appWindow.postMessage("hideTelemetryBar", appOrigin);
             setTimeout(function() {
@@ -35,7 +35,7 @@ const bind = () => {
 
     // Let's detect iphone and make the category blocks shorter
     var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    
+
     // Let's reduce the padding to 5px for the category blocks
     // Not the prettiest way but we'll go with it for now
     if(userAgent.match( /iPhone/i ) || (userAgent.match( /Android/i ) && userAgent.match( /Mobile\sSafari/i))) {
@@ -48,7 +48,7 @@ const bind = () => {
       $("div#\\:7").css("cssText", "padding: 3px !important");
       $("div#\\:8").css("cssText", "padding: 3px !important");
     }
-  
+
     $("#codeView").addClass("hidden");
 
     $('.button-collapse').sideNav({
@@ -68,26 +68,26 @@ const bind = () => {
         code = eval(code);
 
         var os = helpers.getMobileOS();
-        
+
         if(os == 'iOS') {
-            
+
             window.webkit.messageHandlers.observe.postMessage(code);
-            
+
         } else if (os == 'Android') {
-        
+
             Android.confirmMission(code);
-            
+
         } else if (aircraft == "DJI") {
-            
+
             $("#mapPreviewModal").html("<iframe src='map_preview.html?code=" + escape(code) + "' width='100%' height='100%'></iframe>");
             $("#mapPreviewModal").openModal();
-        
+
         // Chrome App case
         }  else {
-        
+
             // Appwindow is so we can post to the chrome app
             appWindow.postMessage(code, appOrigin);
-        
+
         }
     });
 
@@ -109,7 +109,7 @@ const bind = () => {
             $("#codeView").addClass("hidden");
             $("#codeViewButton a").html("{ Code }");
         }
-          
+
         // Call to redraw the view
         blockly.onresize();
     });
@@ -124,17 +124,17 @@ const bind = () => {
     });
 
     $("#saveMission").click(() => {
-      
+
         // Clear out the mission title from the dialog
         $("#title").text("");
-        
+
         // We only prompt on the first save of the mission
         if(!localStorage.getItem('missionId')) {
             // Update the save text in the modal
             var h6 = $("#saveMissionModal").find("h6");
             h6.text("Please enter a mission title below and click SAVE");
             h6.css({"color": "black"});
-            
+
             $('#saveMissionModal').openModal();
         } else {
             firebase.saveMission(blockly.workspace);
@@ -144,18 +144,18 @@ const bind = () => {
     $("#saveMissionAs").click(() => {
         // Null out the mission id so a new one will be created
         localStorage.removeItem('missionId');
-        
+
         // We need to figure out what to do if the user hits the cancel button
         $('#saveMissionModal').openModal();
       });
-      
+
     $("#saveModal").click(() => {
         firebase.saveMission(blockly.workspace);
     });
 
     $("#logout").click(function() {
         $(".button-collapse").sideNav("hide");
-        $("#login").html('<span class="waves-effect waves-light btn z-depth-0 light-blue">Login</span>');
+        $("#login").html('<span class="waves-effect waves-light btn z-depth-0 light-blue btn-login">Login</span>');
         $("#login").addClass("center-align");
         $("#logout").hide();
         $("#d1").hide();
@@ -165,19 +165,21 @@ const bind = () => {
         $("#saveMissionAs").hide();
         //$("#shareMission").hide();
         $("#myMissions").hide();
-        
+
         // Send the logout message to iOS
         if(helpers.getMobileOS() == "iOS") {
           window.webkit.messageHandlers.observe.postMessage("logout");
         }
-        
+
         firebase.auth().signOut();
         localStorage.removeItem('missionId');
         localStorage.removeItem('uid');
     });
 
     $("#login").click(function() {
-        firebase.login();
+        if ($("#login").html().includes('btn-login')) {
+            window.open('/signin-widget.html', "Sign In", "width=985,height=735");
+        }
     });
 
     $("#setUnits").click((e) => {
@@ -187,7 +189,7 @@ const bind = () => {
 
         if (units == 'metric') {
             localStorage.setItem('units', 'metric');
-        
+
             if (document.location.href.match(/chrome_app/i)) {
                 document.location.href = "chrome_app_metric.html";
             } else {
@@ -195,14 +197,55 @@ const bind = () => {
             }
         } else if (units == 'standard') {
             localStorage.setItem('units', 'standard');
-        
+
             if (document.location.href.match(/chrome_app/i)) {
                 document.location.href = "chrome_app.html";
             } else {
                 document.location.href = "tello.html";
-            } 
+            }
         }
     })
+}
+
+
+function setupSigninUI() {
+  var uiConfig = {
+    // Url to redirect to after a successful sign-in.
+    signInSuccessUrl: "/",
+    callbacks: {
+      signInSuccess: function(user, credential, redirectUrl) {
+        if (window.opener) {
+          // The widget has been opened in a popup, so close the window
+          // and return false to not redirect the opener.
+          window.close();
+          return false;
+        } else {
+          // The widget has been used in redirect mode, so we redirect to the signInSuccessUrl.
+          return true;
+        }
+      }
+    },
+    signInOptions: [
+      {
+        provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        // Required to enable this provider in One-Tap Sign-up.
+        authMethod: "https://accounts.google.com"
+      },
+      {
+        provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        signInMethod: 'password'
+      }
+    ],
+    // Terms of service url.
+    tosUrl: "https://www.google.com",
+    credentialHelper: firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM
+  };
+
+  // Initialize the FirebaseUI Widget using Firebase.
+  var ui = new firebaseui.auth.AuthUI(firebase.auth());
+  // The start method will wait until the DOM is loaded to include the FirebaseUI sign-in widget
+  // within the element corresponding to the selector specified.
+  ui.start("#firebaseui-auth-container", uiConfig);
 }
 
 // Run on document ready
@@ -214,7 +257,7 @@ $(document).ready(() => {
     if(searchSplit && searchSplit.length === 2){
         query = searchSplit.split('&');
     }
-    
+
     if(pathname === '/chrome_app.html' || pathname === '/' || pathname === '/tello.html'){
         if(aircraft === 'DJI'){
             if(pathname !== '/'){
@@ -243,7 +286,7 @@ $(document).ready(() => {
 
             setTimeout(() => {
                 Blockly.getMainWorkspace().clear();
-                Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(localStorage.getItem('backup')), blockly.workspace);                                    
+                Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(localStorage.getItem('backup')), blockly.workspace);
             }, 1000);
         }
     }
@@ -266,7 +309,7 @@ $(document).ready(() => {
 
                             setTimeout(() => {
                                 Blockly.getMainWorkspace().clear();
-                                Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(v.missionXML), blockly.workspace);                                    
+                                Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(v.missionXML), blockly.workspace);
                             }, 1000);
                         }
                     })
@@ -274,8 +317,13 @@ $(document).ready(() => {
             })
         }
     });
-    
+
     // Init all bindings
-    bind();
+
+    if (pathname === "/signin-widget.html") {
+      setupSigninUI();
+    } else {
+      bind();
+    }
 })
 
