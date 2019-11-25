@@ -178,7 +178,8 @@ const bind = () => {
 
     $("#login").click(function() {
         if ($("#login").html().includes('btn-login')) {
-            window.open('/signin-widget.html', "Sign In", "width=985,height=735");
+            document.location.href = "signin.html";
+            // window.open('/signin-widget.html', "Sign In", "width=985,height=735");
         }
     });
 
@@ -320,8 +321,9 @@ $(document).ready(() => {
 
     // Init all bindings
 
-    if (pathname === "/signin-widget.html") {
+    if (pathname === "/signin.html") {
       setupSigninUI();
+      bind();
     } else {
       bind();
     }
