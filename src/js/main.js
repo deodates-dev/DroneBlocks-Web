@@ -180,7 +180,11 @@ const bind = () => {
         if ($("#login").html().includes('btn-login')) {
             // let successUrl = '/'
             let {pathname} = location;
-            document.location.href = `signin.html?successUrl=${pathname}`;
+            if (pathname === '/chrome_app.html') {
+                document.location.href = `signin.html?successUrl=${pathname}`;
+            } else {
+                firebase.login();
+            }
             // window.open('/signin-widget.html', "Sign In", "width=985,height=735");
         }
     });
