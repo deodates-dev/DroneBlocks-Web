@@ -178,9 +178,19 @@ const bind = () => {
 
     $("#login").click(function() {
         if ($("#login").html().includes('btn-login')) {
-            document.location.href = "signin.html";
+            // let successUrl = '/'
+            let {pathname} = location;
+            document.location.href = `signin.html?successUrl=${pathname}`;
             // window.open('/signin-widget.html', "Sign In", "width=985,height=735");
         }
+    });
+
+    $("#cancel_login").click(function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        let {pathname, search} = location;
+        let query = parseQueryInfo(search);
+        document.location.href = query.successUrl || '/';
     });
 
     $("#setUnits").click((e) => {
@@ -209,10 +219,10 @@ const bind = () => {
 }
 
 
-function setupSigninUI() {
+function setupSigninUI(successUrl = '') {
   var uiConfig = {
     // Url to redirect to after a successful sign-in.
-    signInSuccessUrl: "/",
+    signInSuccessUrl: successUrl,
     callbacks: {
       signInSuccess: function(user, credential, redirectUrl) {
         if (window.opener) {
@@ -226,6 +236,7 @@ function setupSigninUI() {
         }
       }
     },
+    'accountChooserEnabled': false,
     signInOptions: [
       {
         provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -239,7 +250,7 @@ function setupSigninUI() {
     ],
     // Terms of service url.
     tosUrl: "https://www.google.com",
-    credentialHelper: firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM
+    credentialHelper: firebaseui.auth.CredentialHelper.NONE // firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM
   };
 
   // Initialize the FirebaseUI Widget using Firebase.
@@ -249,15 +260,27 @@ function setupSigninUI() {
   ui.start("#firebaseui-auth-container", uiConfig);
 }
 
+function parseQueryInfo(searchInfo) {
+    var query = searchInfo.substring(1);
+    var vars = query.split('&');
+    const obj = {};
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        obj[pair[0]] = pair[1];
+    }
+    return obj;
+}
+
 // Run on document ready
 $(document).ready(() => {
     let {pathname, search} = location;
+    let query = parseQueryInfo(search);
+    // let query = {}, searchSplit = search.split('?')[1];
 
-    let query, searchSplit = search.split('?')[1];
+    // if(searchSplit){
+    //     const queryData = searchSplit.split('&');
 
-    if(searchSplit && searchSplit.length === 2){
-        query = searchSplit.split('&');
-    }
+    // }
 
     if(pathname === '/chrome_app.html' || pathname === '/' || pathname === '/tello.html'){
         if(aircraft === 'DJI'){
@@ -297,7 +320,7 @@ $(document).ready(() => {
         if(window.Blockly){
             firebase.onAuthStateChanged((user) => {
                 console.log('user', user);
-                if(query && query.indexOf('share=1') !== -1){
+                if(query && query.share === '1'){
                     return;
                 }
 
@@ -322,7 +345,7 @@ $(document).ready(() => {
     // Init all bindings
 
     if (pathname === "/signin.html") {
-      setupSigninUI();
+      setupSigninUI(query.successUrl || '/');
       bind();
     } else {
       bind();

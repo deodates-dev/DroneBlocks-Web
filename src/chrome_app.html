@@ -35,16 +35,16 @@
   <script src="./blockly/blocks/tello/flip_right.js"></script>
   <script src="./blockly/blocks/tello/flip_left.js"></script>
   <script src="./blockly/blocks/tello/loop_with_variable.js"></script>
-  
+
   <link rel="stylesheet" type="text/css" href="./css/tello.css">
   <link rel="stylesheet" type="text/css" href="./blockly/prettify.css">
   <link rel="stylesheet" href="./css/style.css">
-  
+
   <!-- Material -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link type="text/css" rel="stylesheet" href="./lib/materialize/css/materialize.min.css"  media="screen,projection"/>
-  
-  <script> 
+
+  <script>
     var aircraft = "Tello";
 
     // For Tello metric/standard units
@@ -63,10 +63,10 @@
   <script src="./js/firebase.js"></script>
 </head>
 <body>
-  
+
   <!-- Side nav -->
   <ul id="nav-mobile" class="side-nav">
-    <li class="center-align" id="login"><span class="waves-effect waves-light btn z-depth-0 light-blue">Login</span></li>
+    <li class="center-align" id="login"><span class="waves-effect waves-light btn z-depth-0 light-blue btn-login">Login</span></li>
     <li class="divider"></li>
     <li><a href="#" id="newMission">New Mission</a></li>
     <li class="divider"></li>
@@ -86,36 +86,36 @@
     <li class="divider" id="d5"></li>
     <li class="center-align" id="logout"><span class="waves-effect waves-light btn z-depth-0 light-blue">Logout</span></li>
   </ul>
-  
+
   <!-- Hamburger icon -->
   <a href="#" data-activates="nav-mobile" class="right button-collapse show-on-large" id="hamburger"><i class="medium material-icons">menu</i></a>
-  
+
   <div id="missionTitle">Untitled Mission</div>
-  
+
   <!-- Save modal -->
   <div id="saveMissionModal" class="modal">
-    
+
     <div class="modal-content">
       <h6>Please enter a mission title below and click SAVE</h6>
       <div class="input-field">
         <input placeholder="Mission Title" id="title" type="text" />
       </div>
     </div>
-    
+
     <div class="modal-footer">
       <a href="#!" class=" modal-action waves-effect waves-light btn z-depth-0" id="saveModal">Save</a>
       <a href="#!" class=" modal-action modal-close waves-effect waves-light btn-flat">Cancel</a>
     </div>
-    
+
   </div>
-  
+
   <!-- Map preview modal -->
   <div id="mapPreviewModal" class="modal" style="width: 95% !important; height: 100% !important">
-    
+
   </div>
-  
+
   <div id="blocklyArea"></div>
-  
+
   <!-- Code preview -->
   <div id="codeView">
     <pre id="code" class="prettyprint linenums"></pre>
@@ -134,7 +134,7 @@
         <li>Click the Connect button below and you should see Tello's battery percentage in the top left of DroneBlocks.</li>
       </ol>
     </div>
-    
+
     <div class="modal-footer">
       <a href="#!" class=" modal-action waves-effect waves-light btn z-depth-0" id="connectButton">Connect</a>
       <a href="#!" class=" modal-action modal-close waves-effect waves-light btn-flat">Cancel</a>
@@ -300,7 +300,7 @@
     </category>
     <category name="Variables" custom="VARIABLE">
     </category>
-    
+
     <category name="Land">
       <block type="land_then_takeoff">
         <value name="duration">
@@ -312,7 +312,7 @@
       <block type="land"></block>
     </category>
   </xml>
-  
+
   <script type="text/javascript" src="./js/chrome_app.js?n=0"></script>
   <script type="text/javascript" src="./js/dialogs.js"></script>
 </body>
