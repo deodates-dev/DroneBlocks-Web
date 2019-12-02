@@ -45,27 +45,27 @@ var isCodeViewOpen = false;
 // }
 
 // function previewMission() {
-  
+
 //   var code = 'var mission="";'
 //   code += Blockly.JavaScript.workspaceToCode(workspace);
 //   code = eval(code);
 //   console.log(code);
-  
+
 //   var os = getMobileOS();
-  
+
 //   if(os == 'iOS') {
-    
+
 //     window.webkit.messageHandlers.observe.postMessage(code);
-    
+
 //   } else if (os == 'Android') {
 
 //   	Android.confirmMission(code);
-    
+
 //   } else if (aircraft == "DJI") {
-    
+
 //     $("#mapPreviewModal").html("<iframe src='map_preview.html?code=" + escape(code) + "' width='100%' height='100%'></iframe>");
 //     $("#mapPreviewModal").openModal();
-  
+
 //   // Chrome App case
 //   }  else {
 
@@ -77,13 +77,13 @@ var isCodeViewOpen = false;
 
 // This will toggle new view in iOS to allow the user to connect to Tello
 // function connectTo(drone) {
-  
+
 //   var os = getMobileOS();
-  
+
 //   if(os == 'iOS') {
-    
+
 //     window.webkit.messageHandlers.observe.postMessage("connectTo" + drone);
-    
+
 //   } else if (os == 'Android') {
 
 //   // Chrome App
@@ -99,13 +99,13 @@ var isCodeViewOpen = false;
 //     }
 
 //   }
-  
+
 // }
 
 // Called from the map preview iframe
 function getMapPreviewCode() {
   var code = 'var mission="";'
-  code += Blockly.JavaScript.workspaceToCode(workspace);
+  code += Blockly.JavaScriptMain.workspaceToCode(workspace);
   code = eval(code);
   return code;
 }
@@ -124,7 +124,7 @@ function getMapPreviewCode() {
 //     $("#showCode").text("Show Mission Code");
 //     closeCodeView();
 //   }
-  
+
 //   // Call to redraw the view
 //   onresize();
 // }
@@ -142,20 +142,20 @@ var blockIndex = 0;
 function highlightBlock(id) {
   var id = parseInt(id); // This is the index of the waypoint block we're highlighting
   var blocks = Blockly.mainWorkspace.getAllBlocks();
-  
+
   // Now let's loop until we find the next waypoint
   for(var i=blockIndex; i<=blocks.length; i++) {
     var type = blocks[i].type;
-    
+
     blockIndex++;
-    
+
     if(type == "takeoff" || type == "fly_forward" || type == "change_altitude" || type == "land") {
       blocks[i].select();
-      
+
       if(type == "land") {
         blockIndex = 0; // Reset the block index
       }
-      
+
       break;
     }
   }
@@ -170,11 +170,11 @@ function highlightBlockFromAndroid(id) {
 // // Listen for workspace changes and save blocks
 // function saveBlocks() {
 //   BlocklyStorage.backupBlocks_(Blockly.getMainWorkspace());
-  
+
 //   if(isCodeViewOpen) {
 //     document.getElementById("code").innerHTML = PR.prettyPrintOne(Blockly.Python.workspaceToCode(workspace));
 //   }
-  
+
 //   // Update text field for debugging
 //   //document.getElementById("textarea").value = Blockly.JavaScript.workspaceToCode(workspace);
 // }
@@ -185,10 +185,10 @@ function highlightBlockFromAndroid(id) {
 // Initialize some elements
 // $(document).ready(function() {
 //   setTimeout(function() {
-    
+
     // // Let's detect iphone and make the category blocks shorter
     // var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    
+
     // // Let's reduce the padding to 5px for the category blocks
     // // Not the prettiest way but we'll go with it for now
     // if(userAgent.match( /iPhone/i ) || (userAgent.match( /Android/i ) && userAgent.match( /Mobile\sSafari/i))) {
@@ -201,29 +201,29 @@ function highlightBlockFromAndroid(id) {
     //   $("div#\\:7").css("cssText", "padding: 3px !important");
     //   $("div#\\:8").css("cssText", "padding: 3px !important");
     // }
-  
+
     // $("#codeView").addClass("hidden");
-    
+
     // // For now let's not show an option to connect to DJI since Android only supports Tello
     // if(userAgent.match( /Android/i ) && aircraft == "Tello") {
     //   $("#connectTo").parent().remove();
     //   $("#d4").remove();
     // }
-    
+
     // $("#newMission").click(function() {
     //   missionId = null;
     //   $("#missionTitle").text("Untitled Mission");
     //   Blockly.getMainWorkspace().clear();
     // });
-  
+
     // $("#previewMission").click(function() {
     //   previewMission();
     // });
-  
+
     // $("#showCode").click(function() {
     //   toggleCodeView();
     // });
-    
+
     // $("#connectTo").click(function(e) {
     //   var text = $(e.target).text();
     //   if (text.includes("Tello")) {
@@ -232,47 +232,47 @@ function highlightBlockFromAndroid(id) {
     //     connectTo('DJI');
     //   }
     // });
-  
+
     // $("#saveMission").click(function() {
-      
+
     //   // Clear out the mission title from the dialog
     //   $("#title").text("");
-      
+
     //   // We only prompt on the first save of the mission
     //   if(missionId == null) {
-        
+
     //     // Update the save text in the modal
     //     var h6 = $("#saveMissionModal").find("h6");
     //     h6.text("Please enter a mission title below and click SAVE");
     //     h6.css({"color": "black"});
-        
+
     //     $('#saveMissionModal').openModal();
     //   } else {
     //     saveMission();
     //   }
-      
+
     // });
-    
+
     // Save mission as a new one
     // $("#saveMissionAs").click(function() {
-      
+
     //   // Null out the mission id so a new one will be created
     //   missionId = null;
-      
+
     //   // We need to figure out what to do if the user hits the cancel button
     //   $('#saveMissionModal').openModal();
-      
+
     // });
-    
+
     // $("#saveModal").click(function() {
     //   saveMission();
     // });
-  
+
     // $('.button-collapse').sideNav({
     //   edge: 'right',
     //   closeOnClick: true
     // });
-  
+
     // $("#logout").click(function() {
     //   $(".button-collapse").sideNav("hide");
     //   $("#login").html('<span class="waves-effect waves-light btn z-depth-0 light-blue">Login</span>');
@@ -285,60 +285,60 @@ function highlightBlockFromAndroid(id) {
     //   $("#saveMissionAs").hide();
     //   //$("#shareMission").hide();
     //   $("#myMissions").hide();
-      
+
     //   // Send the logout message to iOS
     //   if(getMobileOS() == "iOS") {
     //     window.webkit.messageHandlers.observe.postMessage("logout");
     //   }
-      
+
     //   userId = '';
     //   firebase.auth().signOut();
     // });
-    
+
     // $("#login").click(function() {
     //   login();
     // });
-  
+
     // Log the user in if necessary
     // initAuth();
-    
+
     // Let's setup the block canvas
     // See if this is a shared mission
 //     if(getUrlParam("share") != null || getUrlParam("view") != null) {
-  
+
 //       // This is local and not a global
 //       var id = getUrlParam("missionId");
-      
+
 //       var missionsRef;
-      
+
 //       if (aircraft == "Tello") {
-//         missionsRef = ref.child("droneblocks/tello_missions/" + id);        
+//         missionsRef = ref.child("droneblocks/tello_missions/" + id);
 //       } else {
 //         missionsRef = ref.child("droneblocks/missions/" + id);
 //       }
-      
-      
+
+
 //       // Update the mission id global so this mission can be updated
 //       missionId = id;
-      
+
 //       missionsRef.once("value", function(snapshot) {
-        
+
 //         var xml = Blockly.Xml.textToDom(snapshot.val().missionXML);
 //         Blockly.Xml.domToWorkspace(xml, workspace);
-        
+
 //         $("#missionTitle").text(snapshot.val().title);
 
 //       });
-      
+
 //     // Load last set of blocks from local storage
 //     } else {
-      
+
 //       window.setTimeout(BlocklyStorage.restoreBlocks, 1000);
-  
+
 //     }
-  
+
 //   }, 1000); // Let's remove this delay later
-  
+
 // });
 
 // // Utility function to get url param
@@ -375,6 +375,6 @@ function highlightBlockFromAndroid(id) {
 //       document.location.href = "chrome_app.html";
 //     } else {
 //       document.location.href = "tello.html";
-//     } 
+//     }
 //   }
 // }

@@ -1,6 +1,7 @@
 import * as firebase from './source/firebase';
 import * as blockly from './source/blockly';
 import * as helpers from './source/helpers';
+import { parseCode } from './editor/jscodetoxml';
 
 const connectTo = (drone) => {
     var os = helpers.getMobileOS();
@@ -91,6 +92,19 @@ const bind = () => {
         }
     });
 
+    $("#update_blocks_from_code").click(() => {
+        try {
+            const codeJS = $("#code").val();
+            const xml1 = parseCode(codeJS);
+            blockly.workspace.clear();
+            blockly.workspace.cleanUp();
+            Blockly.Xml.domToWorkspace(xml1, blockly.workspace);
+        } catch (error) {
+            alert(`${error}`);
+        }
+    });
+
+
     $("#showCode").click(() => {
         showCode = !showCode;
 
@@ -100,7 +114,8 @@ const bind = () => {
             $("#codeView").removeClass("hidden");
             $("#codeView").addClass("block");
             $("#codeViewButton a").html("X");
-            $("#code").html(PR.prettyPrintOne(Blockly.Python.workspaceToCode(blockly.workspace)));
+            // $("#code").html(PR.prettyPrintOne(Blockly.JavaScript.workspaceToCode(blockly.workspace)));
+            $("#code").val(Blockly.JavaScriptMain.workspaceToCode(blockly.workspace));
             $("#showCode").text("Hide Mission Code");
         } else {
             $("#showCode").text("Show Mission Code");
@@ -277,6 +292,7 @@ function parseQueryInfo(searchInfo) {
 
 // Run on document ready
 $(document).ready(() => {
+    window._BIDE = {};
     let {pathname, search} = location;
     let query = parseQueryInfo(search);
     // let query = {}, searchSplit = search.split('?')[1];

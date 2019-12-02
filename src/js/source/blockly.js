@@ -7,16 +7,16 @@ const getUrlParam = (param) => {
       sURLVariables = sPageURL.split('&'),
       sParameterName,
       i;
-  
+
     for (i = 0; i < sURLVariables.length; i++) {
       sParameterName = sURLVariables[i].split('=');
-  
+
       if (sParameterName[0] === param) {
         return sParameterName[1] === undefined ? true : sParameterName[1];
       }
     }
 }
-  
+
 
 const init = () => {
     const blocklyArea = document.getElementById('blocklyArea');
@@ -56,14 +56,16 @@ const init = () => {
         if(xml !== '<xml xmlns="http://www.w3.org/1999/xhtml"></xml>'){
             localStorage.setItem('backup', xml);
         }
-  
+
         if(document.getElementById("code")) {
-            document.getElementById("code").innerHTML = PR.prettyPrintOne(Blockly.Python.workspaceToCode(workspace));
+            document.getElementById("code").value = Blockly.JavaScriptMain.workspaceToCode(workspace);
+            // console.log('Blockly.JavaScriptMain.workspaceToCode(workspace)', Blockly.JavaScriptMain.workspaceToCode(workspace))
+            // document.getElementById("code").innerHTML = Blockly.JavaScriptMain.workspaceToCode(workspace);
         }
     })
 
     if(getUrlParam("share") != null || getUrlParam("view") != null) {
-  
+
         // This is local and not a global
         const id = getUrlParam("missionId");
         const uid = getUrlParam("uid");

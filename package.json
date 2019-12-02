@@ -32,6 +32,8 @@
     "webpack-stream": "^5.2.1"
   },
   "dependencies": {
+    "acorn": "^7.1.0",
+    "acorn-dynamic-import": "^4.0.0",
     "firebase": "^6.4.2",
     "firebaseui": "^4.3.0",
     "font-awesome": "^4.7.0",
