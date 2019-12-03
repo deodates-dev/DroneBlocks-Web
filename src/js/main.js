@@ -179,9 +179,9 @@ const bind = () => {
     $("#login").click(function() {
         if ($("#login").html().includes('btn-login')) {
             // let successUrl = '/'
-            let {pathname} = location;
+            let {pathname, href} = location;
             if (pathname === '/chrome_app.html') {
-                document.location.href = `signin.html?successUrl=${pathname}`;
+                document.location.href = `signin.html?successUrl=${encodeURIComponent(href)}`;
             } else {
                 firebase.login();
             }
@@ -194,7 +194,7 @@ const bind = () => {
         event.stopPropagation();
         let {pathname, search} = location;
         let query = parseQueryInfo(search);
-        document.location.href = query.successUrl || '/';
+        document.location.href = decodeURIComponent(query.successUrl || '/');
     });
 
     $("#setUnits").click((e) => {
@@ -349,7 +349,7 @@ $(document).ready(() => {
     // Init all bindings
 
     if (pathname === "/signin.html") {
-      setupSigninUI(query.successUrl || '/');
+      setupSigninUI(decodeURIComponent(query.successUrl || '/'));
       bind();
     } else {
       bind();
