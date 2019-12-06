@@ -214,7 +214,10 @@ base.Program = base.BlockStatement = (node, st, c) => {
     c(node.body[i], st, "Statement")
 }
 base.Statement = skipThrough
-base.EmptyStatement = ignore
+base.EmptyStatement = (node, st, c) => {
+  c(node, st, "EmptyStatement")
+}
+
 base.ExpressionStatement = base.ParenthesizedExpression =
   (node, st, c) => c(node.expression, st, "Expression")
 base.IfStatement = (node, st, c) => {
@@ -404,6 +407,9 @@ export function walk1(ast, comments, block_loc, options){
   var xml1 = goog.dom.createDom('xml');
   var root_node = xml1;
   var current_node = root_node;
+  var heightOffset = 0;
+  var heightStep = 50;
+  let insideBlock = false;
   //var variable_next = null;
   var current_call = false;
   var current_path_chain = [];
@@ -452,26 +458,83 @@ export function walk1(ast, comments, block_loc, options){
   var ignore = function(_node, _st, _c) {}
 
   funcs.Program = funcs.BlockStatement = (node, st, c) => {
-    for (let i = 0; i < node.body.length; ++i)
-      c(node.body[i], st, "Statement")
-  }
-  funcs.Statement = function(node, st, c) {
-    if(debug) console.log("Statement");
-    c(node, st)
-    if(!options.joinTopBlocks && current_node === root_node ){
-      let lastChild = current_node.children.length
-      //console.log('Statement '+lastChild);
-      current_node.children[lastChild-1].setAttribute('x', '0');
-      current_node.children[lastChild-1].setAttribute('y', (lastChild*50).toString());
-    } else{
-      if(current_node.children.length > 0){
-        var next1 = newNode('next');
-        current_node.children[0].appendChild(next1);
-        current_node = next1;
+    for (let i = 0; i < node.body.length; ++i) {
+      let shouldNewBlock = false;
+      if (i < node.body.length - 1) {
+        if (node.body[i + 1].loc.start.line - node.body[i].loc.end.line > 1) {
+          // console.log('calculate distance', node.body[i].loc.start.line, node.body[i - 1].loc.end.line);
+          // We should insert blank statement
+
+          // console.log('HELLO EMPTY STATEMENT')
+          // c(node, st, "EmptyStatement")
+          shouldNewBlock = true;
+        }
+      }
+      // if (i >0) {
+      //   if (node.body[i].loc.start.line - node.body[i - 1].loc.end.line > 1) {
+      //     shouldNewBlock = true;
+      //   }
+      // }
+      // console.log('HELLO shouldNewBlock--', i, shouldNewBlock, root_node.innerHTML, heightOffset, insideBlock)
+      heightOffset += heightStep;
+      if (!insideBlock && shouldNewBlock) {
+        // current_node = root_node;
+        c(node.body[i], st, "StatementNewBlock")
+      } else {
+        c(node.body[i], st, "Statement")
       }
     }
   }
-  funcs.EmptyStatement = ignore
+  funcs.Statement = function(node, st, c) {
+    if(debug) console.log("Statement");
+    const currentHeightOffset = heightOffset;
+    c(node, st)
+    // console.log('Statement -- after c', root_node.innerHTML, 'current_node.innerHTML', current_node.innerHTML)
+    // if(!options.joinTopBlocks && current_node === root_node ){
+    //   let lastChild = current_node.children.length
+    //   console.log('Statement lastChild', lastChild);
+    //   current_node.children[lastChild-1].setAttribute('x', '0');
+    //   current_node.children[lastChild-1].setAttribute('y', (lastChild*50).toString());
+    // } else{
+      if(current_node.children.length > 0){
+        if(current_node === root_node){
+          let lastChild = current_node.children.length
+          // console.log('Statement lastChild ', lastChild, parseInt(current_node.children[lastChild-1].id), currentHeightOffset);
+          const topOffset = parseInt(current_node.children[lastChild-1].id) * 50;
+          if (!current_node.children[lastChild-1].getAttribute('y')) {
+            current_node.children[lastChild-1].setAttribute('x', '0');
+            current_node.children[lastChild-1].setAttribute('y', (currentHeightOffset).toString());
+          }
+        }
+        let lastChild = current_node.children.length;
+        var next1 = newNode('next');
+        current_node.children[lastChild - 1].appendChild(next1);
+        current_node = next1;
+      }
+    // }
+  }
+  funcs.StatementNewBlock = function(node, st, c) {
+    if(debug) console.log("Statement");
+    const currentHeightOffset = heightOffset;
+    c(node, st)
+    current_node = root_node;
+    if(current_node === root_node){
+      let lastChild = current_node.children.length
+      // console.log('StatementNewBlock lastChild ', lastChild, currentHeightOffset);
+      // const topOffset = parseInt(current_node.children[lastChild-1].id) * 50;
+      if (!current_node.children[lastChild-1].getAttribute('y')) {
+        current_node.children[lastChild-1].setAttribute('x', '0');
+        current_node.children[lastChild-1].setAttribute('y', (currentHeightOffset).toString());
+      }
+    }
+    else{
+      // if(current_node.children.length > 0){
+      //   var next1 = newNode('next');
+      //   current_node.children[0].appendChild(next1);
+      //   current_node = next1;
+      // }
+    }
+  }
   funcs.ExpressionStatement = (node, st, c) => {
     if(debug) console.log("ExpressionStatement");
     expression_statement = true;
@@ -483,6 +546,7 @@ export function walk1(ast, comments, block_loc, options){
   }
   funcs.IfStatement = (node, st, c) => {
     if(debug) console.log("IfStatement");
+    insideBlock = true;
     var block1 = newNode('block', {type:'controls_if'}, '', node);
     current_node.appendChild(block1);
     if(node.alternate){
@@ -505,6 +569,7 @@ export function walk1(ast, comments, block_loc, options){
       c(node.alternate, st, "Statement")
     }
     current_node = node1;
+    insideBlock = false;
   }
   funcs.LabeledStatement = (node, st, c) => {
     if(debug) console.log("LabeledStatement");
@@ -680,6 +745,7 @@ export function walk1(ast, comments, block_loc, options){
   }
   funcs.ForStatement = (node, st, c) => {
     if(debug) console.log("ForStatement");
+    insideBlock = true;
     var block1 = newNode('block', {type: 'bi_for'}, '', node);
     current_node.appendChild(block1);
     var init1 = newNode('statement', {name:'init'});
@@ -702,6 +768,7 @@ export function walk1(ast, comments, block_loc, options){
     current_node = statement1;
     c(node.body, st, "Statement")
     current_node = node1;
+    insideBlock = false;
   }
   // TODO: Separate ForOfStatement?
   // Only works with one variable declaration.
@@ -1262,17 +1329,21 @@ export function walk1(ast, comments, block_loc, options){
       for (let i = 0; i < node.arguments.length; ++i) {
         let value2 = newNode('value', {name:'items'+(i+1)});
         if (FunctionMap[name]) {
-          const funcArgs = FunctionMap[name].arguments.filter(arg => arg.category === 'value').map(arg => arg.name);
+          const funcArgs = FunctionMap[name].arguments.filter(arg => arg.category === 'value')
           if (i < funcArgs.length) {
-            value2 = newNode('value', {name: funcArgs[i]});
+            const argInfo = funcArgs[i];
+            const typesInfo = argInfo.type.split('_')
+            if (typesInfo[0] === 'field') {
+              value2 = newNode('field', {name: argInfo.name});
+            } else {
+              value2 = newNode('value', {name: argInfo.name});
+            }
+            block1.appendChild(value2);
+            current_node = value2;
+            c(node.arguments[i], st, "Expression");
           } else {
             value2 = null;
           }
-        }
-        if (value2) {
-          block1.appendChild(value2);
-          current_node = value2;
-          c(node.arguments[i], st, "Expression")
         }
       }
     }
@@ -1652,7 +1723,7 @@ export function parseCode(code){
     };
     ast1 = acorn.parse(code, options);
     console.log(comments)
-    xml1 = walk1(ast1, comments, block_loc);
+    xml1 = walk1(ast1, comments, block_loc, {joinTopBlocks: true});
     // console.log(xml1);
     return xml1;
     // workspace.clear();

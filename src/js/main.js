@@ -107,7 +107,7 @@ const bind = () => {
 
     $("#showCode").click(() => {
         showCode = !showCode;
-
+        // console.log('showCode', Blockly.Xml.workspaceToDom(blockly.workspace))
         if(showCode) {
             $("#blocklyArea").removeClass("full");
             $("#blocklyArea").addClass("half");
@@ -325,6 +325,21 @@ $(document).ready(() => {
         // Init blockly
         blockly.init();
 
+        // const xml = parseCode(`
+        // takeoff();
+        // flyForward(5, 'cm');
+        // flyXYZ(5, 10, 20, 'cm');
+        // flyLeft(15, 'in');
+        // yawLeft(50);
+        // hover(10);
+        // curve(5, 10, 20, 30, 40, 50, 'cm');
+        // land();
+        // `);
+        // console.log('xml', xml);
+        // setTimeout(() => {
+        //     Blockly.getMainWorkspace().clear();
+        //     Blockly.Xml.domToWorkspace(xml, blockly.workspace);
+        // }, 1000);
         if(localStorage.getItem('backup')){
             console.log('Loading canvas from backup.');
 

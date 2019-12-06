@@ -132,7 +132,7 @@ Blockly.JavaScriptMain['controls_if'] = function(block) {
         Blockly.JavaScriptMain.PASS;
     code += '} else {\n' + branchCode + '}\n';
   }
-  return code + '}';
+  return code + '}\n';
 };
 
 Blockly.JavaScriptMain['variables_set'] = function(block) {
