@@ -2,6 +2,7 @@ import * as firebase from './source/firebase';
 import * as blockly from './source/blockly';
 import * as helpers from './source/helpers';
 import { parseCode } from './editor/jscodetoxml';
+import { notificationData, NotificationLocalKey } from './notification_info';
 
 const connectTo = (drone) => {
     var os = helpers.getMobileOS();
@@ -384,6 +385,15 @@ $(document).ready(() => {
       bind();
     } else {
       bind();
+    }
+
+    if ($("body").overhang && notificationData && notificationData.data) {
+        const currentVersion = localStorage.getItem(NotificationLocalKey)
+        if (!currentVersion || currentVersion < notificationData.version) {
+            $("body").overhang({
+                ...notificationData.data
+            });
+        }
     }
 })
 
