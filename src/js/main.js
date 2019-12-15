@@ -108,7 +108,7 @@ const bind = () => {
 
     $("#showCode").click(() => {
         showCode = !showCode;
-        // console.log('showCode', Blockly.Xml.workspaceToDom(blockly.workspace))
+        console.log('showCode', Blockly.Xml.workspaceToDom(blockly.workspace))
         if(showCode) {
             $("#blocklyArea").removeClass("full");
             $("#blocklyArea").addClass("half");
@@ -329,11 +329,9 @@ $(document).ready(() => {
         // const xml = parseCode(`
         // takeoff();
         // flyForward(5, 'cm');
-        // flyXYZ(5, 10, 20, 'cm');
-        // flyLeft(15, 'in');
-        // yawLeft(50);
-        // hover(10);
-        // curve(5, 10, 20, 30, 40, 50, 'cm');
+        // if (5 > 10) {
+        //     flyLeft(15, 'in');
+        // }
         // land();
         // `);
         // console.log('xml', xml);

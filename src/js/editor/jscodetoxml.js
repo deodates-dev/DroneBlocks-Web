@@ -1097,24 +1097,24 @@ export function walk1(ast, comments, block_loc, options){
   funcs.BinaryExpression = (node, st, c) => {
     if(debug) console.log("BinaryExpression");
     var op;
-    var type = 'bi_math_arithmetic';
+    var type = 'math_arithmetic';
     switch(node.operator){
       case '+': op='ADD'; break;
       case '-': op='MINUS'; break;
       case '*': op='MULTIPLY'; break;
       case '/': op='DIVIDE'; break;
       case '**': op='POWER'; break;
-      case '==': op='EQ'; type = 'bi_logic_compare'; break;
-      case '!=': op='NEQ'; type = 'bi_logic_compare'; break;
-      case '<': op='LT'; type = 'bi_logic_compare'; break;
-      case '<=': op='LTE'; type = 'bi_logic_compare'; break;
-      case '>': op='GT'; type = 'bi_logic_compare'; break;
-      case '>=': op='GTE'; type = 'bi_logic_compare'; break;
-      case '&&': op='AND'; type = 'bi_logic_operation'; break;
-      case '||': op='OR'; type = 'bi_logic_operation'; break;
+      case '==': op='EQ'; type = 'logic_compare'; break;
+      case '!=': op='NEQ'; type = 'logic_compare'; break;
+      case '<': op='LT'; type = 'logic_compare'; break;
+      case '<=': op='LTE'; type = 'logic_compare'; break;
+      case '>': op='GT'; type = 'logic_compare'; break;
+      case '>=': op='GTE'; type = 'logic_compare'; break;
+      case '&&': op='AND'; type = 'logic_operation'; break;
+      case '||': op='OR'; type = 'logic_operation'; break;
       default:
         op = node.operator;
-        type = 'bi_assignment_return';
+        type = 'assignment_return';
     }
     var block1 = newNode('block', {type: type}, '', node);
     block1.appendChild(newNode('field',{name:'OP'},op));
@@ -1135,7 +1135,7 @@ export function walk1(ast, comments, block_loc, options){
   funcs.LogicalExpression = (node, st, c) => {
     if(debug) console.log("LogicalExpression");
     var op;
-    var type = 'bi_logic_operation';
+    var type = 'logic_operation';
     switch(node.operator){
       case '&&': op='AND'; break;
       case '||': op='OR'; break;

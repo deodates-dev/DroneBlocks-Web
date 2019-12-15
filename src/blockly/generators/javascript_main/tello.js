@@ -131,6 +131,7 @@ Blockly.JavaScriptMain['controls_if'] = function(block) {
     branchCode = Blockly.JavaScriptMain.statementToCode(block, 'ELSE') ||
         Blockly.JavaScriptMain.PASS;
     code += '} else {\n' + branchCode + '}\n';
+    return code;
   }
   return code + '}\n';
 };
