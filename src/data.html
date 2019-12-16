@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Firestore Data</title>
+
+    <script src="./lib/firebase/firebase.js"></script>
+    <script src="./lib/firebase/firebase-firestore.js"></script>
+</head>
+<body>
+    <p>
+        <strong>Users:</strong>
+        <span id="users"></span>
+    </p>
+    <p>
+        <strong>Tello Missions:</strong>
+        <span id="tello"></span>
+    </p>
+    <p>
+        <strong>DJI Missions:</strong>
+        <span id="dji"></span>
+    </p>
+    
+
+    <script>
+        firebase.initializeApp({
+            "apiKey": "AIzaSyBcbAt69BGUjPiOucQbkcNNbcdaSmE-G0o",
+            "authDomain": "fiery-inferno-4972.firebaseapp.com",
+            "databaseURL": "https://fiery-inferno-4972.firebaseio.com",
+            "projectId": "fiery-inferno-4972",
+            "storageBucket": "fiery-inferno-4972.appspot.com"
+        });
+
+        const db = firebase.firestore();
+
+        db.collection('missions').get().then(({docs}) => {
+            const missions = docs.map(v => v.data());
+
+            document.querySelector('#tello').innerHTML = missions.filter(v => v.aircraft === 'Tello').length;
+            document.querySelector('#dji').innerHTML = missions.filter(v => v.aircraft === 'DJI').length;
+        })
+
+        db.collection('users').get().then(({docs}) => {
+            const users = docs.map(v => v.data());
+
+            document.querySelector('#users').innerHTML = users.length;
+        })
+    </script>
+</body>
+</html>
