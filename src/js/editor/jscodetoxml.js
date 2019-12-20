@@ -1281,9 +1281,19 @@ export function walk1(ast, comments, block_loc, options){
     var node3;
     var value1;
     var name;
+    var doNotCallCallee = false;
     if(node.callee.type === "MemberExpression"){
-      block1 = newNode('block', {type:'bi_call_editable_return'}, '', node);
-      name = node.callee.property.name;
+      if (node.callee.object.name === 'Math') {
+        name = `Math.${node.callee.property.name}`;
+        block1 = newNode('block', {type: FunctionMap[name].name}, '', node);
+        const fieldValue = newNode('field', {name: 'OP'}, FunctionMap[name].op);
+        doNotCallCallee = true;
+        block1.appendChild(fieldValue);
+        current_node.appendChild(block1);
+      } else {
+        block1 = newNode('block', {type:'bi_call_editable_return'}, '', node);
+        name = node.callee.property.name;
+      }
     } else if(node.callee.type === "Identifier"){
       name = node.callee.name;
       if(expression_statement){
@@ -1320,7 +1330,9 @@ export function walk1(ast, comments, block_loc, options){
     }
     // value1 = newNode('value',{name:'chain'});
     // current_path_chain.push(value1);
-    c(node.callee, st, "Expression")
+    if (!doNotCallCallee) {
+      c(node.callee, st, "Expression")
+    }
     current_node = node3;
     var path_chain1 = current_path_chain; // Save path chain
     current_path_chain = [];
@@ -1362,20 +1374,35 @@ export function walk1(ast, comments, block_loc, options){
     var is_call = current_call;
     var block1;
     var block2;
+    var name;
+    var doNotCallCallee;
+
     if(is_call){
       current_call = false;
     } else {
-      if(node.computed){
-        block1 = newNode('block', {type:'bi_index'}, '', node);
-        block2 = newNode('value', {name:'index'});
-        block1.appendChild(block2);
-      } else{
-        block1 = newNode('block', {type:'bi_field_return'}, '', node);
-        block1.appendChild(newNode('field',{name:'NAME'},node.property.name));
+      if (node.object.name === 'Math') {
+        name = `Math.${node.property.name}`;
+        block1 = newNode('block', {type: FunctionMap[name].name}, '', node);
+        if (FunctionMap[name].constant) {
+          var fieldValue = newNode('field', {name: 'CONSTANT'}, FunctionMap[name].constant);
+          block1.appendChild(fieldValue);
+        }
+        doNotCallCallee = true;
+        current_node.appendChild(block1);
+        return;
+      } else {
+        if(node.computed){
+          block1 = newNode('block', {type:'bi_index'}, '', node);
+          block2 = newNode('value', {name:'index'});
+          block1.appendChild(block2);
+        } else{
+          block1 = newNode('block', {type:'bi_field_return'}, '', node);
+          block1.appendChild(newNode('field',{name:'NAME'},node.property.name));
+        }
+        var value1 = newNode('value',{name:'chain'});
+        block1.appendChild(value1);
+        current_path_chain.push(value1);
       }
-      var value1 = newNode('value',{name:'chain'});
-      block1.appendChild(value1);
-      current_path_chain.push(value1);
     }
     c(node.object, st, "Expression")
     if (node.computed){
@@ -1488,16 +1515,21 @@ export function walk1(ast, comments, block_loc, options){
       current_call = false;
     } else {
       var block1;
-      if(expression_statement){
-        expression_statement = false;
-        block1 = newNode('block', {type:'bi_field'}, '', node);
+      if (node.name === 'Infinity') {
+        block1 = newNode('block', {type:'math_constant'}, '', node);
+        block1.appendChild(newNode('field',{name:'CONSTANT'}, 'INFINITY'));
       } else {
-        block1 = newNode('block', {type:'bi_field_return'}, '', node);
+        if(expression_statement){
+          expression_statement = false;
+          block1 = newNode('block', {type:'bi_field'}, '', node);
+        } else {
+          block1 = newNode('block', {type:'bi_field_return'}, '', node);
+        }
+        block1.appendChild(newNode('field',{name:'NAME'},node.name));
+        var value1 = newNode('value',{name:'chain'});
+        block1.appendChild(value1);
+        current_path_chain.push(value1);
       }
-      block1.appendChild(newNode('field',{name:'NAME'},node.name));
-      var value1 = newNode('value',{name:'chain'});
-      block1.appendChild(value1);
-      current_path_chain.push(value1);
       current_node.appendChild(block1);
     }
   } //ignore

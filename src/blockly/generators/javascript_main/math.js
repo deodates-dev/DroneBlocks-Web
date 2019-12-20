@@ -94,6 +94,9 @@ Blockly.JavaScriptMain['math_single'] = function(block) {
     case 'LN':
       code = 'Math.log(' + arg + ')';
       break;
+    case 'LOG10':
+      code = 'Math.log10(' + arg + ')';
+      break;
     case 'EXP':
       code = 'Math.exp(' + arg + ')';
       break;
@@ -125,9 +128,6 @@ Blockly.JavaScriptMain['math_single'] = function(block) {
   // Second, handle cases which generate values that may need parentheses
   // wrapping the code.
   switch (operator) {
-    case 'LOG10':
-      code = 'Math.log(' + arg + ') / Math.log(10)';
-      break;
     case 'ASIN':
       code = 'Math.asin(' + arg + ') / Math.PI * 180';
       break;
