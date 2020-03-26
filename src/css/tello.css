@@ -33,7 +33,9 @@ table {
   height: 30px !important;
   line-height: 30px !important;
 }
-
+.row .col{
+  float: none !important;
+}
 div#\:1 {
   background-color: #264653 !important;
   padding: 10px !important;
@@ -148,10 +150,10 @@ div#\:8 .blocklyTreeSelected {
 /* End block category styling */
 
 div#blocklyArea {
-  float: left;
   width: 100%;
   height: 100%;
 }
+
 
 div#blocklyArea.half {
   width: 55% !important;
