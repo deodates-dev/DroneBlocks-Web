@@ -1,4 +1,5 @@
-var scene, camera, renderer, controls;
+var scene, camera, renderer, controls, drone;
+var blade1, blade2, blade3, blade4;
 var keyboard = new THREEx.KeyboardState();
 var clock = new THREE.Clock();
 
@@ -6,17 +7,20 @@ var clock = new THREE.Clock();
 var cube;
 
 scene = new THREE.Scene();
+scene.background = new THREE.Color(0xcce0ff);
+scene.fog = new THREE.Fog(0xcce0ff, 1000, 150000);
+
 
 var SCREEN_WIDTH = window.innerWidth / 2, SCREEN_HEIGHT = window.innerHeight;
 // camera attributes
-var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
+var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 200000;
 // set up camera
 camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 // add the camera to the scene
 scene.add(camera);
-
-camera.position.set(0, 300, 800);
+camera.position.set(0, 600, 1600);
 camera.lookAt(scene.position);
+scene.add(new THREE.AxesHelper(200000));
 
 // create and start the renderer; choose antialias setting.
 if (Detector.webgl) {
@@ -33,45 +37,37 @@ THREEx.WindowResize(renderer, camera);
 // toggle full-screen on given key press
 //THREEx.FullScreen.bindKey({ charCode: 'm'.charCodeAt(0) });
 controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.minDistance = 200;
+controls.maxDistance = 60000;
+controls.maxPolarAngle = Math.PI * 0.48;
 
-const size = 250;
+/* const size = 250;
 const divisions = 25;
 const gridHelper = new THREE.GridHelper(size, divisions);
 
-scene.add(gridHelper);
+scene.add(gridHelper); */
 
-var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
-hemiLight.color = new THREE.Color(0.6, 0.6, 0.5);
-hemiLight.groundColor = new THREE.Color(0.095, 0.1, 0.5);
-hemiLight.position.set(0, 500, 0);
-scene.add(hemiLight);
+scene.add(new THREE.AmbientLight(0x666666));
 
-var hemiLight2 = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
-hemiLight2.color = new THREE.Color(0.6, 0.6, 0.5);
-hemiLight2.groundColor = new THREE.Color(0.095, 0.1, 0.5);
-hemiLight2.position.set(0, -500, 0);
-scene.add(hemiLight2);
+var light = new THREE.DirectionalLight(0xdfebff, 1);
+light.position.set(50, 200, 100);
+light.position.multiplyScalar(1.3);
 
-var dirLight = new THREE.DirectionalLight(0xffffff, 1);
-dirLight.position.set(-1, 0.6, 1);
-dirLight.position.multiplyScalar(50);
-dirLight.name = "dirlight";
+light.castShadow = true;
 
-scene.add(dirLight);
-
-dirLight.castShadow = true;
-dirLight.shadowMapWidth = dirLight.shadowMapHeight = 1024 * 2;
+light.shadow.mapSize.width = 1024;
+light.shadow.mapSize.height = 1024;
 
 var d = 300;
 
-dirLight.shadowCameraLeft = -d;
-dirLight.shadowCameraRight = d;
-dirLight.shadowCameraTop = d;
-dirLight.shadowCameraBottom = -d;
+light.shadow.camera.left = - d;
+light.shadow.camera.right = d;
+light.shadow.camera.top = d;
+light.shadow.camera.bottom = - d;
 
-dirLight.shadowCameraFar = 3500;
-dirLight.shadowBias = -0.0001;
-dirLight.shadowDarkness = 0.35;
+light.shadow.camera.far = 1000;
+
+scene.add(light);
 
 /*   var pointLightHelper = [];
   var sphereSize = 10;
@@ -80,10 +76,25 @@ dirLight.shadowDarkness = 0.35;
   scene.add(pointLightHelper[0]);
   scene.add(pointLightHelper[1]); */
 
-var skyBoxGeometry = new THREE.BoxGeometry(10000, 10000, 10000),
-  skyBoxMaterial = new THREE.MeshBasicMaterial({ color: 0x9999ff, side: THREE.BackSide }),
-  skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
-scene.add(skyBox);
+
+// ground
+var loader = new THREE.TextureLoader();
+var groundTexture = loader.load('https://threejs.org/examples/textures/terrain/grasslight-big.jpg');
+groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+groundTexture.repeat.set(25, 25);
+groundTexture.anisotropy = 16;
+groundTexture.encoding = THREE.sRGBEncoding;
+
+var groundMaterial = new THREE.MeshLambertMaterial({ map: groundTexture });
+
+var mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(100000, 100000), groundMaterial);
+mesh.position.y = 0;
+mesh.rotation.x = - Math.PI / 2;
+mesh.receiveShadow = true;
+scene.add(mesh);
+
+
+
 var manager = new THREE.LoadingManager();
 manager.onProgress = function (item, loaded, total) {
   console.log(item, loaded, total);
@@ -102,19 +113,29 @@ loader.crossOrigin = 'anonymous';
 loader.load('https://cors-anywhere.herokuapp.com/https://bfmblob.blob.core.windows.net/partlibrary/drone.obj', function (object) {
 
   object.traverse(function (child) {
-    console.log(child)
-  });
+    if (!!child.name.includes("Blade")) {
+      console.log(child);
 
-  scene.add(object);
+    }
+  });
+  drone = object;
+  scene.add(drone);
+  blade1 = scene.getObjectByName("Blade01");
+  blade2 = scene.getObjectByName("Blade02");
+  blade3 = scene.getObjectByName("Blade03");
+  blade4 = scene.getObjectByName("Blade04");
 
 }, onProgress, onError);
 
-// fog must be added to scene before first render
-scene.fog = new THREE.FogExp2(0x9999ff, 0.00025);
 
 (function animate() {
   window.addEventListener("resize", handleWindowResize);
   requestAnimationFrame(animate);
+  if (drone) {
+    //drone.position.x += 0.4;
+    //drone.position.y += 0.2;
+    blade1.rotation.y += 0.5;
+  }
   render();
   update();
 })();
