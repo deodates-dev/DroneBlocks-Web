@@ -132,9 +132,9 @@ loader.load('https://cors-anywhere.herokuapp.com/https://bfmblob.blob.core.windo
   window.addEventListener("resize", handleWindowResize);
   requestAnimationFrame(animate);
   if (drone) {
-    //drone.position.x += 0.4;
-    //drone.position.y += 0.2;
-    blade1.rotation.y += 0.5;
+    drone.position.x += 0.4;
+    drone.position.y += 0.2;
+    //blade1.rotation.y += 0.5;
   }
   render();
   update();
