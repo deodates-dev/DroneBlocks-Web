@@ -1,5 +1,5 @@
 var scene, camera, renderer, controls, drone;
-var blade1, blade2, blade3, blade4;
+var blade = [];
 var keyboard = new THREEx.KeyboardState();
 var clock = new THREE.Clock();
 
@@ -120,21 +120,32 @@ loader.load('https://cors-anywhere.herokuapp.com/https://bfmblob.blob.core.windo
   });
   drone = object;
   scene.add(drone);
-  blade1 = scene.getObjectByName("Blade01");
-  blade2 = scene.getObjectByName("Blade02");
-  blade3 = scene.getObjectByName("Blade03");
-  blade4 = scene.getObjectByName("Blade04");
-
+  blade[0] = scene.getObjectByName("Blade01");
+  blade[1] = scene.getObjectByName("Blade02");
+  blade[2] = scene.getObjectByName("Blade03");
+  blade[3] = scene.getObjectByName("Blade04");
+  moveAxis(drone, blade[0]);
+  moveAxis(drone, blade[1]);
+  moveAxis(drone, blade[2]);
+  moveAxis(drone, blade[3]);
 }, onProgress, onError);
 
 
 (function animate() {
   window.addEventListener("resize", handleWindowResize);
   requestAnimationFrame(animate);
-  if (drone) {
-    drone.position.x += 0.4;
-    drone.position.y += 0.2;
-    //blade1.rotation.y += 0.5;
+  if (blade.length > 0) {
+    drone.position.z += 0.2;
+    drone.position.y += 0.1;
+    const randomValue = (Math.random() - 0.5) / 2;
+    drone.position.x += randomValue;
+
+    const rotateSpeed = Math.PI / 91 * 40;
+    blade[0].rotation.y += rotateSpeed;
+    blade[1].rotation.y -= rotateSpeed;
+    blade[2].rotation.y += rotateSpeed;
+    blade[3].rotation.y -= rotateSpeed;
+
   }
   render();
   update();
@@ -160,3 +171,15 @@ function handleWindowResize() {
   // .updateProjectionMatrix for the changes to take effect.
   camera.updateProjectionMatrix();
 };
+
+function moveAxis(object, mesh) {
+  // Create a bounding box:
+  var box = new THREE.Box3().setFromObject(mesh);
+  // Reset mesh position:
+  box.getCenter(mesh.position);
+  var pivot = new THREE.Group();
+  scene.add(pivot);
+  pivot.add(mesh);
+  mesh.geometry.center();
+  object.add(mesh);
+}

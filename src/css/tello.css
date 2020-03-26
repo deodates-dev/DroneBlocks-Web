@@ -150,17 +150,26 @@ div#\:8 .blocklyTreeSelected {
 /* End block category styling */
 
 div#blocklyArea {
-  width: 100%;
-  height: 100%;
+  float: left !important;
+  width: 50%;
+  height: 100vh;
+}
+div#droneArea {
+  float: right;
+  width: 50%;
+  height: 100vh;
 }
 
-
 div#blocklyArea.half {
+  float: left !important;
   width: 55% !important;
+  height: 100vh;
 }
 
 div#blocklyArea.full {
+  float: left !important;
   width: 100% !important;
+  height: 100vh;
 }
 
 div#codeView {
