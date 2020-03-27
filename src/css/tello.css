@@ -151,25 +151,19 @@ div#\:8 .blocklyTreeSelected {
 
 div#blocklyArea {
   float: left !important;
-  width: 50%;
-  height: 100vh;
+  width: 55%;
+  height: 100%;
 }
-div#droneArea {
-  float: right;
-  width: 50%;
-  height: 100vh;
-}
-
 div#blocklyArea.half {
   float: left !important;
   width: 55% !important;
-  height: 100vh;
+  height: 100%;
 }
 
 div#blocklyArea.full {
   float: left !important;
   width: 100% !important;
-  height: 100vh;
+  height: 100%;
 }
 
 div#codeView {
@@ -187,6 +181,21 @@ div#codeView.hidden {
 }
 
 div#codeView.visible {
+  display: block;
+}
+div#droneArea {
+  float: left;
+  width: 45%;
+  height: 100%;
+  overflow: hidden;
+  display: block;
+}
+
+div#droneArea.hidden {
+  display: none;
+}
+
+div#droneArea.visible {
   display: block;
 }
 

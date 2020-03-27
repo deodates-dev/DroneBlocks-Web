@@ -135,8 +135,8 @@ loader.load('https://cors-anywhere.herokuapp.com/https://bfmblob.blob.core.windo
   window.addEventListener("resize", handleWindowResize);
   requestAnimationFrame(animate);
   if (blade.length > 0) {
-    drone.position.z += 0.2;
-    drone.position.y += 0.1;
+    drone.position.z += 0.5;
+    drone.position.y += 0.5;
     const randomValue = (Math.random() - 0.5) / 2;
     drone.position.x += randomValue;
 
