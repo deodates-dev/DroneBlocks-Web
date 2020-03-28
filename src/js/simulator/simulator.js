@@ -5,7 +5,21 @@ var clock = new THREE.Clock();
 
 // custom global variables
 var cube;
+var isFlying = false;
+var isFlyingForward = false;
+var isOnHeight = false;
+var forwardDistance = 0;
+var originPos = 0;
+var isOnForwardTarget = false;
+var isRotating = false;
+var rotateTarget = 0;
+var isOnRotateTarget = false;
+var isLanding = false;
+let rotateSpeed = Math.PI / 180 * 80; //blade spin speed
 
+var commandString = "takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land";
+var commands = commandString.split("|");
+//console.log(commands);
 scene = new THREE.Scene();
 scene.background = new THREE.Color(0xcce0ff);
 scene.fog = new THREE.Fog(0xcce0ff, 1000, 150000);
@@ -18,7 +32,7 @@ var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20
 camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 // add the camera to the scene
 scene.add(camera);
-camera.position.set(0, 600, 1600);
+camera.position.set(4000, 0, 4000);
 camera.lookAt(scene.position);
 scene.add(new THREE.AxesHelper(200000));
 
@@ -41,11 +55,11 @@ controls.minDistance = 200;
 controls.maxDistance = 60000;
 controls.maxPolarAngle = Math.PI * 0.48;
 
-/* const size = 250;
-const divisions = 25;
+const size = 25000; //2500cm, 10cm = 100, 1 = 0.1cm
+const divisions = 250;
 const gridHelper = new THREE.GridHelper(size, divisions);
 
-scene.add(gridHelper); */
+//scene.add(gridHelper);
 
 scene.add(new THREE.AmbientLight(0x666666));
 
@@ -69,12 +83,6 @@ light.shadow.camera.far = 1000;
 
 scene.add(light);
 
-/*   var pointLightHelper = [];
-  var sphereSize = 10;
-  pointLightHelper[0] = new THREE.PointLightHelper(hemiLight, sphereSize);
-  pointLightHelper[1] = new THREE.PointLightHelper(dirLight, sphereSize);
-  scene.add(pointLightHelper[0]);
-  scene.add(pointLightHelper[1]); */
 
 
 // ground
@@ -114,8 +122,7 @@ loader.load('https://cors-anywhere.herokuapp.com/https://bfmblob.blob.core.windo
 
   object.traverse(function (child) {
     if (!!child.name.includes("Blade")) {
-      console.log(child);
-
+      //console.log(child);
     }
   });
   drone = object;
@@ -130,23 +137,94 @@ loader.load('https://cors-anywhere.herokuapp.com/https://bfmblob.blob.core.windo
   moveAxis(drone, blade[3]);
 }, onProgress, onError);
 
+let then = 0;
 
-(function animate() {
+(function animate(now) {
   window.addEventListener("resize", handleWindowResize);
-  requestAnimationFrame(animate);
-  if (blade.length > 0) {
-    drone.position.z += 0.5;
-    drone.position.y += 0.5;
-    const randomValue = (Math.random() - 0.5) / 2;
-    drone.position.x += randomValue;
+  now *= 0.001;  // make it seconds
 
-    const rotateSpeed = Math.PI / 91 * 40;
-    blade[0].rotation.y += rotateSpeed;
-    blade[1].rotation.y -= rotateSpeed;
-    blade[2].rotation.y += rotateSpeed;
-    blade[3].rotation.y -= rotateSpeed;
+  const delta = now - then;
+  //console.log(now);
+  then = now;
+  const speedY = 60 * 10; // 60cm/s in height
+  const speedZ = 30 * 10 // 40cm/s in forward
+  const droneRotateSpeed = Math.PI / 2;
+  if (drone) {                //If model is loaded
+    //camera.lookAt(scene.position);        
+    if (isFlying) {
+      blade[0].rotation.y -= rotateSpeed;
+      blade[1].rotation.y += rotateSpeed;
+      blade[2].rotation.y -= rotateSpeed;
+      blade[3].rotation.y += rotateSpeed;
+      if (!isOnHeight && drone.position.y < 1520) {  // Drone Height is 152cm;
+        drone.position.y += delta * speedY;
+      } else if ((drone.position.y >= 1520) && !isOnHeight) {
+        isOnHeight = true;
+        commands.shift();
+      }
+
+      if (isOnHeight && isFlyingForward && (Math.abs(drone.position.z - originPos) < forwardDistance)) {
+        drone.position.z += delta * speedZ * Math.cos(drone.rotation.y);
+        //console.log(drone.position.z)
+      } else if (isFlyingForward && !isOnForwardTarget && (Math.abs(drone.position.z - originPos) >= forwardDistance)) {
+        isOnForwardTarget = true;
+        isFlyingForward = false;
+        commands.shift();
+      }
+
+      if (isRotating && (drone.rotation.y < rotateTarget)) {
+        drone.rotation.y += delta * droneRotateSpeed;
+        //console.log(drone.rotation.y);
+        //console.log(rotateTarget);
+      } else if (isRotating && (drone.rotation.y >= rotateTarget) && !isOnRotateTarget) {
+        isOnRotateTarget = true;
+        isOnForwardTarget = false;
+        commands.shift();
+      }
+    }
+    if (commands[0].includes("takeoff")) {
+      isFlying = true;
+    }
+    if (commands[0].includes("fly_forward") && !isFlyingForward) {
+      isFlyingForward = true;
+      const subcommands = commands[0].split(",");
+      console.log(subcommands);
+      const distance = subcommands[1];
+      const distanceUnit = subcommands[2];
+      originPos = drone.position.z;
+      if (distanceUnit == "in") {
+        forwardDistance = distance * 10 * 2.54 // Inchi to cm 
+      } else if (distanceUnit == "cm") {
+        forwardDistance = distance * 10 // 
+      }
+    }
+    if (commands[0].includes("yaw_right") && !isRotating) {
+      isRotating = true;
+      const subcommands = commands[0].split(",");
+      console.log(subcommands);
+      const deltaAngle = subcommands[1] * Math.PI / 180;
+      //console.log(deltaAngle);
+      rotateTarget = drone.rotation.y + deltaAngle;
+    }
+    if (commands[0].includes("land")) {
+      if (drone.position.y > 0) {
+        drone.position.y -= delta * speedY;
+      } else {
+        rotateSpeed -= delta * rotateSpeed;
+        if (rotateSpeed <= 0) {
+          isFlying = false;
+        } else {
+          blade[0].rotation.y -= rotateSpeed;
+          blade[1].rotation.y += rotateSpeed;
+          blade[2].rotation.y -= rotateSpeed;
+          blade[3].rotation.y += rotateSpeed;
+        }
+      }
+    }
 
   }
+  //console.log(commands[0]);
+  requestAnimationFrame(animate);
   render();
   update();
 })();
