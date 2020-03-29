@@ -1,0 +1,15 @@
+div#missionTitle {
+  right: calc(45vw + 65px) !important;
+}
+
+.side-nav {
+  right: calc(45vw + 0px) !important;
+  display: none;
+}
+a#hamburger {
+  right: calc(45vw + 20px);
+}
+
+#sidenav-overlay {
+  right: 45vw !important;
+}

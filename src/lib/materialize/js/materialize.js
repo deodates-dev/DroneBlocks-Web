@@ -4,6 +4,7 @@
  * MIT License (https://raw.githubusercontent.com/Dogfalo/materialize/master/LICENSE)
  */
 // Check for jQuery.
+console.log('I am living here')
 if (typeof(jQuery) === 'undefined') {
   var jQuery;
   // Check if require is a defined function.
@@ -2094,7 +2095,8 @@ $(document).ready(function(){
             overflow: '',
             width: ''
           });
-
+          var $sideNav = $('#nav-mobile');
+          $sideNav.css('z-index', '-1');
           $('#sidenav-overlay').velocity({opacity: 0}, {duration: 200,
               queue: false, easing: 'easeOutQuad',
             complete: function() {
@@ -2163,7 +2165,6 @@ $(document).ready(function(){
             var oldWidth = $body.innerWidth();
             $body.css('overflow', 'hidden');
             $body.width(oldWidth);
-
             // If overlay does not exist, create one and if it is clicked, close menu
             if ($('#sidenav-overlay').length === 0) {
               var overlay = $('<div id="sidenav-overlay"></div>');
@@ -2269,7 +2270,6 @@ $(document).ready(function(){
                   overflow: '',
                   width: ''
                 });
-
                 // Slide menu closed
                 menu_id.velocity({'translateX': [options.menuWidth + 10, rightPos]}, {duration: 200, queue: false, easing: 'easeOutQuad'});
                 $('#sidenav-overlay').velocity({opacity: 0 }, {duration: 200, queue: false, easing: 'easeOutQuad',
@@ -2296,7 +2296,9 @@ $(document).ready(function(){
               var oldWidth = $body.innerWidth();
               $body.css('overflow', 'hidden');
               $body.width(oldWidth);
-
+              var $sideNav = $('#nav-mobile');
+              $sideNav.css('display', 'block');
+              $sideNav.css('z-index', '999');
               // Push current drag target on top of DOM tree
               $('body').append(dragTarget);
 
