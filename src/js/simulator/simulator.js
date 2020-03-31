@@ -21,13 +21,17 @@ var rotateTarget = 0;
 var isOnRotateTarget = false;
 var isLanding = false;
 var islanded = false;
-let rotateSpeed = Math.PI / 180 * 80; //blade spin speed
+let rotateSpeed = Math.PI / 180 * 80; //blade spin speed;
+var isHovering = false;
+var isHovered = false;
+var hoverPeriod = 0;
+var clock = 0;
 
 let speed = 20 * 10 * 2.54; // 30in/s in height;
 let isSpeedSet = false;
 const droneRotateSpeed = Math.PI / 2;
 
-var commandString = "takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land";
+var commandString = "takeoff|hover,3|fly_forward,20,in|yaw_right,180|hover,3|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land";
 var commands = commandString.split("|");
 //console.log(commands);
 scene = new THREE.Scene();
@@ -188,23 +192,31 @@ let then = 0;
       speedControl(commands[0]);
       commands.shift();
     }
+    if (commands[0] && commands[0].includes("hover")) {
+      const subcommands = commands[0].split(",");
+      hoverPeriod = subcommands[1];
+      clock += delta;
+      if (clock > hoverPeriod) {
+        commands.shift();
+        clock = 0;
+      }
+    }
     if (commands[0] && commands[0].includes("land") && !islanded) {
       if (drone.position.y > 0) {
         drone.position.y -= delta * speed;
       } else {
+        let speedLimit;
+        if (commands.length == 1) {
+          speedLimit = 0.01;
+        } else {
+          speedLimit = rotateSpeed;
+        }
         rotateSpeed -= delta * rotateSpeed;
-        if (rotateSpeed <= 0.001) {
+        if (rotateSpeed <= speedLimit) {
           isFlying = false;
           isLanded = true;
           isOnHeight = false;
           commands.shift();
-          console.log(commands);
-        } else {
-          blade[0].rotation.y -= rotateSpeed;
-          blade[1].rotation.y += rotateSpeed;
-          blade[2].rotation.y -= rotateSpeed;
-          blade[3].rotation.y += rotateSpeed;
-
         }
       }
     }
@@ -217,9 +229,6 @@ let then = 0;
 })();
 
 function update() {
-  // delta = change in time since last call (in seconds)
-  var delta = clock.getDelta();
-  // update controls
   controls.update();
 }
 function render() {
