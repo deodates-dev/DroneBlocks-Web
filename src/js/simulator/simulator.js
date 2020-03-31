@@ -8,14 +8,22 @@ var cube;
 var isFlying = false;
 var isFlyingForward = false;
 var isOnHeight = false;
+var originPosX = 0;
+var originPosY = 0;
+var originPosZ = 0;
 var forwardDistance = 0;
-var originPos = 0;
+var originAngle = 0;
+var distanceAngle = 0;
 var isOnForwardTarget = false;
 var isRotating = false;
 var rotateTarget = 0;
 var isOnRotateTarget = false;
 var isLanding = false;
 let rotateSpeed = Math.PI / 180 * 80; //blade spin speed
+
+let speedY = 20 * 10 * 2.54; // 30in/s in height
+let speedZ = 20 * 10 * 2.54 // 30in/s in forward
+const droneRotateSpeed = Math.PI / 2;
 
 var commandString = "takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land";
 var commands = commandString.split("|");
@@ -146,9 +154,6 @@ let then = 0;
   const delta = now - then;
   //console.log(now);
   then = now;
-  const speedY = 60 * 10; // 60cm/s in height
-  const speedZ = 30 * 10 // 40cm/s in forward
-  const droneRotateSpeed = Math.PI / 2;
   if (drone) {                //If model is loaded
     //camera.lookAt(scene.position);        
     if (isFlying) {
@@ -163,48 +168,17 @@ let then = 0;
         commands.shift();
       }
 
-      if (isOnHeight && isFlyingForward && (Math.abs(drone.position.z - originPos) < forwardDistance)) {
-        drone.position.z += delta * speedZ * Math.cos(drone.rotation.y);
-        //console.log(drone.position.z)
-      } else if (isFlyingForward && !isOnForwardTarget && (Math.abs(drone.position.z - originPos) >= forwardDistance)) {
-        isOnForwardTarget = true;
-        isFlyingForward = false;
-        commands.shift();
-      }
-
-      if (isRotating && (drone.rotation.y < rotateTarget)) {
-        drone.rotation.y += delta * droneRotateSpeed;
-        //console.log(drone.rotation.y);
-        //console.log(rotateTarget);
-      } else if (isRotating && (drone.rotation.y >= rotateTarget) && !isOnRotateTarget) {
-        isOnRotateTarget = true;
-        isOnForwardTarget = false;
-        commands.shift();
-      }
+      fly(delta);
+      yawRotate(delta);
     }
     if (commands[0].includes("takeoff")) {
       isFlying = true;
     }
     if (commands[0].includes("fly_forward") && !isFlyingForward) {
-      isFlyingForward = true;
-      const subcommands = commands[0].split(",");
-      console.log(subcommands);
-      const distance = subcommands[1];
-      const distanceUnit = subcommands[2];
-      originPos = drone.position.z;
-      if (distanceUnit == "in") {
-        forwardDistance = distance * 10 * 2.54 // Inchi to cm 
-      } else if (distanceUnit == "cm") {
-        forwardDistance = distance * 10 // 
-      }
+      flySetting(commands[0]);
     }
-    if (commands[0].includes("yaw_right") && !isRotating) {
-      isRotating = true;
-      const subcommands = commands[0].split(",");
-      console.log(subcommands);
-      const deltaAngle = subcommands[1] * Math.PI / 180;
-      //console.log(deltaAngle);
-      rotateTarget = drone.rotation.y + deltaAngle;
+    if (commands[0].includes("yaw") && !isRotating) {
+      yawRotateSetting(commands[0]);
     }
     if (commands[0].includes("land")) {
       if (drone.position.y > 0) {
@@ -260,4 +234,73 @@ function moveAxis(object, mesh) {
   pivot.add(mesh);
   mesh.geometry.center();
   object.add(mesh);
+}
+
+function distanceVector(point1, point2) {
+  var dx = point1.x - point2.x;
+  var dy = point1.y - point2.y;
+  var dz = point1.z - point2.z;
+
+  return Math.sqrt(dx * dx + dy * dy + dz * dz);
+}
+
+function yawRotateSetting(command) {
+  isRotating = true;
+  originAngle = drone.rotation.y;
+  const subcommands = command.split(",");
+  //console.log(subcommands);
+  distanceAngle = subcommands[1] * Math.PI / 180;
+}
+
+function yawRotate(delta) {
+  const shiftAngle = Math.abs(drone.rotation.y - originAngle);
+  if (isRotating && (shiftAngle < distanceAngle)) {
+    const direction = getDirection(commands[0]);
+    if (direction == 'right') {
+      drone.rotation.y += delta * droneRotateSpeed;
+    } else {
+      drone.rotation.y -= delta * droneRotateSpeed;
+    }
+  } else if (isRotating && (shiftAngle >= distanceAngle) && !isOnRotateTarget) {
+    isOnRotateTarget = true;
+    isOnForwardTarget = false;
+    commands.shift();
+  }
+}
+
+function flySetting(command) {
+  isFlyingForward = true;
+  originPosX = drone.position.x;
+  originPosY = drone.position.y;
+  originPosZ = drone.position.z;
+  const subcommands = command.split(",");
+  //console.log(subcommands);
+  const distance = subcommands[1];
+  const distanceUnit = subcommands[2];
+  if (distanceUnit == "in") {
+    forwardDistance = distance * 10 * 2.54 // Inchi to cm 
+  } else if (distanceUnit == "cm") {
+    forwardDistance = distance * 10 // 
+  }
+}
+
+function fly(delta) {
+  const shiftLength = distanceVector(drone.position, { x: originPosX, y: originPosY, z: originPosZ });
+  if (isOnHeight && isFlyingForward && (shiftLength < forwardDistance)) {
+    const direction = getDirection(commands[0]);
+    console.log(direction);
+    drone.position.z += delta * speedZ * Math.cos(drone.rotation.y);
+    drone.position.x += delta * speedZ * Math.sin(drone.rotation.y);
+  } else if (isFlyingForward && !isOnForwardTarget && (shiftLength >= forwardDistance)) {
+    isOnForwardTarget = true;
+    isFlyingForward = false;
+    commands.shift();
+  }
+}
+
+function getDirection(command) {
+  const subcommands = command.split(",");
+  const direction = subcommands[0].split("_")[1];
+
+  return direction;
 }
