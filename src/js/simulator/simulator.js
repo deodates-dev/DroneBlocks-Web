@@ -22,10 +22,11 @@ var isOnRotateTarget = false;
 var isLanding = false;
 let rotateSpeed = Math.PI / 180 * 80; //blade spin speed
 
-let speed = 20 * 10 * 2.54; // 30in/s in height
+let speed = 20 * 10 * 2.54; // 30in/s in height;
+let isSpeedSet = false;
 const droneRotateSpeed = Math.PI / 2;
 
-var commandString = "takeoff|fly_forward,20,in|yaw_left,180|fly_left,20,in|land";
+var commandString = "takeoff|fly_forward,20,in|yaw_left,180|speed,50,in/s|fly_left,20,in|land";
 var commands = commandString.split("|");
 //console.log(commands);
 scene = new THREE.Scene();
@@ -180,6 +181,10 @@ let then = 0;
     if (commands[0] && commands[0].includes("yaw") && !isRotating) {
       yawRotateSetting(commands[0]);
     }
+    if (commands[0] && commands[0].includes("speed") && !isSpeedSet) {
+      speedControl(commands[0]);
+      commands.shift();
+    }
     if (commands[0] && commands[0].includes("land")) {
       if (drone.position.y > 0) {
         drone.position.y -= delta * speed;
@@ -301,6 +306,7 @@ function flySetting(command) {
     forwardDistance = distance * 10 * 2.54 // Inchi to cm;
   } else if (distanceUnit == "cm") {
     forwardDistance = distance * 10 // number to cm
+
   }
 }
 
@@ -330,12 +336,28 @@ function fly(delta) {
       case 'right':
         drone.position.z += delta * speed * Math.cos(drone.rotation.y - Math.PI / 2);
         drone.position.x += delta * speed * Math.sin(drone.rotation.y - Math.PI / 2);
+        break;
         console.log(Math.cos(drone.rotation.y + Math.PI / 2));
       case 'left':
         drone.position.z -= delta * speed * Math.cos(drone.rotation.y - Math.PI / 2);
         drone.position.x -= delta * speed * Math.sin(drone.rotation.y - Math.PI / 2);
+        break;
       case 'xyz':
-
+        const fai = Math.atan((target.y - originPosY) / (target.x - originPosX));
+        console.log(target);
+        console.log(originPosX, originPosY, originPosZ);
+        const sita = Math.acos((target.z - originPosZ) / forwardDistance);
+        if (drone.position.y > 0) {
+          drone.position.x += delta * speed * Math.sin(sita) * Math.cos(fai);
+          //console.log(Math.sin(sita) * Math.cos(fai));
+          //console.log(Math.sin(sita) * Math.sin(fai));
+          //console.log(Math.cos(sita));
+          drone.position.y += delta * speed * Math.sin(sita) * Math.sin(fai);
+          drone.position.z += delta * speed * Math.cos(sita);
+          console.log(drone.position);
+        }
+        break;
+      default:
       //console.log(drone.position);
 
     }
@@ -351,4 +373,15 @@ function getDirection(command) {
   const subcommands = command.split(",");
   const direction = subcommands[0].split("_")[1];
   return direction;
+}
+
+function speedControl(command) {
+  const subcommands = command.split(",");
+  const speedFactor = subcommands[1];
+  const speedUnit = subcommands[2];
+  if (speedUnit == 'in/s') {
+    speed = speedFactor * 10 * 2.54;
+  } else if (speedUnit == 'cm/s') {
+    speed = speedFactor * 10;
+  }
 }
