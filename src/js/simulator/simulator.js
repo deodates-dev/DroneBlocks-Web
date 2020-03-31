@@ -20,13 +20,14 @@ var isRotating = false;
 var rotateTarget = 0;
 var isOnRotateTarget = false;
 var isLanding = false;
+var islanded = false;
 let rotateSpeed = Math.PI / 180 * 80; //blade spin speed
 
 let speed = 20 * 10 * 2.54; // 30in/s in height;
 let isSpeedSet = false;
 const droneRotateSpeed = Math.PI / 2;
 
-var commandString = "takeoff|fly_xyz,40,40,40,in|yaw_left,180|speed,50,in/s|fly_left,20,in|land";
+var commandString = "takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land";
 var commands = commandString.split("|");
 //console.log(commands);
 scene = new THREE.Scene();
@@ -162,6 +163,7 @@ let then = 0;
       blade[1].rotation.y += rotateSpeed;
       blade[2].rotation.y -= rotateSpeed;
       blade[3].rotation.y += rotateSpeed;
+
       if (!isOnHeight && drone.position.y < 1520) {  // Drone Height is 152cm;
         drone.position.y += delta * speed;
       } else if ((drone.position.y >= 1520) && !isOnHeight) {
@@ -174,6 +176,7 @@ let then = 0;
     }
     if (commands[0] && commands[0].includes("takeoff")) {
       isFlying = true;
+      rotateSpeed = Math.PI / 180 * 80;
     }
     if (commands[0] && commands[0].includes("fly") && !isFlyingForward) {
       flySetting(commands[0]);
@@ -185,18 +188,23 @@ let then = 0;
       speedControl(commands[0]);
       commands.shift();
     }
-    if (commands[0] && commands[0].includes("land")) {
+    if (commands[0] && commands[0].includes("land") && !islanded) {
       if (drone.position.y > 0) {
         drone.position.y -= delta * speed;
       } else {
         rotateSpeed -= delta * rotateSpeed;
-        if (rotateSpeed <= 0) {
+        if (rotateSpeed <= 0.001) {
           isFlying = false;
+          isLanded = true;
+          isOnHeight = false;
+          commands.shift();
+          console.log(commands);
         } else {
           blade[0].rotation.y -= rotateSpeed;
           blade[1].rotation.y += rotateSpeed;
           blade[2].rotation.y -= rotateSpeed;
           blade[3].rotation.y += rotateSpeed;
+
         }
       }
     }
@@ -260,6 +268,7 @@ function yawRotateSetting(command) {
 function yawRotate(delta) {
   const shiftAngle = Math.abs(drone.rotation.y - originAngle);
   if (isRotating && (shiftAngle < distanceAngle)) {
+    isOnRotateTarget = false;
     const direction = getDirection(commands[0]);
     if (direction == 'right') {
       drone.rotation.y += delta * droneRotateSpeed;
@@ -269,6 +278,7 @@ function yawRotate(delta) {
   } else if (isRotating && (shiftAngle >= distanceAngle) && !isOnRotateTarget) {
     isOnRotateTarget = true;
     isOnForwardTarget = false;
+    isRotating = false;
     commands.shift();
   }
 }
@@ -311,8 +321,8 @@ function flySetting(command) {
 
 function fly(delta) {
   const shiftLength = distanceVector(drone.position, { x: originPosX, y: originPosY, z: originPosZ });
-  console.log(shiftLength + '---' + forwardDistance);
   if (isOnHeight && isFlyingForward && (shiftLength < forwardDistance)) {
+    isOnForwardTarget = false;
     const direction = getDirection(commands[0]);
     console.log(direction);
     switch (direction) {
