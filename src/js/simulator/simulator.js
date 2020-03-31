@@ -12,6 +12,7 @@ var originPosX = 0;
 var originPosY = 0;
 var originPosZ = 0;
 var forwardDistance = 0;
+var target;
 var originAngle = 0;
 var distanceAngle = 0;
 var isOnForwardTarget = false;
@@ -21,11 +22,10 @@ var isOnRotateTarget = false;
 var isLanding = false;
 let rotateSpeed = Math.PI / 180 * 80; //blade spin speed
 
-let speedY = 20 * 10 * 2.54; // 30in/s in height
-let speedZ = 20 * 10 * 2.54 // 30in/s in forward
+let speed = 20 * 10 * 2.54; // 30in/s in height
 const droneRotateSpeed = Math.PI / 2;
 
-var commandString = "takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land";
+var commandString = "takeoff|fly_forward,20,in|yaw_left,180|fly_left,20,in|land";
 var commands = commandString.split("|");
 //console.log(commands);
 scene = new THREE.Scene();
@@ -162,7 +162,7 @@ let then = 0;
       blade[2].rotation.y -= rotateSpeed;
       blade[3].rotation.y += rotateSpeed;
       if (!isOnHeight && drone.position.y < 1520) {  // Drone Height is 152cm;
-        drone.position.y += delta * speedY;
+        drone.position.y += delta * speed;
       } else if ((drone.position.y >= 1520) && !isOnHeight) {
         isOnHeight = true;
         commands.shift();
@@ -171,18 +171,18 @@ let then = 0;
       fly(delta);
       yawRotate(delta);
     }
-    if (commands[0].includes("takeoff")) {
+    if (commands[0] && commands[0].includes("takeoff")) {
       isFlying = true;
     }
-    if (commands[0].includes("fly_forward") && !isFlyingForward) {
+    if (commands[0] && commands[0].includes("fly") && !isFlyingForward) {
       flySetting(commands[0]);
     }
-    if (commands[0].includes("yaw") && !isRotating) {
+    if (commands[0] && commands[0].includes("yaw") && !isRotating) {
       yawRotateSetting(commands[0]);
     }
-    if (commands[0].includes("land")) {
+    if (commands[0] && commands[0].includes("land")) {
       if (drone.position.y > 0) {
-        drone.position.y -= delta * speedY;
+        drone.position.y -= delta * speed;
       } else {
         rotateSpeed -= delta * rotateSpeed;
         if (rotateSpeed <= 0) {
@@ -274,23 +274,72 @@ function flySetting(command) {
   originPosY = drone.position.y;
   originPosZ = drone.position.z;
   const subcommands = command.split(",");
-  //console.log(subcommands);
-  const distance = subcommands[1];
-  const distanceUnit = subcommands[2];
+  const distanceUnit = subcommands[subcommands.length - 1];
+  const direction = getDirection(command);
+  console.log(direction);
+  let distance;
+  if (direction == 'xyz') {
+    if (distanceUnit == "in") {
+      target = {
+        x: subcommands[2] * 10 * 2.54, //webGl x asix = y in real;
+        y: subcommands[3] * 10 * 2.54, //webGL y axis = z in real;
+        z: subcommands[1] * 10 * 2.54,  //webGL z axis = x in real 
+      }
+    } else if (distanceUnit == "cm") {
+      target = {
+        x: subcommands[2] * 10, //webGl x asix = y in real;
+        y: subcommands[3] * 10, //webGL y axis = z in real;
+        z: subcommands[1] * 10,  //webGL z axis = x in real 
+      }
+    }
+    distance = distanceVector(drone.position, target);
+  } else {
+    distance = subcommands[1];
+  }
+
   if (distanceUnit == "in") {
-    forwardDistance = distance * 10 * 2.54 // Inchi to cm 
+    forwardDistance = distance * 10 * 2.54 // Inchi to cm;
   } else if (distanceUnit == "cm") {
-    forwardDistance = distance * 10 // 
+    forwardDistance = distance * 10 // number to cm
   }
 }
 
 function fly(delta) {
   const shiftLength = distanceVector(drone.position, { x: originPosX, y: originPosY, z: originPosZ });
+  console.log(shiftLength + '---' + forwardDistance);
   if (isOnHeight && isFlyingForward && (shiftLength < forwardDistance)) {
     const direction = getDirection(commands[0]);
     console.log(direction);
-    drone.position.z += delta * speedZ * Math.cos(drone.rotation.y);
-    drone.position.x += delta * speedZ * Math.sin(drone.rotation.y);
+    switch (direction) {
+      case 'forward':
+        drone.position.z += delta * speed * Math.cos(drone.rotation.y);
+        drone.position.x += delta * speed * Math.sin(drone.rotation.y);
+        break;
+      case 'backward':
+        drone.position.z -= delta * speed * Math.cos(drone.rotation.y);
+        drone.position.x -= delta * speed * Math.sin(drone.rotation.y);
+        break;
+      case 'up':
+        drone.position.y += delta * speed;
+        break;
+      case 'down':
+        if (drone.position.y > 0) {
+          drone.position.y -= delta * speed;
+        }
+        break;
+      case 'right':
+        drone.position.z += delta * speed * Math.cos(drone.rotation.y - Math.PI / 2);
+        drone.position.x += delta * speed * Math.sin(drone.rotation.y - Math.PI / 2);
+        console.log(Math.cos(drone.rotation.y + Math.PI / 2));
+      case 'left':
+        drone.position.z -= delta * speed * Math.cos(drone.rotation.y - Math.PI / 2);
+        drone.position.x -= delta * speed * Math.sin(drone.rotation.y - Math.PI / 2);
+      case 'xyz':
+
+      //console.log(drone.position);
+
+    }
+
   } else if (isFlyingForward && !isOnForwardTarget && (shiftLength >= forwardDistance)) {
     isOnForwardTarget = true;
     isFlyingForward = false;
@@ -301,6 +350,5 @@ function fly(delta) {
 function getDirection(command) {
   const subcommands = command.split(",");
   const direction = subcommands[0].split("_")[1];
-
   return direction;
 }
