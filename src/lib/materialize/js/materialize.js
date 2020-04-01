@@ -4,7 +4,6 @@
  * MIT License (https://raw.githubusercontent.com/Dogfalo/materialize/master/LICENSE)
  */
 // Check for jQuery.
-console.log('I am living here')
 if (typeof(jQuery) === 'undefined') {
   var jQuery;
   // Check if require is a defined function.

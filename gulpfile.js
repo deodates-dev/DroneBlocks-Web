@@ -5,7 +5,7 @@ const webpackStream = require('webpack-stream');
 
 const webpackConfig = {
     output: {
-      filename: '[name].min.js'
+        filename: '[name].min.js'
     },
     mode: process.env.NODE_ENV === 'dev' ? 'development' : 'production',
     module: {

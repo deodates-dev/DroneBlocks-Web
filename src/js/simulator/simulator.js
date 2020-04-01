@@ -30,11 +30,11 @@ var isFliping = false;
 
 let speed = 20 * 10 * 2.54; // 30in/s in height;
 let isSpeedSet = false;
-const droneRotateSpeed = Math.PI / 2;
+const droneRotateSpeed = Math.PI;
 
-var commandString = "takeoff|flip_left|fly_forward,20,in|yaw_right,180|hover,3|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land";
-var commands = commandString.split("|");
-//console.log(commands);
+//var window.commandstring = "takeoff|flip_left|fly_forward,20,in|yaw_right,180|hover,3|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land";
+
+//console.log(window.commands);
 scene = new THREE.Scene();
 scene.background = new THREE.Color(0xcce0ff);
 scene.fog = new THREE.Fog(0xcce0ff, 1000, 150000);
@@ -146,7 +146,6 @@ loader.load('https://cors-anywhere.herokuapp.com/https://bfmblob.blob.core.windo
   object.traverse(function (child) {
     if (child instanceof THREE.Mesh) {
       child.material.map = bodyTexture;
-      console.log(child);
       if (child.name == "green_light") {
         child.material.map = lightTexture;
       }
@@ -172,11 +171,12 @@ let then = 0;
 (function animate(now) {
   window.addEventListener("resize", handleWindowResize);
   now *= 0.001;  // make it seconds
-
+  if (!window.commands || window.commands == 0) {
+    window.commands = ['land'];
+  }
   const delta = now - then;
-  //console.log(now);
   then = now;
-  if (drone) {                //If model is loaded
+  if (drone) {             //If model is loaded
     //camera.lookAt(scene.position);        
     if (isFlying) {
       blade[0].rotation.y -= rotateSpeed;
@@ -188,7 +188,7 @@ let then = 0;
       yawRotate(delta);
       flip(delta);
     }
-    if (commands[0] && commands[0].includes("takeoff")) {
+    if (window.commands[0] && window.commands[0].includes("takeoff")) {
       hoverPeriod = 1; //hover 1s for every command
       clock += delta;
       if (clock > hoverPeriod) {
@@ -197,39 +197,39 @@ let then = 0;
         clock = 0;
       }
     }
-    if (commands[0] && commands[0].includes("fly") && !isFlyingForward) {
+    if (window.commands[0] && window.commands[0].includes("fly") && !isFlyingForward) {
       hoverPeriod = 1; //hover 1s for every command
       clock += delta;
       if (clock > hoverPeriod) {
-        flySetting(commands[0]);
+        flySetting(window.commands[0]);
         clock = 0;
       }
     }
-    if (commands[0] && commands[0].includes("yaw") && !isRotating) {
+    if (window.commands[0] && window.commands[0].includes("yaw") && !isRotating) {
       hoverPeriod = 1; //hover 1s for every command
       clock += delta;
       if (clock > hoverPeriod) {
-        yawRotateSetting(commands[0]);
+        yawRotateSetting(window.commands[0]);
         clock = 0;
       }
     }
-    if (commands[0] && commands[0].includes("speed") && !isSpeedSet) {
-      speedControl(commands[0]);
-      commands.shift();
+    if (window.commands[0] && window.commands[0].includes("speed") && !isSpeedSet) {
+      speedControl(window.commands[0]);
+      window.commands.shift();
     }
-    if (commands[0] && commands[0].includes("hover")) {
-      const subcommands = commands[0].split(",");
+    if (window.commands[0] && window.commands[0].includes("hover")) {
+      const subcommands = window.commands[0].split(",");
       hoverPeriod = subcommands[1];
       clock += delta;
       if (clock > hoverPeriod) {
-        commands.shift();
+        window.commands.shift();
         clock = 0;
       }
     }
-    if (commands[0] && commands[0].includes("flip") && !isFliping) {
+    if (window.commands[0] && window.commands[0].includes("flip") && !isFliping) {
       hoverPeriod = 1;
       clock += delta;
-      const direction = getDirection(commands[0]);
+      const direction = getDirection(window.commands[0]);
       if (clock > hoverPeriod) {
         clock = 0;
         isFliping = true;
@@ -240,16 +240,15 @@ let then = 0;
         }
       }
     }
-    if (commands[0] && commands[0].includes("land") && !islanded) {
+    if (window.commands[0] && window.commands[0].includes("land") && !islanded) {
       hoverPeriod = 1;
       clock += delta;
       if (clock > hoverPeriod) {
         land(delta);
       }
     }
-
   }
-  //console.log(commands[0]);
+  //console.log(window.commands[0]);
   requestAnimationFrame(animate);
   render();
   update();
@@ -305,7 +304,7 @@ function yawRotate(delta) {
   const shiftAngle = Math.abs(drone.rotation.y - originAngle);
   if (isRotating && (shiftAngle < distanceAngle)) {
     isOnRotateTarget = false;
-    const direction = getDirection(commands[0]);
+    const direction = getDirection(window.commands[0]);
     if (direction == 'right') {
       drone.rotation.y += delta * droneRotateSpeed;
     } else {
@@ -315,7 +314,7 @@ function yawRotate(delta) {
     isOnRotateTarget = true;
     isOnForwardTarget = false;
     isRotating = false;
-    commands.shift();
+    window.commands.shift();
   }
 }
 
@@ -359,14 +358,14 @@ function verticalFly(delta) {
     drone.position.y += delta * speed;
   } else if ((drone.position.y >= 1520) && !isOnHeight) {
     isOnHeight = true;
-    commands.shift();
+    window.commands.shift();
   }
 }
 function fly(delta) {
   const shiftLength = distanceVector(drone.position, { x: originPosX, y: originPosY, z: originPosZ });
   if (isOnHeight && isFlyingForward && (shiftLength < forwardDistance)) {
     isOnForwardTarget = false;
-    const direction = getDirection(commands[0]);
+    const direction = getDirection(window.commands[0]);
     switch (direction) {
       case 'forward':
         drone.position.z += delta * speed * Math.cos(drone.rotation.y);
@@ -413,56 +412,61 @@ function fly(delta) {
   } else if (isFlyingForward && !isOnForwardTarget && (shiftLength >= forwardDistance)) {
     isOnForwardTarget = true;
     isFlyingForward = false;
-    commands.shift();
+    window.commands.shift();
   }
 }
 
 function flip(delta) {
-  const direction = getDirection(commands[0]);
-  const distanceAngle = Math.PI * 2;
-  let angleShift;
-  if ((direction == 'left') || (direction == 'right')) {
-    angleShift = Math.abs(drone.rotation.z - originAngle);
-  } else {
-    angleShift = Math.abs(drone.rotation.x - originAngle);
-  }
-  if ((angleShift < distanceAngle) && isFliping) {
-    switch (direction) {
-      case 'forward':
-        drone.rotation.x += delta * droneRotateSpeed;
-        break;
-      case 'backward':
-        drone.rotation.x -= delta * droneRotateSpeed;
-        break;
-      case 'right':
-        drone.rotation.z += delta * droneRotateSpeed;
-        break;
-      case 'left':
-        drone.rotation.z -= delta * droneRotateSpeed;
-        break;
+  if (isFliping) {
+    const direction = getDirection(window.commands[0]);
+    const distanceAngle = Math.PI * 2;
+    let angleShift;
+    if ((direction == 'left') || (direction == 'right')) {
+      angleShift = Math.abs(drone.rotation.z - originAngle);
+    } else {
+      angleShift = Math.abs(drone.rotation.x - originAngle);
     }
-  } else if ((angleShift >= distanceAngle) && isFliping) {
-    isFliping = false;
-    commands.shift();
+    if ((angleShift < distanceAngle) && isFliping) {
+      switch (direction) {
+        case 'forward':
+          drone.rotation.x += delta * droneRotateSpeed;
+          break;
+        case 'backward':
+          drone.rotation.x -= delta * droneRotateSpeed;
+          break;
+        case 'right':
+          drone.rotation.z += delta * droneRotateSpeed;
+          break;
+        case 'left':
+          drone.rotation.z -= delta * droneRotateSpeed;
+          break;
+      }
+    } else if ((angleShift >= distanceAngle) && isFliping) {
+      isFliping = false;
+      window.commands.shift();
+    }
   }
-
 }
 function land(delta) {
   if (drone.position.y > 0) {
     drone.position.y -= delta * speed;
   } else {
     let speedLimit;
-    if (commands.length == 1) {
+    if (window.commands.length == 1) {
       speedLimit = 0.01;
+      rotateSpeed -= delta * rotateSpeed;
+      if (rotateSpeed <= speedLimit) {
+        isFlying = false;
+        isLanded = true;
+        isOnHeight = false;
+        window.commands.shift();
+        clock = 0;
+      }
     } else {
-      speedLimit = rotateSpeed;
-    }
-    rotateSpeed -= delta * rotateSpeed;
-    if (rotateSpeed <= speedLimit) {
-      isFlying = false;
+      isFlying = true;
       isLanded = true;
       isOnHeight = false;
-      commands.shift();
+      window.commands.shift();
       clock = 0;
     }
   }
