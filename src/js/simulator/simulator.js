@@ -32,7 +32,7 @@ let speed = 20 * 10 * 2.54; // 30in/s in height;
 let isSpeedSet = false;
 const droneRotateSpeed = Math.PI / 2;
 
-var commandString = "takeoff|flip_left|fly_forward,20,in|yaw_right,180|hover,3|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land";
+var commandString = "takeoff|flip_right|hover,3|fly_forward,20,in|yaw_right,360|fly_forward,20,in|land";
 var commands = commandString.split("|");
 //console.log(commands);
 scene = new THREE.Scene();
@@ -130,14 +130,29 @@ var onProgress = function (xhr) {
   }
 };
 var onError = function (xhr) { };
+var droneImage = "https://cors-anywhere.herokuapp.com/https://bfmblob.blob.core.windows.net/partlibrary/Textures/Drone_mat_Diffuse.png"
+var bodyTexture = new THREE.TextureLoader().load(droneImage);
+
+var lightImage = "https://cors-anywhere.herokuapp.com/https://bfmblob.blob.core.windows.net/partlibrary/Textures/LED%20_Emissive.png";
+var lightTexture = new THREE.TextureLoader().load(lightImage);
+
+var glassImage = "https://cors-anywhere.herokuapp.com/https://bfmblob.blob.core.windows.net/partlibrary/Textures/glass_mat%20_Normal.png";
+var glassTexture = new THREE.TextureLoader().load(glassImage);
 
 var loader = new THREE.OBJLoader(manager);
 loader.crossOrigin = 'anonymous';
-loader.load('https://cors-anywhere.herokuapp.com/https://bfmblob.blob.core.windows.net/partlibrary/drone.obj', function (object) {
+loader.load('https://cors-anywhere.herokuapp.com/https://bfmblob.blob.core.windows.net/partlibrary/drone_object.obj', function (object) {
 
   object.traverse(function (child) {
-    if (!!child.name.includes("Blade")) {
-      //console.log(child);
+    if (child instanceof THREE.Mesh) {
+      child.material.map = bodyTexture;
+      console.log(child);
+      if (child.name == "green_light") {
+        child.material.map = lightTexture;
+      }
+      if (child.name == "glass") {
+        child.material.map = glassTexture;
+      }
     }
   });
   drone = object;
