@@ -387,12 +387,12 @@ function fly(delta) {
     const direction = getDirection(window.commands[0]);
     switch (direction) {
       case 'forward':
-        drone.position.z += delta * speed * Math.cos(drone.rotation.y);
-        drone.position.x += delta * speed * Math.sin(drone.rotation.y);
+        drone.position.z += delta * speed * Math.sin(-drone.rotation.y);
+        drone.position.x += delta * speed * Math.cos(-drone.rotation.y);
         break;
       case 'backward':
-        drone.position.z -= delta * speed * Math.cos(drone.rotation.y);
-        drone.position.x -= delta * speed * Math.sin(drone.rotation.y);
+        drone.position.z -= delta * speed * Math.sin(-drone.rotation.y);
+        drone.position.x -= delta * speed * Math.cos(-drone.rotation.y);
         break;
       case 'up':
         drone.position.y += delta * speed;
@@ -403,24 +403,19 @@ function fly(delta) {
         }
         break;
       case 'right':
-        drone.position.z += delta * speed * Math.cos(drone.rotation.y - Math.PI / 2);
-        drone.position.x += delta * speed * Math.sin(drone.rotation.y - Math.PI / 2);
+        drone.position.z += delta * speed * Math.sin(-drone.rotation.y + Math.PI / 2);
+        drone.position.x += delta * speed * Math.cos(-drone.rotation.y + Math.PI / 2);
         break;
-        console.log(Math.cos(drone.rotation.y + Math.PI / 2));
       case 'left':
-        drone.position.z -= delta * speed * Math.cos(drone.rotation.y - Math.PI / 2);
-        drone.position.x -= delta * speed * Math.sin(drone.rotation.y - Math.PI / 2);
+        drone.position.z += delta * speed * Math.sin(-drone.rotation.y - Math.PI / 2);
+        drone.position.x += delta * speed * Math.cos(-drone.rotation.y - Math.PI / 2);
         break;
       case 'xyz':
         if (drone.position.y > 0) {
-          console.log(forwardDistance);
-          console.log(target);
           const speedRatio = (target.y - originPosY) / forwardDistance;
-          console.log(speedRatio)
           drone.position.x += delta * speed * (target.x - originPosX) / forwardDistance;
           drone.position.y += delta * speed * (target.y - originPosY) / forwardDistance;
           drone.position.z += delta * speed * (target.z - originPosZ) / forwardDistance;
-          console.log(drone.position);
         }
         break;
       default:
