@@ -30,6 +30,7 @@ var isFliping = false;
 
 let speed = 20 * 10 * 2.54; // 30in/s in height;
 let isSpeedSet = false;
+const droneFlipSpeed = Math.PI * 3; //flip speed.
 const droneRotateSpeed = Math.PI;
 
 //var window.commandstring = "takeoff|flip_left|fly_forward,20,in|yaw_right,180|hover,3|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land";
@@ -37,9 +38,7 @@ const droneRotateSpeed = Math.PI;
 //console.log(window.commands);
 scene = new THREE.Scene();
 scene.background = new THREE.Color(0xcce0ff);
-scene.fog = new THREE.Fog(0xcce0ff, 1000, 150000);
-
-
+scene.position.set(-2500, 0, -1500);
 var SCREEN_WIDTH = window.innerWidth / 2, SCREEN_HEIGHT = window.innerHeight;
 // camera attributes
 var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 200000;
@@ -47,9 +46,9 @@ var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20
 camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 // add the camera to the scene
 scene.add(camera);
-camera.position.set(3000, 4000, 3000);
+camera.position.set(-3000, 2000, 100);
 camera.lookAt(scene.position);
-scene.add(new THREE.AxesHelper(200000));
+scene.add(new THREE.AxesHelper(2600));
 
 // create and start the renderer; choose antialias setting.
 if (Detector.webgl) {
@@ -71,21 +70,21 @@ controls.maxDistance = 60000;
 controls.maxPolarAngle = Math.PI * 0.48;
 
 const size = 25000; //2500cm, 10cm = 100, 1 = 0.1cm
-const divisions = 250;
+const divisions = 250; //1 division = 10cm;
 const gridHelper = new THREE.GridHelper(size, divisions);
 
-//scene.add(gridHelper);
+scene.add(gridHelper);
 
 scene.add(new THREE.AmbientLight(0x666666));
 
 var light = new THREE.DirectionalLight(0xdfebff, 1);
-light.position.set(50, 200, 100);
+light.position.set(0, 200, 0);
 light.position.multiplyScalar(1.3);
 
-light.castShadow = true;
+//light.castShadow = true;
 
-light.shadow.mapSize.width = 1024;
-light.shadow.mapSize.height = 1024;
+//light.shadow.mapSize.width = 1024;
+//light.shadow.mapSize.height = 1024;
 
 var d = 300;
 
@@ -100,7 +99,7 @@ scene.add(light);
 
 
 
-// ground
+/* // ground Texture material 
 var loader = new THREE.TextureLoader();
 var groundTexture = loader.load('https://threejs.org/examples/textures/terrain/grasslight-big.jpg');
 groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
@@ -108,9 +107,30 @@ groundTexture.repeat.set(25, 25);
 groundTexture.anisotropy = 16;
 groundTexture.encoding = THREE.sRGBEncoding;
 
-var groundMaterial = new THREE.MeshLambertMaterial({ map: groundTexture });
+var groundMaterial = new THREE.MeshLambertMaterial({ map: groundTexture }); */
 
-var mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(100000, 100000), groundMaterial);
+var material = new THREE.MeshFaceMaterial([
+  new THREE.MeshBasicMaterial({
+    color: 0x00ff00
+  }),
+  new THREE.MeshBasicMaterial({
+    color: 0xff0000
+  }),
+  new THREE.MeshBasicMaterial({
+    color: 0x0000ff,
+  }),
+  new THREE.MeshBasicMaterial({
+    color: 0xffff00
+  }),
+  new THREE.MeshBasicMaterial({
+    color: 0x00ffff
+  }),
+  new THREE.MeshBasicMaterial({
+    color: 0xff00ff
+  })
+]);
+
+var mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(100000, 100000), material);
 mesh.position.y = 0;
 mesh.rotation.x = - Math.PI / 2;
 mesh.receiveShadow = true;
@@ -154,6 +174,7 @@ loader.load('https://cors-anywhere.herokuapp.com/https://bfmblob.blob.core.windo
       }
     }
   });
+  object.rotation.y = 90 * Math.PI / 180;
   drone = object;
   scene.add(drone);
   blade[0] = scene.getObjectByName("Blade01");
@@ -171,13 +192,13 @@ let then = 0;
 (function animate(now) {
   window.addEventListener("resize", handleWindowResize);
   now *= 0.001;  // make it seconds
-  if (!window.commands || window.commands == 0) {
-    window.commands = ['land'];
+  if (!window.commands) {
+    window.commands = ['stay'];
   }
   const delta = now - then;
   then = now;
   if (drone) {             //If model is loaded
-    //camera.lookAt(scene.position);        
+    //camera.lookAt(drone.position);
     if (isFlying) {
       blade[0].rotation.y -= rotateSpeed;
       blade[1].rotation.y += rotateSpeed;
@@ -194,7 +215,6 @@ let then = 0;
       if (clock > hoverPeriod) {
         isFlying = true;
         rotateSpeed = Math.PI / 180 * 80;
-        clock = 0;
       }
     }
     if (window.commands[0] && window.commands[0].includes("fly") && !isFlyingForward) {
@@ -202,7 +222,6 @@ let then = 0;
       clock += delta;
       if (clock > hoverPeriod) {
         flySetting(window.commands[0]);
-        clock = 0;
       }
     }
     if (window.commands[0] && window.commands[0].includes("yaw") && !isRotating) {
@@ -210,7 +229,6 @@ let then = 0;
       clock += delta;
       if (clock > hoverPeriod) {
         yawRotateSetting(window.commands[0]);
-        clock = 0;
       }
     }
     if (window.commands[0] && window.commands[0].includes("speed") && !isSpeedSet) {
@@ -246,6 +264,9 @@ let then = 0;
       if (clock > hoverPeriod) {
         land(delta);
       }
+    }
+    if (window.commands[0] && window.commands[0].includes("stay")) {
+      clock = 0;
     }
   }
   //console.log(window.commands[0]);
@@ -306,15 +327,16 @@ function yawRotate(delta) {
     isOnRotateTarget = false;
     const direction = getDirection(window.commands[0]);
     if (direction == 'right') {
-      drone.rotation.y += delta * droneRotateSpeed;
-    } else {
       drone.rotation.y -= delta * droneRotateSpeed;
+    } else {
+      drone.rotation.y += delta * droneRotateSpeed;
     }
   } else if (isRotating && (shiftAngle >= distanceAngle) && !isOnRotateTarget) {
     isOnRotateTarget = true;
     isOnForwardTarget = false;
     isRotating = false;
     window.commands.shift();
+    clock = 0;
   }
 }
 
@@ -359,6 +381,7 @@ function verticalFly(delta) {
   } else if ((drone.position.y >= 1520) && !isOnHeight) {
     isOnHeight = true;
     window.commands.shift();
+    clock = 0;
   }
 }
 function fly(delta) {
@@ -413,6 +436,7 @@ function fly(delta) {
     isOnForwardTarget = true;
     isFlyingForward = false;
     window.commands.shift();
+    clock = 0;
   }
 }
 
@@ -426,23 +450,25 @@ function flip(delta) {
     } else {
       angleShift = Math.abs(drone.rotation.x - originAngle);
     }
-    if ((angleShift < distanceAngle) && isFliping) {
+    if ((angleShift <= distanceAngle) && isFliping) {
       switch (direction) {
         case 'forward':
-          drone.rotation.x += delta * droneRotateSpeed;
+          drone.rotation.x += delta * droneFlipSpeed;
           break;
         case 'backward':
-          drone.rotation.x -= delta * droneRotateSpeed;
+          drone.rotation.x -= delta * droneFlipSpeed;
           break;
         case 'right':
-          drone.rotation.z += delta * droneRotateSpeed;
+          drone.rotation.z += delta * droneFlipSpeed;
           break;
         case 'left':
-          drone.rotation.z -= delta * droneRotateSpeed;
+          drone.rotation.z -= delta * droneFlipSpeed;
           break;
       }
-    } else if ((angleShift >= distanceAngle) && isFliping) {
+    } else if ((angleShift > distanceAngle) && isFliping) {
       isFliping = false;
+      drone.rotation.x = 0;
+      drone.rotation.z = 0;
       window.commands.shift();
     }
   }
@@ -452,8 +478,9 @@ function land(delta) {
     drone.position.y -= delta * speed;
   } else {
     let speedLimit;
+    drone.position.y = 0;
     if (window.commands.length == 1) {
-      speedLimit = 0.01;
+      speedLimit = 1;
       rotateSpeed -= delta * rotateSpeed;
       if (rotateSpeed <= speedLimit) {
         isFlying = false;

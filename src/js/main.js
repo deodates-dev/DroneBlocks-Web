@@ -66,7 +66,7 @@ const bind = () => {
         let code = 'var mission="";'
         code += Blockly.JavaScript.workspaceToCode(blockly.workspace);
         code = eval(code);
-        window.commands = code.split("|");
+        window.commands = code.split("|"); //Send commands to simulator
         console.log(window.commands);
         var os = helpers.getMobileOS();
 
@@ -87,7 +87,7 @@ const bind = () => {
         } else {
 
             // Appwindow is so we can post to the chrome app
-            //appWindow.postMessage(code, appOrigin);
+            appWindow.postMessage(code, appOrigin);
 
         }
     });
