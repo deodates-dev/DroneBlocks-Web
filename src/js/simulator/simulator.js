@@ -171,7 +171,6 @@ objLoader.load('drone.obj', function (object) {
       }
     }
   });
-  object.rotation.y = 90 * Math.PI / 180;
   drone = object;
   scene.add(drone);
   blade[0] = scene.getObjectByName("Blade01");
@@ -249,9 +248,9 @@ let then = 0;
         clock = 0;
         isFliping = true;
         if ((direction == 'left') || (direction == 'right')) {
-          originAngle = drone.rotation.z;
+          originAngle = drone.rotation.x;
         } else {
-          originAngle = drone.rotation.x
+          originAngle = drone.rotation.z;
         }
       }
     }
@@ -443,23 +442,23 @@ function flip(delta) {
     const distanceAngle = Math.PI * 2;
     let angleShift;
     if ((direction == 'left') || (direction == 'right')) {
-      angleShift = Math.abs(drone.rotation.z - originAngle);
-    } else {
       angleShift = Math.abs(drone.rotation.x - originAngle);
+    } else {
+      angleShift = Math.abs(drone.rotation.z - originAngle);
     }
     if ((angleShift <= distanceAngle) && isFliping) {
       switch (direction) {
         case 'forward':
-          drone.rotation.x += delta * droneFlipSpeed;
+          drone.rotation.z -= delta * droneFlipSpeed;
           break;
         case 'backward':
-          drone.rotation.x -= delta * droneFlipSpeed;
-          break;
-        case 'right':
           drone.rotation.z += delta * droneFlipSpeed;
           break;
+        case 'right':
+          drone.rotation.x += delta * droneFlipSpeed;
+          break;
         case 'left':
-          drone.rotation.z -= delta * droneFlipSpeed;
+          drone.rotation.x -= delta * droneFlipSpeed;
           break;
       }
     } else if ((angleShift > distanceAngle) && isFliping) {
