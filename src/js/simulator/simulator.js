@@ -38,7 +38,6 @@ const droneRotateSpeed = Math.PI;
 //console.log(window.commands);
 scene = new THREE.Scene();
 scene.background = new THREE.Color(0xcce0ff);
-scene.position.set(-2500, 0, -1500);
 var SCREEN_WIDTH = window.innerWidth / 2, SCREEN_HEIGHT = window.innerHeight;
 // camera attributes
 var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 200000;
