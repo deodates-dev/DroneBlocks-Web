@@ -152,7 +152,7 @@ var onError = function (xhr) { };
 
 var textureLoader = new THREE.TextureLoader();
 textureLoader.setPath('assets/textures/');
-var bodyTexture = textureLoader.load('drone_mat_Diffuse.png');
+var bodyTexture = textureLoader.load('Drone_mat_Diffuse.png');
 var lightTexture = textureLoader.load('LED_Emissive.png');
 var glassTexture = textureLoader.load('glass_mat _Normal.png');
 
