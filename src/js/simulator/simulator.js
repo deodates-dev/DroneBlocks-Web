@@ -149,18 +149,16 @@ var onProgress = function (xhr) {
   }
 };
 var onError = function (xhr) { };
-var droneImage = "https://cors-anywhere.herokuapp.com/https://bfmblob.blob.core.windows.net/partlibrary/Textures/Drone_mat_Diffuse.png"
-var bodyTexture = new THREE.TextureLoader().load(droneImage);
 
-var lightImage = "https://cors-anywhere.herokuapp.com/https://bfmblob.blob.core.windows.net/partlibrary/Textures/LED%20_Emissive.png";
-var lightTexture = new THREE.TextureLoader().load(lightImage);
+var textureLoader = new THREE.TextureLoader();
+textureLoader.setPath('assets/textures/');
+var bodyTexture = textureLoader.load('drone_mat_Diffuse.png');
+var lightTexture = textureLoader.load('LED_Emissive.png');
+var glassTexture = textureLoader.load('glass_mat _Normal.png');
 
-var glassImage = "https://cors-anywhere.herokuapp.com/https://bfmblob.blob.core.windows.net/partlibrary/Textures/glass_mat%20_Normal.png";
-var glassTexture = new THREE.TextureLoader().load(glassImage);
-
-var loader = new THREE.OBJLoader(manager);
-loader.crossOrigin = 'anonymous';
-loader.load('https://cors-anywhere.herokuapp.com/https://bfmblob.blob.core.windows.net/partlibrary/drone_object.obj', function (object) {
+var objLoader = new THREE.OBJLoader(manager);
+objLoader.setPath('assets/');
+objLoader.load('drone.obj', function (object) {
 
   object.traverse(function (child) {
     if (child instanceof THREE.Mesh) {
