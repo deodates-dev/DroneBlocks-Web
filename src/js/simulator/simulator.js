@@ -35,7 +35,6 @@ const droneRotateSpeed = Math.PI;
 
 //var window.commandstring = "takeoff|flip_left|fly_forward,20,in|yaw_right,180|hover,3|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land";
 
-//console.log(window.commands);
 scene = new THREE.Scene();
 scene.background = new THREE.Color(0xcce0ff);
 var SCREEN_WIDTH = window.innerWidth / 2, SCREEN_HEIGHT = window.innerHeight;
@@ -211,6 +210,7 @@ let then = 0;
       clock += delta;
       if (clock > hoverPeriod) {
         isFlying = true;
+        isOnHeight = false;
         rotateSpeed = Math.PI / 180 * 80;
       }
     }
@@ -233,6 +233,7 @@ let then = 0;
       window.commands.shift();
     }
     if (window.commands[0] && window.commands[0].includes("hover")) {
+      isOnHeight = true;
       const subcommands = window.commands[0].split(",");
       hoverPeriod = subcommands[1];
       clock += delta;
@@ -263,11 +264,6 @@ let then = 0;
       }
     }
     if (window.commands[0] && window.commands[0].includes("stay")) {
-      clock = 0;
-    }
-    if (window.commands[0] && window.commands[0].length === "") {
-      console.log('here');
-      window.commands.shift();
       clock = 0;
     }
   }
