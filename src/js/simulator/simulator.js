@@ -483,7 +483,7 @@ function land(delta) {
         clock = 0;
       }
     } else {
-      isFlying = true;
+      isFlying = false;
       isLanded = true;
       isOnHeight = false;
       window.commands.shift();
