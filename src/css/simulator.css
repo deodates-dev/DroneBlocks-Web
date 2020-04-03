@@ -13,3 +13,15 @@ a#hamburger {
 #sidenav-overlay {
   right: 45vw !important;
 }
+
+button#resetSimulator {
+  position: absolute !important;
+  right: 17vw;
+  top: 90vh;
+  background-color: #17c750 !important;
+  color: white;
+}
+button#resetSimulator:hover {
+  background-color: #8ff804 !important;
+  color: grey;
+}

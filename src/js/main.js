@@ -198,6 +198,10 @@ const bind = () => {
         document.location.href = decodeURIComponent(query.successUrl || '/');
     });
 
+    $("#resetSimulator").click(() => {
+        window.commands = ['reset'];
+    });
+
     $("#setUnits").click((e) => {
         const units = $(e.currentTarget).data('units');
 

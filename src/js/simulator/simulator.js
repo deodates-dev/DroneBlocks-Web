@@ -238,6 +238,12 @@ let then = 0;
     if (window.commands[0] && window.commands[0].includes("stay")) {
       clock = 0;
     }
+    if (window.commands[0] && window.commands[0].includes("reset")) {
+      drone.position.set(0, 0, 0);
+      isFlying = false;
+      clock = 0;
+      commands.shift();
+    }
   }
   //console.log(window.commands[0]);
   requestAnimationFrame(animate);
