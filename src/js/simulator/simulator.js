@@ -191,6 +191,7 @@ let then = 0;
   if (!window.commands) {
     window.commands = ['stay'];
   }
+  window.commands = window.commands.filter(command => command.length > 0);
   const delta = now - then;
   then = now;
   if (drone) {             //If model is loaded
@@ -262,6 +263,11 @@ let then = 0;
       }
     }
     if (window.commands[0] && window.commands[0].includes("stay")) {
+      clock = 0;
+    }
+    if (window.commands[0] && window.commands[0].length === "") {
+      console.log('here');
+      window.commands.shift();
       clock = 0;
     }
   }
