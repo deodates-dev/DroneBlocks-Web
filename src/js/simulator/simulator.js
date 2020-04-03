@@ -349,15 +349,15 @@ function flySetting(command) {
   if (direction == 'xyz') {
     if (distanceUnit == "in") {
       target = {
-        x: subcommands[2] * 10 * 2.54, //webGl x asix = y in real;
-        y: subcommands[3] * 10 * 2.54, //webGL y axis = z in real;
-        z: subcommands[1] * 10 * 2.54,  //webGL z axis = x in real 
+        x: drone.position.x + subcommands[2] * 10 * 2.54, //webGl x asix = y in real;
+        y: drone.position.y + subcommands[3] * 10 * 2.54, //webGL y axis = z in real;
+        z: drone.position.z + subcommands[1] * 10 * 2.54,  //webGL z axis = x in real 
       }
     } else if (distanceUnit == "cm") {
       target = {
-        x: subcommands[2] * 10, //webGl x asix = y in real;
-        y: subcommands[3] * 10, //webGL y axis = z in real;
-        z: subcommands[1] * 10,  //webGL z axis = x in real;
+        x: drone.position.x + subcommands[2] * 10, //webGl x asix = y in real;
+        y: drone.position.y + subcommands[3] * 10, //webGL y axis = z in real;
+        z: drone.position.z + subcommands[1] * 10,  //webGL z axis = x in real;
       }
     }
     forwardDistance = distanceVector(drone.position, target);
