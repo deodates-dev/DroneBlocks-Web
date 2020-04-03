@@ -96,37 +96,9 @@ light.shadow.camera.far = 1000;
 scene.add(light);
 
 
-
-/* // ground Texture material 
-var loader = new THREE.TextureLoader();
-var groundTexture = loader.load('https://threejs.org/examples/textures/terrain/grasslight-big.jpg');
-groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
-groundTexture.repeat.set(25, 25);
-groundTexture.anisotropy = 16;
-groundTexture.encoding = THREE.sRGBEncoding;
-
-var groundMaterial = new THREE.MeshLambertMaterial({ map: groundTexture }); */
-
-var material = new THREE.MeshFaceMaterial([
-  new THREE.MeshBasicMaterial({
-    color: 0x00ff00
-  }),
-  new THREE.MeshBasicMaterial({
-    color: 0xff0000
-  }),
-  new THREE.MeshBasicMaterial({
-    color: 0x0000ff,
-  }),
-  new THREE.MeshBasicMaterial({
-    color: 0xffff00
-  }),
-  new THREE.MeshBasicMaterial({
-    color: 0x00ffff
-  }),
-  new THREE.MeshBasicMaterial({
-    color: 0xff00ff
-  })
-]);
+var material = new THREE.MeshBasicMaterial({
+  color: 0xff0000, // Ground Color determine.
+})
 
 var mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(100000, 100000), material);
 mesh.position.y = 0;
