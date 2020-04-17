@@ -329,15 +329,15 @@ function flySetting(command) {
   if (direction == 'xyz') {
     if (distanceUnit == "in") {
       target = {
-        x: drone.position.x + subcommands[2] * 10 * 2.54, //webGl x asix = y in real;
+        x: drone.position.x + subcommands[1] * 10 * 2.54, //webGl x asix = x in real;
         y: drone.position.y + subcommands[3] * 10 * 2.54, //webGL y axis = z in real;
-        z: drone.position.z + subcommands[1] * 10 * 2.54,  //webGL z axis = x in real 
+        z: drone.position.z - subcommands[2] * 10 * 2.54,  //webGL z axis = -x in real 
       }
     } else if (distanceUnit == "cm") {
       target = {
-        x: drone.position.x + subcommands[2] * 10, //webGl x asix = y in real;
+        x: drone.position.x + subcommands[1] * 10, //webGl x asix = y in real;
         y: drone.position.y + subcommands[3] * 10, //webGL y axis = z in real;
-        z: drone.position.z + subcommands[1] * 10,  //webGL z axis = x in real;
+        z: drone.position.z - subcommands[2] * 10,  //webGL z axis = -x in real;
       }
     }
     forwardDistance = distanceVector(drone.position, target);
@@ -392,7 +392,6 @@ function fly(delta) {
         break;
       case 'xyz':
         if (drone.position.y > 0) {
-          const speedRatio = (target.y - originPosY) / forwardDistance;
           drone.position.x += delta * speed * (target.x - originPosX) / forwardDistance;
           drone.position.y += delta * speed * (target.y - originPosY) / forwardDistance;
           drone.position.z += delta * speed * (target.z - originPosZ) / forwardDistance;
