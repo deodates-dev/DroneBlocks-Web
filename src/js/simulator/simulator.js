@@ -24,6 +24,11 @@ var islanded = false;
 let rotateSpeed = Math.PI / 180 * 80; //blade spin speed;
 var isHovering = false;
 var isHovered = false;
+var isCurving = false;
+var curveCenter = { x: 0, y: 0 };
+var curveRadius = 0;
+var curveInitialPhase = 0;
+var curveTargetPhase = 0;
 var hoverPeriod = 0;
 var clock = 0;
 var isFliping = false;
@@ -176,6 +181,7 @@ let then = 0;
       fly(delta);
       yawRotate(delta);
       flip(delta);
+      curveFly(delta);
     }
     if (window.commands[0] && window.commands[0].includes("takeoff")) {
       hoverPeriod = 1; //hover 1s for every command
@@ -191,6 +197,14 @@ let then = 0;
       clock += delta;
       if (clock > hoverPeriod) {
         flySetting(window.commands[0]);
+      }
+    }
+    if (window.commands[0] && window.commands[0].includes("curve") && !isCurving) {
+      hoverPeriod = 1; //hover 1s for every command
+      clock += delta;
+      if (clock > hoverPeriod) {
+        clock = 0;
+        curveSetting(window.commands[0]);
       }
     }
     if (window.commands[0] && window.commands[0].includes("yaw") && !isRotating) {
@@ -238,6 +252,7 @@ let then = 0;
     if (window.commands[0] && window.commands[0].includes("stay")) {
       clock = 0;
     }
+
     if (window.commands[0] && window.commands[0].includes("reset")) {
       drone.position.set(0, 0, 0);
       isFlying = false;
@@ -351,6 +366,28 @@ function flySetting(command) {
     }
   }
 }
+function curveSetting(command) {
+  isCurving = true;
+  originPosX = drone.position.x;
+  originPosY = drone.position.y;
+  originPosZ = drone.position.z;
+  const subcommands = command.split(",");
+  const distanceUnit = subcommands[subcommands.length - 1];
+
+  const { center, radius, initialPhase, targetPhase } = getCircleFromThreePoints(subcommands[1], subcommands[2], subcommands[4], subcommands[5]);
+  if (distanceUnit == "in") {
+    curveCenter.x = center.x * 10 * 2.54;
+    curveCenter.y = center.y * 10 * 2.54;
+    curveRadius = radius * 10 * 2.54;
+  } else if (distanceUnit == "cm") {
+    curveCenter.x = center.x * 10;
+    curveCenter.y = center.y * 10;
+    curveRadius = radius * 10;
+  }
+  curveInitialPhase = initialPhase;
+  curveTargetPhase = targetPhase;
+
+}
 function verticalFly(delta) {
   if (!isOnHeight && drone.position.y < 1520) {  // Drone Height is 152cm;
     drone.position.y += delta * speed;
@@ -443,6 +480,22 @@ function flip(delta) {
     }
   }
 }
+function curveFly(delta) {
+  if (isCurving) {
+    clock += delta;
+    const omega = speed / curveRadius;
+    const angle = -curveInitialPhase + omega * clock;
+    console.log(angle, '->>>', curveTargetPhase);
+    if (angle < -curveTargetPhase) {
+      drone.position.x = originPosX + curveCenter.x + curveRadius * Math.cos(angle);
+      drone.position.z = originPosZ - curveCenter.y + curveRadius * Math.sin(angle);
+    } else {
+      clock = 0;
+      isCurving = false;
+      window.commands.shift();
+    }
+  }
+}
 function land(delta) {
   if (drone.position.y > 0) {
     drone.position.y -= delta * speed;
@@ -484,4 +537,26 @@ function speedControl(command) {
   } else if (speedUnit == 'cm/s') {
     speed = speedFactor * 10;
   }
+}
+
+function getCircleFromThreePoints(x1, y1, x2, y2) {
+  const A = x1 * y2 - x2 * y1;
+  const B = (x2 * x2 + y2 * y2) * y1 - (x1 * x1 + y1 * y1) * y2;
+  const C = (x1 * x1 + y1 * y1) * x2 - (x2 * x2 + y2 * y2) * x1;
+  const centerX = -B / (2 * A);
+  const centerY = -C / (2 * A);
+  const radius = Math.sqrt(centerX * centerX + centerY * centerY);
+  const initialPhase = Math.atan2(0 - centerY, 0 - centerX);
+  const phase1 = Math.atan2(y1 - centerY, x1 - centerX);
+  const phase2 = Math.atan2(y2 - centerY, x2 - centerX);
+  const circleData = {
+    center: {
+      x: centerX,
+      y: centerY
+    },
+    radius: radius,
+    initialPhase,
+    targetPhase: phase2
+  };
+  return circleData;
 }
