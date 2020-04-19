@@ -41,7 +41,7 @@ const droneRotateSpeed = Math.PI;
 //var window.commandstring = "takeoff|flip_left|fly_forward,20,in|yaw_right,180|hover,3|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land";
 
 scene = new THREE.Scene();
-scene.background = new THREE.Color(0xcce0ff);
+scene.background = new THREE.Color(0xcccccc);
 var SCREEN_WIDTH = window.innerWidth / 2, SCREEN_HEIGHT = window.innerHeight;
 // camera attributes
 var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 200000;
@@ -102,7 +102,7 @@ scene.add(light);
 
 
 var material = new THREE.MeshBasicMaterial({
-  color: 0xff0000, // Ground Color determine.
+  color: 0x999999, // Ground Color determine.
 })
 
 var mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(100000, 100000), material);
