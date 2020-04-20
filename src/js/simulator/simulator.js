@@ -29,6 +29,7 @@ var curveCenter = { x: 0, y: 0 };
 var curveRadius = 0;
 var curveInitialPhase = 0;
 var curveTargetPhase = 0;
+var curveMiddlePhase = 0;
 var hoverPeriod = 0;
 var clock = 0;
 var isFliping = false;
@@ -374,7 +375,7 @@ function curveSetting(command) {
   const subcommands = command.split(",");
   const distanceUnit = subcommands[subcommands.length - 1];
 
-  const { center, radius, initialPhase, targetPhase } = getCircleFromThreePoints(subcommands[1], subcommands[2], subcommands[4], subcommands[5]);
+  const { center, radius, initialPhase, middlePhase, targetPhase } = getCircleFromThreePoints(subcommands[1], subcommands[2], subcommands[4], subcommands[5]);
   if (distanceUnit == "in") {
     curveCenter.x = center.x * 10 * 2.54;
     curveCenter.y = center.y * 10 * 2.54;
@@ -386,8 +387,7 @@ function curveSetting(command) {
   }
   curveInitialPhase = initialPhase;
   curveTargetPhase = targetPhase;
-  console.log(initialPhase, '------', targetPhase);
-
+  curveMiddlePhase = middlePhase;
 }
 function verticalFly(delta) {
   if (!isOnHeight && drone.position.y < 1520) {  // Drone Height is 152cm;
@@ -483,10 +483,23 @@ function flip(delta) {
 }
 function curveFly(delta) {
   if (isCurving) {
+    let angle;
+    let distance;
     clock += delta;
     const omega = speed / curveRadius;
-    const angle = -curveInitialPhase + omega * clock;
-    const distance = Math.abs(curveTargetPhase - curveInitialPhase);
+    distance = Math.abs(curveTargetPhase - curveInitialPhase);
+    if ((curveInitialPhase > curveMiddlePhase) && (curveMiddlePhase > curveTargetPhase)) {
+      distance = Math.abs(curveTargetPhase - curveInitialPhase);
+    } else if ((curveInitialPhase < curveMiddlePhase) && (curveMiddlePhase < curveTargetPhase)) {
+      distance = Math.abs(curveTargetPhase - curveInitialPhase);
+    } else {
+      distance = Math.PI * 2 - distance;
+    }
+    if (curveInitialPhase > curveMiddlePhase) {
+      angle = -curveInitialPhase + omega * clock;
+    } else {
+      angle = -curveInitialPhase - omega * clock;
+    }
     if (distance > omega * clock) {
       drone.position.x = originPosX + curveCenter.x + curveRadius * Math.cos(angle);
       drone.position.z = originPosZ - curveCenter.y + curveRadius * Math.sin(angle);
@@ -557,6 +570,7 @@ function getCircleFromThreePoints(x1, y1, x2, y2) {
     },
     radius: radius,
     initialPhase,
+    middlePhase: phase1,
     targetPhase: phase2
   };
   return circleData;
