@@ -386,6 +386,7 @@ function curveSetting(command) {
   }
   curveInitialPhase = initialPhase;
   curveTargetPhase = targetPhase;
+  console.log(initialPhase, '------', targetPhase);
 
 }
 function verticalFly(delta) {
@@ -485,8 +486,8 @@ function curveFly(delta) {
     clock += delta;
     const omega = speed / curveRadius;
     const angle = -curveInitialPhase + omega * clock;
-    console.log(angle, '->>>', curveTargetPhase);
-    if (angle < -curveTargetPhase) {
+    const distance = Math.abs(curveTargetPhase - curveInitialPhase);
+    if (distance > omega * clock) {
       drone.position.x = originPosX + curveCenter.x + curveRadius * Math.cos(angle);
       drone.position.z = originPosZ - curveCenter.y + curveRadius * Math.sin(angle);
     } else {
