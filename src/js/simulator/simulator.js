@@ -257,6 +257,11 @@ let then = 0;
     if (window.commands[0] && window.commands[0].includes("reset")) {
       drone.position.set(0, 0, 0);
       isFlying = false;
+      isCurving = false;
+      isFliping = false;
+      isHovering = false;
+      isLanding = false;
+      isRotating = false;
       clock = 0;
       commands.shift();
     }
@@ -388,6 +393,7 @@ function curveSetting(command) {
   curveInitialPhase = initialPhase;
   curveTargetPhase = targetPhase;
   curveMiddlePhase = middlePhase;
+  console.log(curveInitialPhase, '--->', curveMiddlePhase, '---', curveTargetPhase);
 }
 function verticalFly(delta) {
   if (!isOnHeight && drone.position.y < 1520) {  // Drone Height is 152cm;
@@ -488,17 +494,26 @@ function curveFly(delta) {
     clock += delta;
     const omega = speed / curveRadius;
     distance = Math.abs(curveTargetPhase - curveInitialPhase);
-    if ((curveInitialPhase > curveMiddlePhase) && (curveMiddlePhase > curveTargetPhase)) {
-      distance = Math.abs(curveTargetPhase - curveInitialPhase);
-    } else if ((curveInitialPhase < curveMiddlePhase) && (curveMiddlePhase < curveTargetPhase)) {
-      distance = Math.abs(curveTargetPhase - curveInitialPhase);
-    } else {
-      distance = Math.PI * 2 - distance;
-    }
     if (curveInitialPhase > curveMiddlePhase) {
-      angle = -curveInitialPhase + omega * clock;
-    } else {
-      angle = -curveInitialPhase - omega * clock;
+      if (curveMiddlePhase > curveTargetPhase) { //A>B>C
+        angle = -curveInitialPhase + omega * clock;
+      } else if (curveTargetPhase > curveInitialPhase) { //C>A>B
+        distance = Math.PI * 2 - distance;
+        angle = -curveInitialPhase + omega * clock;
+      } else {  //A>C>B
+        distance = Math.PI * 2 - distance;
+        angle = -curveInitialPhase - omega * clock;
+      }
+    } else if (curveInitialPhase < curveMiddlePhase) {
+      if (curveMiddlePhase < curveTargetPhase) { //A<B<C
+        angle = -curveInitialPhase - omega * clock;
+      } else if (curveTargetPhase < curveInitialPhase) { //C<A<B
+        distance = Math.PI * 2 - distance;
+        angle = -curveInitialPhase - omega * clock;
+      } else { //A<C<B
+        distance = Math.PI * 2 - distance;
+        angle = -curveInitialPhase + omega * clock;
+      }
     }
     if (distance > omega * clock) {
       drone.position.x = originPosX + curveCenter.x + curveRadius * Math.cos(angle);
