@@ -33,13 +33,12 @@ var curveMiddlePhase = 0;
 var hoverPeriod = 0;
 var clock = 0;
 var isFliping = false;
+var inverseRotationMatrix;
 
 let speed = 20 * 10 * 2.54; // 30in/s in height;
 let isSpeedSet = false;
 const droneFlipSpeed = Math.PI * 3; //flip speed.
 const droneRotateSpeed = Math.PI;
-
-//var window.commandstring = "takeoff|flip_left|fly_forward,20,in|yaw_right,180|hover,3|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land|takeoff|fly_forward,20,in|yaw_right,180|fly_forward,20,in|land";
 
 scene = new THREE.Scene();
 scene.background = new THREE.Color(0xcccccc);
@@ -352,7 +351,7 @@ function flySetting(command) {
       target = {
         x: drone.position.x + subcommands[1] * 10 * 2.54, //webGl x asix = x in real;
         y: drone.position.y + subcommands[3] * 10 * 2.54, //webGL y axis = z in real;
-        z: drone.position.z - subcommands[2] * 10 * 2.54,  //webGL z axis = -x in real 
+        z: drone.position.z - subcommands[2] * 10 * 2.54,  //webGL z axis = -y in real 
       }
     } else if (distanceUnit == "cm") {
       target = {
@@ -379,8 +378,24 @@ function curveSetting(command) {
   originPosZ = drone.position.z;
   const subcommands = command.split(",");
   const distanceUnit = subcommands[subcommands.length - 1];
+  const P1x = subcommands[1];
+  const P1y = subcommands[2];
+  const P1z = subcommands[3];
+  const P2x = subcommands[4];
+  const P2y = subcommands[5];
+  const P2z = subcommands[6];
 
-  const { center, radius, initialPhase, middlePhase, targetPhase } = getCircleFromThreePoints(subcommands[1], subcommands[2], subcommands[4], subcommands[5]);
+  var Vector1 = new THREE.Vector3(P1x, P1y, P1z);
+  var Vector2 = new THREE.Vector3(P2x, P2y, P2z);
+  var normalVector = new THREE.Vector3(P1y * P2z - P2y * P1z, P2x * P1z - P1x * P2z, P1x * P2y - P2x * P1y);
+  const { rotationMatrix, inverseMatrix } = getRotationMatrix(normalVector);
+  inverseRotationMatrix = inverseMatrix;
+  //console.log(rotationMatrix);
+  //console.log(inverseRotationMatrix);
+  var newVector1 = Vector1.applyMatrix3(rotationMatrix);
+  var newVector2 = Vector2.applyMatrix3(rotationMatrix);
+
+  const { center, radius, initialPhase, middlePhase, targetPhase } = getCircleFromThreePoints(newVector1, newVector2);
   if (distanceUnit == "in") {
     curveCenter.x = center.x * 10 * 2.54;
     curveCenter.y = center.y * 10 * 2.54;
@@ -396,9 +411,9 @@ function curveSetting(command) {
   console.log(curveInitialPhase, '--->', curveMiddlePhase, '---', curveTargetPhase);
 }
 function verticalFly(delta) {
-  if (!isOnHeight && drone.position.y < 1520) {  // Drone Height is 152cm;
+  if (!isOnHeight && drone.position.y < 1524) {  // Drone Height is 152.5cm=5feet;
     drone.position.y += delta * speed;
-  } else if ((drone.position.y >= 1520) && !isOnHeight) {
+  } else if ((drone.position.y >= 1524) && !isOnHeight) {
     isOnHeight = true;
     window.commands.shift();
     clock = 0;
@@ -516,8 +531,14 @@ function curveFly(delta) {
       }
     }
     if (distance > omega * clock) {
-      drone.position.x = originPosX + curveCenter.x + curveRadius * Math.cos(angle);
-      drone.position.z = originPosZ - curveCenter.y + curveRadius * Math.sin(angle);
+      const deltaX = curveCenter.x + curveRadius * Math.cos(angle);
+      const deltaY = curveCenter.y - curveRadius * Math.sin(angle);
+      var transform2DVector = new THREE.Vector3(deltaX, deltaY, 0);
+      var transform3DVector = transform2DVector.applyMatrix3(inverseRotationMatrix);
+      //console.log(transform3DVector);
+      drone.position.x = originPosX + transform3DVector.x;
+      drone.position.z = originPosZ - transform3DVector.y;
+      drone.position.y = originPosY - transform3DVector.z;
     } else {
       clock = 0;
       isCurving = false;
@@ -568,7 +589,11 @@ function speedControl(command) {
   }
 }
 
-function getCircleFromThreePoints(x1, y1, x2, y2) {
+function getCircleFromThreePoints(Vector1, Vector2) {
+  const x1 = Vector1.x;
+  const y1 = Vector1.y;
+  const x2 = Vector2.x;
+  const y2 = Vector2.y;
   const A = x1 * y2 - x2 * y1;
   const B = (x2 * x2 + y2 * y2) * y1 - (x1 * x1 + y1 * y1) * y2;
   const C = (x1 * x1 + y1 * y1) * x2 - (x2 * x2 + y2 * y2) * x1;
@@ -589,4 +614,54 @@ function getCircleFromThreePoints(x1, y1, x2, y2) {
     targetPhase: phase2
   };
   return circleData;
+}
+
+
+function getRotationMatrix(normalVector) {
+  const a = normalVector.x;
+  const b = normalVector.y;
+  const c = normalVector.z;
+
+  const cosAlpha = c / Math.sqrt(a * a + b * b + c * c);
+  const sinAlpha = Math.sqrt((a * a + b * b) / (a * a + b * b + c * c));
+  const u1 = b / Math.sqrt(a * a + b * b + c * c);
+  const u2 = -a / Math.sqrt(a * a + b * b + c * c);
+
+  const a11 = cosAlpha + u1 * u1 * (1 - cosAlpha);
+  const a12 = u1 * u2 * (1 - cosAlpha);
+  const a13 = u2 * sinAlpha;
+  const a21 = a12;
+  const a22 = cosAlpha + u2 * u2 * (1 - cosAlpha);
+  const a23 = -u1 * sinAlpha;
+  const a31 = -a13;
+  const a32 = -a23;
+  const a33 = cosAlpha;
+  var rotationMatrix = new THREE.Matrix3();
+  rotationMatrix.set(a11, a12, a13,
+    a21, a22, a23,
+    a31, a32, a33);
+  var inverseMatrix = getInverseMatrix([...rotationMatrix.elements]);
+  const result = {
+    rotationMatrix,
+    inverseMatrix
+  }
+  return result;
+}
+
+function getInverseMatrix([a, b, c, d, e, f, g, h, i]) {
+  const det = a * (e * i - f * h) - b * (d * i - f * g) + c * (d * h - e * g);
+  const a11 = (e * i - f * h) / det;
+  const a12 = (c * h - b * i) / det;
+  const a13 = (b * f - c * e) / det;
+  const a21 = (f * g - d * i) / det;
+  const a22 = (a * i - c * g) / det;
+  const a23 = (c * d - a * f) / det;
+  const a31 = (d * h - e * g) / det;
+  const a32 = (b * g - a * h) / det;
+  const a33 = (a * e - b * d) / det;
+  var inverseMatrix = new THREE.Matrix3();
+  inverseMatrix.set(a11, a12, a13,
+    a21, a22, a23,
+    a31, a32, a33);
+  return inverseMatrix;
 }
