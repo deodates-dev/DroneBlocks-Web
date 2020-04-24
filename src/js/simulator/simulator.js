@@ -159,6 +159,31 @@ objLoader.load('drone.obj', function (object) {
   moveAxis(drone, blade[3]);
 }, onProgress, onError);
 
+//add ring
+/* RingGeometry(innerRadius : Float, outerRadius : Float, thetaSegments : Integer, phiSegments : Integer, thetaStart : Float, thetaLength : Float)
+innerRadius — Default is 0.5.
+outerRadius — Default is 1.
+thetaSegments — Number of segments. A higher number means the ring will be more round. Minimum is 3. Default is 8.
+phiSegments — Minimum is 1. Default is 8.
+thetaStart — Starting angle. Default is 0.
+thetaLength — Central angle. Default is Math.PI * 2. */
+const innerRadius = 150;
+const outerRadius = 155;
+const thetaSegments = 1000;
+const phiSegments = 1;
+const thetaStart = 0;
+const thetaLength = Math.PI * 2;
+var geometry = new THREE.RingGeometry(innerRadius, outerRadius, thetaSegments, phiSegments, thetaStart, thetaLength);
+var material = new THREE.MeshBasicMaterial({ color: 0xff0000, side: THREE.DoubleSide });
+for (var i = 0; i < 10; i++) {
+  var mesh = new THREE.Mesh(geometry, material);
+  mesh.rotation.set((Math.random() - 0.5) * Math.PI * 2, (Math.random() - 0.5) * Math.PI * 2, (Math.random() - 0.5) * Math.PI * 2);
+  mesh.position.set((Math.random() - 0.5) * 3000, Math.random() * 3000 + outerRadius, (Math.random() - 0.5) * 3000);
+  console.log(mesh.position);
+  console.log(mesh.rotation);
+  scene.add(mesh);
+}
+
 let then = 0;
 
 (function animate(now) {
