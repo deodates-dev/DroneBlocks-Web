@@ -167,18 +167,18 @@ thetaSegments — Number of segments. A higher number means the ring will be mor
 phiSegments — Minimum is 1. Default is 8.
 thetaStart — Starting angle. Default is 0.
 thetaLength — Central angle. Default is Math.PI * 2. */
-const innerRadius = 150;
-const outerRadius = 155;
+const innerRadius = 295;
+const outerRadius = 300; //Diameter = 60cm
 const thetaSegments = 1000;
 const phiSegments = 1;
 const thetaStart = 0;
 const thetaLength = Math.PI * 2;
 var geometry = new THREE.RingGeometry(innerRadius, outerRadius, thetaSegments, phiSegments, thetaStart, thetaLength);
 var material = new THREE.MeshBasicMaterial({ color: 0xff0000, side: THREE.DoubleSide });
-for (var i = 0; i < 10; i++) {
+for (var i = 0; i < 3; i++) {
   var mesh = new THREE.Mesh(geometry, material);
-  mesh.rotation.set((Math.random() - 0.5) * Math.PI * 2, (Math.random() - 0.5) * Math.PI * 2, (Math.random() - 0.5) * Math.PI * 2);
-  mesh.position.set((Math.random() - 0.5) * 3000, Math.random() * 3000 + outerRadius, (Math.random() - 0.5) * 3000);
+  mesh.rotation.y = Math.PI / 2;
+  mesh.position.set(1000 * (i + 1), 1524 + outerRadius * i, (Math.pow(-1,i)-1)*outerRadius*0.7);
   scene.add(mesh);
 }
 
