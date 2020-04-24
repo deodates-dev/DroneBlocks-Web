@@ -179,8 +179,6 @@ for (var i = 0; i < 10; i++) {
   var mesh = new THREE.Mesh(geometry, material);
   mesh.rotation.set((Math.random() - 0.5) * Math.PI * 2, (Math.random() - 0.5) * Math.PI * 2, (Math.random() - 0.5) * Math.PI * 2);
   mesh.position.set((Math.random() - 0.5) * 3000, Math.random() * 3000 + outerRadius, (Math.random() - 0.5) * 3000);
-  console.log(mesh.position);
-  console.log(mesh.rotation);
   scene.add(mesh);
 }
 
