@@ -34,7 +34,8 @@ var hoverPeriod = 0;
 var clock = 0;
 var isFliping = false;
 var inverseRotationMatrix;
-
+var ringsCount = 3;
+var ringBoxs = [];
 let speed = 20 * 10 * 2.54; // 30in/s in height;
 let isSpeedSet = false;
 const droneFlipSpeed = Math.PI * 3; //flip speed.
@@ -148,6 +149,7 @@ objLoader.load('drone.obj', function (object) {
     }
   });
   drone = object;
+  drone.name = "drone";
   scene.add(drone);
   blade[0] = scene.getObjectByName("Blade01");
   blade[1] = scene.getObjectByName("Blade02");
@@ -169,17 +171,23 @@ thetaStart — Starting angle. Default is 0.
 thetaLength — Central angle. Default is Math.PI * 2. */
 const innerRadius = 295;
 const outerRadius = 300; //Diameter = 60cm
-const thetaSegments = 1000;
+const thetaSegments = 100;
 const phiSegments = 1;
 const thetaStart = 0;
 const thetaLength = Math.PI * 2;
 var geometry = new THREE.RingGeometry(innerRadius, outerRadius, thetaSegments, phiSegments, thetaStart, thetaLength);
 var material = new THREE.MeshBasicMaterial({ color: 0xff0000, side: THREE.DoubleSide });
-for (var i = 0; i < 3; i++) {
+for (var i = 0; i < ringsCount; i++) {
   var mesh = new THREE.Mesh(geometry, material);
   mesh.rotation.y = Math.PI / 2;
-  mesh.position.set(1000 * (i + 1), 1524 + outerRadius * i, (Math.pow(-1,i)-1)*outerRadius*0.7);
+  mesh.position.set(1000 * (i + 1), 1524 + outerRadius * i, (Math.pow(-1, i) - 1) * outerRadius * 0.7);
+  mesh.name = `ring${i}`;
   scene.add(mesh);
+  ringData = {
+    ring: mesh,
+    box: new THREE.Box3().setFromObject(mesh)
+  }
+  ringBoxs.push(ringData);
 }
 
 let then = 0;
@@ -200,6 +208,7 @@ let then = 0;
       blade[1].rotation.y += rotateSpeed;
       blade[2].rotation.y -= rotateSpeed;
       blade[3].rotation.y += rotateSpeed;
+      collisionDetect();
       verticalFly(delta);
       fly(delta);
       yawRotate(delta);
@@ -687,4 +696,19 @@ function getInverseMatrix([a, b, c, d, e, f, g, h, i]) {
     a21, a22, a23,
     a31, a32, a33);
   return inverseMatrix;
+}
+
+function collisionDetect() {
+  var droneBox = new THREE.Box3().setFromObject(drone);
+  ringBoxs.map(ringData => {
+    var collision = ringData.box.intersectsBox(droneBox);
+    var distanceFromCenter1 = distanceVector(ringData.ring.position, droneBox.min);
+    var distanceFromCenter2 = distanceVector(ringData.ring.position, droneBox.max);
+    var distanceFromCenter = Math.max(distanceFromCenter1,distanceFromCenter2);
+
+    if (!!collision && (distanceFromCenter >innerRadius)) {
+      console.log('collision Detected');
+      window.commands=['reset'];
+    }
+  })
 }
