@@ -169,11 +169,11 @@ radialSegments — Default is 8
 tubularSegments — Default is 6.
 arc — Central angle. Default is Math.PI * 2 */
 const radius = 300; //Diameter = 60cm
-const tube = 10;     //You can control thickness here
+const tube = 50;     //You can control thickness here
 const radialSegments = 50;
 const tubularSegments = 50;
 var geometry = new THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments);
-var material = new THREE.MeshBasicMaterial({ color: 0xff0000, side: THREE.DoubleSide });
+var material = new THREE.MeshBasicMaterial({ color: 0xff6700, side: THREE.DoubleSide });
 for (var i = 0; i < ringsCount; i++) {
   var mesh = new THREE.Mesh(geometry, material);
   mesh.rotation.y = Math.PI / 2;
