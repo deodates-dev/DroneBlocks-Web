@@ -162,25 +162,22 @@ objLoader.load('drone.obj', function (object) {
 }, onProgress, onError);
 
 //add ring
-/* RingGeometry(innerRadius : Float, outerRadius : Float, thetaSegments : Integer, phiSegments : Integer, thetaStart : Float, thetaLength : Float)
-innerRadius — Default is 0.5.
-outerRadius — Default is 1.
-thetaSegments — Number of segments. A higher number means the ring will be more round. Minimum is 3. Default is 8.
-phiSegments — Minimum is 1. Default is 8.
-thetaStart — Starting angle. Default is 0.
-thetaLength — Central angle. Default is Math.PI * 2. */
-const innerRadius = 295;
-const outerRadius = 300; //Diameter = 60cm
-const thetaSegments = 100;
-const phiSegments = 1;
-const thetaStart = 0;
-const thetaLength = Math.PI * 2;
-var geometry = new THREE.RingGeometry(innerRadius, outerRadius, thetaSegments, phiSegments, thetaStart, thetaLength);
+/* TorusGeometry(radius : Float, tube : Float, radialSegments : Integer, tubularSegments : Integer, arc : Float)
+radius - Radius of the torus, from the center of the torus to the center of the tube. Default is 1.
+tube — Radius of the tube. Default is 0.4.
+radialSegments — Default is 8
+tubularSegments — Default is 6.
+arc — Central angle. Default is Math.PI * 2 */
+const radius = 300; //Diameter = 60cm
+const tube = 10;     //You can control thickness here
+const radialSegments = 50;
+const tubularSegments = 50;
+var geometry = new THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments);
 var material = new THREE.MeshBasicMaterial({ color: 0xff0000, side: THREE.DoubleSide });
 for (var i = 0; i < ringsCount; i++) {
   var mesh = new THREE.Mesh(geometry, material);
   mesh.rotation.y = Math.PI / 2;
-  mesh.position.set(1000 * (i + 1), 1524 + outerRadius * i, (Math.pow(-1, i) - 1) * outerRadius * 0.7);
+  mesh.position.set(1000 * (i + 1), 1524 + radius * i, (Math.pow(-1, i) - 1) * radius * 0.7);
   mesh.name = `ring${i}`;
   scene.add(mesh);
   ringData = {
@@ -704,11 +701,11 @@ function collisionDetect() {
     var collision = ringData.box.intersectsBox(droneBox);
     var distanceFromCenter1 = distanceVector(ringData.ring.position, droneBox.min);
     var distanceFromCenter2 = distanceVector(ringData.ring.position, droneBox.max);
-    var distanceFromCenter = Math.max(distanceFromCenter1,distanceFromCenter2);
+    var distanceFromCenter = Math.max(distanceFromCenter1, distanceFromCenter2);
 
-    if (!!collision && (distanceFromCenter >innerRadius)) {
+    if (!!collision && (distanceFromCenter > (radius - tube))) {
       console.log('collision Detected');
-      window.commands=['reset'];
+      window.commands = ['reset'];
     }
   })
 }
