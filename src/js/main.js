@@ -202,6 +202,11 @@ const bind = () => {
         window.commands = ['reset'];
     });
 
+    $("#fullScreen").click(() => {
+        var elem = document.getElementById("droneArea");
+        openFullscreen(elem);
+        console.log('clicked');
+    });
     $("#setUnits").click((e) => {
         const units = $(e.currentTarget).data('units');
 
@@ -361,3 +366,15 @@ $(document).ready(() => {
     }
 })
 
+function openFullscreen(elem) {
+    console.log(elem);
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) { /* Firefox */
+        elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE/Edge */
+        elem.msRequestFullscreen();
+    }
+}

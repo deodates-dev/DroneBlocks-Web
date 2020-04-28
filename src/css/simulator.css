@@ -16,12 +16,23 @@ a#hamburger {
 
 button#resetSimulator {
   position: absolute !important;
-  right: 17vw;
+  right: 22vw;
   top: 90vh;
   background-color: #17c750 !important;
   color: white;
 }
 button#resetSimulator:hover {
+  background-color: #8ff804 !important;
+  color: grey;
+}
+button#fullScreen {
+  position: absolute !important;
+  right: 15vw;
+  top: 90vh;
+  background-color: #17c750 !important;
+  color: white;
+}
+button#fullScreen:hover {
   background-color: #8ff804 !important;
   color: grey;
 }
