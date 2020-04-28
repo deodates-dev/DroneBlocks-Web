@@ -75,9 +75,12 @@ controls.maxPolarAngle = Math.PI * 0.48;
 
 const size = 25000; //2500cm, 10cm = 100, 1 = 0.1cm
 const divisions = 250; //1 division = 10cm;
-const gridHelper = new THREE.GridHelper(size, divisions);
+const horizontalGridHelper = new THREE.GridHelper(size, divisions);
 
-scene.add(gridHelper);
+scene.add(horizontalGridHelper);
+const verticalGridHelper = new THREE.GridHelper(size, divisions);
+verticalGridHelper.rotation.z = Math.PI / 2;
+scene.add(verticalGridHelper);
 
 scene.add(new THREE.AmbientLight(0x666666));
 
