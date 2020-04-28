@@ -78,9 +78,14 @@ const divisions = 250; //1 division = 10cm;
 const horizontalGridHelper = new THREE.GridHelper(size, divisions);
 
 scene.add(horizontalGridHelper);
-const verticalGridHelper = new THREE.GridHelper(size, divisions);
-verticalGridHelper.rotation.z = Math.PI / 2;
-scene.add(verticalGridHelper);
+//Vertical Grid 1 XOY plane
+const verticalGridHelper1 = new THREE.GridHelper(size, divisions);
+verticalGridHelper1.rotation.z = Math.PI / 2;
+scene.add(verticalGridHelper1);
+//Vertical Grid 2 XOZ plane
+const verticalGridHelper2 = new THREE.GridHelper(size, divisions);
+verticalGridHelper2.rotation.x = Math.PI / 2;
+scene.add(verticalGridHelper2);
 
 scene.add(new THREE.AmbientLight(0x666666));
 
