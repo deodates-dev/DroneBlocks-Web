@@ -66,8 +66,8 @@ document.getElementById("droneArea").appendChild(renderer.domElement);
 
 // automatically resize renderer
 THREEx.WindowResize(renderer, camera);
-// toggle full-screen on given 'f' key press
-THREEx.FullScreen.bindKey({ charCode: 'f'.charCodeAt(0) });
+// toggle full-screen on given key press
+//THREEx.FullScreen.bindKey({ charCode: 'm'.charCodeAt(0) });
 controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.minDistance = 200;
 controls.maxDistance = 60000;
