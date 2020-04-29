@@ -207,6 +207,19 @@ const bind = () => {
         openFullscreen(elem);
         console.log('clicked');
     });
+    $("#toggleGrid").click(() => {
+        var toggleGridButton = document.getElementById('toggleGrid');
+        if (window.toggle === undefined) {
+            window.toggle = false;
+            toggleGridButton.innerHTML = '<i class="material-icons">grid_on</i>';
+        } else if(window.toggle === true){
+            window.toggle = false;
+            toggleGridButton.innerHTML = '<i class="material-icons">grid_on</i>';
+        } else {
+            window.toggle = true;
+            toggleGridButton.innerHTML = '<i class="material-icons">grid_off</i>';
+        }
+    });
     $("#setUnits").click((e) => {
         const units = $(e.currentTarget).data('units');
 

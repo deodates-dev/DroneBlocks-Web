@@ -76,16 +76,18 @@ controls.maxPolarAngle = Math.PI * 0.48;
 const size = 25000; //2500cm, 10cm = 100, 1 = 0.1cm
 const divisions = 250; //1 division = 10cm;
 const horizontalGridHelper = new THREE.GridHelper(size, divisions);
-
-scene.add(horizontalGridHelper);
+let gridGroup = new THREE.Group();
+gridGroup.name = "gridHelper";
+gridGroup.add(horizontalGridHelper);
 //Vertical Grid 1 XOY plane
 const verticalGridHelper1 = new THREE.GridHelper(size, divisions);
 verticalGridHelper1.rotation.z = Math.PI / 2;
-scene.add(verticalGridHelper1);
+gridGroup.add(verticalGridHelper1);
 //Vertical Grid 2 XOZ plane
 const verticalGridHelper2 = new THREE.GridHelper(size, divisions);
 verticalGridHelper2.rotation.x = Math.PI / 2;
-scene.add(verticalGridHelper2);
+gridGroup.add(verticalGridHelper2);
+scene.add(gridGroup);
 
 scene.add(new THREE.AmbientLight(0x666666));
 
@@ -220,6 +222,7 @@ let then = 0;
       flip(delta);
       curveFly(delta);
     }
+      toggleGridHelper(window.toggle);
     if (window.commands[0] && window.commands[0].includes("takeoff")) {
       hoverPeriod = 1; //hover 1s for every command
       clock += delta;
@@ -715,5 +718,12 @@ function collisionDetect() {
       console.log('collision Detected');
       window.commands = ['reset'];
     }
+  })
+}
+
+function toggleGridHelper(value) {
+  var gridHelper = scene.getObjectByName("gridHelper");
+  gridHelper.children.map(grid => {
+    grid.visible = value;
   })
 }

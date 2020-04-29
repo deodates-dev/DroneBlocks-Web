@@ -13,26 +13,26 @@ a#hamburger {
 #sidenav-overlay {
   right: 45vw !important;
 }
-
-button#resetSimulator {
-  position: absolute !important;
-  right: 22vw;
-  top: 90vh;
-  background-color: #17c750 !important;
+button.green {
+  background-color: #6b9658 !important;
   color: white;
 }
-button#resetSimulator:hover {
-  background-color: #8ff804 !important;
+button.green:hover {
+  background-color: #557846 !important;
   color: grey;
+}
+button#resetSimulator {
+  position: absolute !important;
+  right: 23vw;
+  top: 90vh;
 }
 button#fullScreen {
   position: absolute !important;
-  right: 15vw;
+  right: 18vw;
   top: 90vh;
-  background-color: #17c750 !important;
-  color: white;
 }
-button#fullScreen:hover {
-  background-color: #8ff804 !important;
-  color: grey;
+button#toggleGrid {
+  position: absolute !important;
+  right: 13vw;
+  top: 90vh;
 }
