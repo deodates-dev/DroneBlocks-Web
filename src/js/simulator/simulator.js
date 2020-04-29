@@ -222,7 +222,7 @@ let then = 0;
       flip(delta);
       curveFly(delta);
     }
-      toggleGridHelper(window.toggle);
+    toggleGridHelper(window.toggle);
     if (window.commands[0] && window.commands[0].includes("takeoff")) {
       hoverPeriod = 1; //hover 1s for every command
       clock += delta;
@@ -298,9 +298,16 @@ let then = 0;
       isFlying = false;
       isCurving = false;
       isFliping = false;
+      isFlyingForward = false;
       isHovering = false;
       isLanding = false;
       isRotating = false;
+      isOnHeight = false;
+      isOnForwardTarget = false;
+      isOnRotateTarget = false;
+      islanded = false;
+      isHovered = false;
+      isSpeedSet = false;
       clock = 0;
       commands.shift();
     }
@@ -343,6 +350,14 @@ function moveAxis(object, mesh) {
 
 function distanceVector(point1, point2) {
   var dx = point1.x - point2.x;
+  var dy = point1.y - point2.y;
+  var dz = point1.z - point2.z;
+
+  return Math.sqrt(dx * dx + dy * dy + dz * dz);
+}
+
+function distance2DVector(point1, point2) {
+  var dx = 0;
   var dy = point1.y - point2.y;
   var dz = point1.z - point2.z;
 
@@ -710,8 +725,8 @@ function collisionDetect() {
   var droneBox = new THREE.Box3().setFromObject(drone);
   ringBoxs.map(ringData => {
     var collision = ringData.box.intersectsBox(droneBox);
-    var distanceFromCenter1 = distanceVector(ringData.ring.position, droneBox.min);
-    var distanceFromCenter2 = distanceVector(ringData.ring.position, droneBox.max);
+    var distanceFromCenter1 = distance2DVector(ringData.ring.position, droneBox.min);
+    var distanceFromCenter2 = distance2DVector(ringData.ring.position, droneBox.max);
     var distanceFromCenter = Math.max(distanceFromCenter1, distanceFromCenter2);
 
     if (!!collision && (distanceFromCenter > (radius - tube))) {
