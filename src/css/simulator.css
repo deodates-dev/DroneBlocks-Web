@@ -36,3 +36,8 @@ button#toggleGrid {
   right: 13vw;
   top: 90vh;
 }
+button#ringGen {
+  position: absolute !important;
+  right: 8vw;
+  top: 90vh;
+}

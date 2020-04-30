@@ -34,7 +34,7 @@ var hoverPeriod = 0;
 var clock = 0;
 var isFliping = false;
 var inverseRotationMatrix;
-var ringsCount = 3;
+var ringsCount = 5;
 var ringBoxs = [];
 let speed = 20 * 10 * 2.54; // 30in/s in height;
 let isSpeedSet = false;
@@ -223,6 +223,9 @@ let then = 0;
       curveFly(delta);
     }
     toggleGridHelper(window.toggle);
+    if (!!window.ringTrigger) {
+      changeRings();
+    }
     if (window.commands[0] && window.commands[0].includes("takeoff")) {
       hoverPeriod = 1; //hover 1s for every command
       clock += delta;
@@ -741,4 +744,12 @@ function toggleGridHelper(value) {
   gridHelper.children.map(grid => {
     grid.visible = value;
   })
+}
+
+function changeRings() {
+  for (var i = 0; i < ringsCount; i++) {
+    var ring = scene.getObjectByName(`ring${i}`);
+    ring.position.set((Math.random() - 0.5) * 10000, Math.random() * 10000 + radius, (Math.random() - 0.5) * 10000);
+  }
+  window.ringTrigger = false;
 }

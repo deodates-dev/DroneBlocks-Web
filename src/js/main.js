@@ -220,6 +220,10 @@ const bind = () => {
             toggleGridButton.innerHTML = '<i class="material-icons">grid_off</i>';
         }
     });
+    $("#ringGen").click(() => {
+        console.log('working');
+        window.ringTrigger = true;
+    });
     $("#setUnits").click((e) => {
         const units = $(e.currentTarget).data('units');
 
