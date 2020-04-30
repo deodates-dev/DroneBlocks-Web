@@ -750,7 +750,7 @@ function toggleGridHelper(value) {
 function changeRings() {
   for (var i = 0; i < ringsCount; i++) {
     var ring = scene.getObjectByName(`ring${i}`);
-    ring.position.set((Math.random() - 0.5) * 10000, Math.random() * 10000 + radius, (Math.random() - 0.5) * 10000);
+    ring.position.set(Math.random() * 10000, Math.random() * 10000 + radius, (Math.random() - 0.5) * 20000);
   }
   window.ringTrigger = false;
 }
