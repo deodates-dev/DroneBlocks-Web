@@ -298,7 +298,7 @@ let then = 0;
 
     if (window.commands[0] && window.commands[0].includes("reset")) {
       drone.position.set(0, 0, 0);
-      drone.rotation.set(0,0,0);
+      drone.rotation.set(0, 0, 0);
       isFlying = false;
       isCurving = false;
       isFliping = false;
@@ -751,6 +751,12 @@ function changeRings() {
   for (var i = 0; i < ringsCount; i++) {
     var ring = scene.getObjectByName(`ring${i}`);
     ring.position.set(Math.random() * 10000, Math.random() * 10000 + radius, (Math.random() - 0.5) * 20000);
+    ringBoxs = [];
+    ringData = {
+      ring: ring,
+      box: new THREE.Box3().setFromObject(ring)
+    }
+    ringBoxs.push(ringData);
   }
   window.ringTrigger = false;
 }
