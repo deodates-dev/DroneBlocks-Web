@@ -221,7 +221,6 @@ const bind = () => {
         }
     });
     $("#ringGen").click(() => {
-        console.log('working');
         window.ringTrigger = true;
     });
     $("#setUnits").click((e) => {

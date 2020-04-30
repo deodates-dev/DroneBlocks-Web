@@ -298,6 +298,7 @@ let then = 0;
 
     if (window.commands[0] && window.commands[0].includes("reset")) {
       drone.position.set(0, 0, 0);
+      drone.rotation.set(0,0,0);
       isFlying = false;
       isCurving = false;
       isFliping = false;
