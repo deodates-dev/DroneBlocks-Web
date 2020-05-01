@@ -1,6 +1,6 @@
 Blockly.Python['takeoff'] = function(block) {
   var altitude = Blockly.Python.valueToCode(block, 'altitude', Blockly.JavaScript.ORDER_NONE);
-  return 'takeoff(' + altitude + ');\n';
+  return 'takeOff(' + altitude + ');\n';
 };
 
 Blockly.Python['flight_path'] = function(block) {

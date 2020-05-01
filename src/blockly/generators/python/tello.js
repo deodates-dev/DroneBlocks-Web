@@ -1,5 +1,5 @@
 Blockly.Python['takeoff'] = function(block) {
-  return 'takeoff();\n';
+  return 'takeOff();\n';
 };
 
 Blockly.Python['set_speed'] = function(block) {
@@ -11,37 +11,37 @@ Blockly.Python['set_speed'] = function(block) {
 Blockly.Python['fly_forward'] = function(block) {
   var distance = Blockly.Python.valueToCode(block, 'distance', Blockly.JavaScript.ORDER_NONE);
   var units = block.getFieldValue("units");
-  return 'fly("forward", ' + distance + ', "' + units + '");\n';
+  return 'flyForward(' + distance + ', "' + units + '");\n';
 };
 
 Blockly.Python['fly_backward'] = function(block) {
   var distance = Blockly.Python.valueToCode(block, 'distance', Blockly.JavaScript.ORDER_NONE);
   var units = block.getFieldValue("units");
-  return 'fly("backward", ' + distance + ', "' + units + '");\n';
+  return 'flyBackward(' + distance + ', "' + units + '");\n';
 };
 
 Blockly.Python['fly_left'] = function(block) {
   var distance = Blockly.Python.valueToCode(block, 'distance', Blockly.JavaScript.ORDER_NONE);
   var units = block.getFieldValue("units");
-  return 'fly("left", ' + distance + ', "' + units + '");\n';
+  return 'flyLeft(' + distance + ', "' + units + '");\n';
 };
 
 Blockly.Python['fly_right'] = function(block) {
   var distance = Blockly.Python.valueToCode(block, 'distance', Blockly.JavaScript.ORDER_NONE);
   var units = block.getFieldValue("units");
-  return 'fly("right", ' + distance + ', "' + units + '");\n';
+  return 'flyRight(' + distance + ', "' + units + '");\n';
 };
 
 Blockly.Python['fly_up'] = function(block) {
   var distance = Blockly.Python.valueToCode(block, 'distance', Blockly.JavaScript.ORDER_NONE);
   var units = block.getFieldValue("units");
-  return 'fly("up", ' + distance + ', "' + units + '");\n';
+  return 'flyUp(' + distance + ', "' + units + '");\n';
 };
 
 Blockly.Python['fly_down'] = function(block) {
   var distance = Blockly.Python.valueToCode(block, 'distance', Blockly.JavaScript.ORDER_NONE);
   var units = block.getFieldValue("units");
-  return 'fly("down", ' + distance + ', "' + units + '");\n';
+  return 'flyDown(' + distance + ', "' + units + '");\n';
 };
 
 Blockly.Python['fly_xyz'] = function(block) {
@@ -49,7 +49,7 @@ Blockly.Python['fly_xyz'] = function(block) {
   var ydistance = Blockly.Python.valueToCode(block, 'ydistance', Blockly.JavaScript.ORDER_NONE);
   var zdistance = Blockly.Python.valueToCode(block, 'zdistance', Blockly.JavaScript.ORDER_NONE);
   var units = block.getFieldValue("units");
-  return 'fly("xyz", ' + xdistance + ', ' + ydistance + ', ' + zdistance + ', "' + units + '");\n';
+  return 'flyXYZ(' + xdistance + ', ' + ydistance + ', ' + zdistance + ', "' + units + '");\n';
 };
 
 Blockly.Python['curve'] = function(block) {
@@ -60,38 +60,38 @@ Blockly.Python['curve'] = function(block) {
   var y2distance = Blockly.Python.valueToCode(block, 'y2distance', Blockly.JavaScript.ORDER_NONE);
   var z2distance = Blockly.Python.valueToCode(block, 'z2distance', Blockly.JavaScript.ORDER_NONE);
   var units = block.getFieldValue("units");
-  return 'curve(' + x1distance + ', ' + y1distance + ', ' + z1distance + ', ' + x2distance + ', ' + y2distance + ', ' + z2distance + ', "' + units + '");\n';
+  return 'flyCurve(' + x1distance + ', ' + y1distance + ', ' + z1distance + ', ' + x2distance + ', ' + y2distance + ', ' + z2distance + ', "' + units + '");\n';
 };
 
 Blockly.Python['yaw_right'] = function(block) {
   var angle = Blockly.Python.valueToCode(block, 'angle', Blockly.JavaScript.ORDER_NONE);
-  return 'yaw("right", ' + angle + ');\n';
+  return 'yawRight(' + angle + ');\n';
 };
 
 Blockly.Python['yaw_left'] = function(block) {
   var angle = Blockly.Python.valueToCode(block, 'angle', Blockly.JavaScript.ORDER_NONE);
-  return 'yaw("left", ' + angle + ');\n';
+  return 'yawLeft(' + angle + ');\n';
 };
 
 Blockly.Python['flip_forward'] = function(block) {
-  return 'flip("forward");\n';
+  return 'flipForward();\n';
 };
 
 Blockly.Python['flip_backward'] = function(block) {
-  return 'flip("backward");\n';
+  return 'flipBackward();\n';
 };
 
 Blockly.Python['flip_left'] = function(block) {
-  return 'flip("left");\n';
+  return 'flipLeft();\n';
 };
 
 Blockly.Python['flip_right'] = function(block) {
-  return 'flip("right");\n';
+  return 'flipRight();\n';
 };
 
 Blockly.Python['land_then_takeoff'] = function(block) {
   var duration = Blockly.Python.valueToCode(block, 'duration', Blockly.JavaScript.ORDER_NONE);
-  return 'landThenTakeoff(' + duration + ');\n';
+  return 'landThenTakeOff(' + duration + ');\n';
 };
 
 Blockly.Python['land'] = function(block) {
