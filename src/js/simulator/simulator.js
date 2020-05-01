@@ -41,7 +41,7 @@ let isSpeedSet = false;
 const droneFlipSpeed = Math.PI * 3; //flip speed.
 const droneRotateSpeed = Math.PI;
 
-var ringsChangeCount = -1;
+var ringsChangeCount = 5;
 var ringsPosConfig = [
   [
     { x: 1000, y: 1524, z: 0 },
@@ -229,11 +229,6 @@ for (var i = 0; i < ringsCount; i++) {
   mesh.visible = false;
   mesh.name = `ring${i}`;
   scene.add(mesh);
-  ringData = {
-    ring: mesh,
-    box: new THREE.Box3().setFromObject(mesh)
-  }
-  ringBoxs.push(ringData);
 }
 
 let then = 0;
@@ -765,7 +760,11 @@ function getInverseMatrix([a, b, c, d, e, f, g, h, i]) {
 }
 
 function collisionDetect() {
+  if (ringsChangeCount === 5) {
+    return;
+  }
   var droneBox = new THREE.Box3().setFromObject(drone);
+  console.log(ringBoxs);
   ringBoxs.map(ringData => {
     var collision = ringData.box.intersectsBox(droneBox);
     var distanceFromCenter1 = distance2DVector(ringData.ring.position, droneBox.min);
@@ -788,21 +787,30 @@ function toggleGridHelper(value) {
 
 function changeRings() {
   ringsChangeCount++;
-  if (ringsChangeCount > 4) {
+  if (ringsChangeCount > 5) {
     ringsChangeCount = 0;
   }
-  for (var i = 0; i < ringsCount; i++) {
-    var ring = scene.getObjectByName(`ring${i}`);
-    ring.visible = true;
-    ring.position.x  = ringsPosConfig[ringsChangeCount][i].x;
-    ring.position.y  = ringsPosConfig[ringsChangeCount][i].y;
-    ring.position.z  = ringsPosConfig[ringsChangeCount][i].z;
+  if (ringsChangeCount < 5) {
     ringBoxs = [];
-    ringData = {
-      ring: ring,
-      box: new THREE.Box3().setFromObject(ring)
+    for (var i = 0; i < ringsCount; i++) {
+      var ring = scene.getObjectByName(`ring${i}`);
+      ring.visible = true;
+      ring.position.x = ringsPosConfig[ringsChangeCount][i].x;
+      ring.position.y = ringsPosConfig[ringsChangeCount][i].y;
+      ring.position.z = ringsPosConfig[ringsChangeCount][i].z;
+      ringData = {
+        ring: ring,
+        box: new THREE.Box3().setFromObject(ring)
+      }
+      ringBoxs.push(ringData);
     }
-    ringBoxs.push(ringData);
+  } else {
+    for (var i = 0; i < ringsCount; i++) {
+      var ring = scene.getObjectByName(`ring${i}`);
+      ring.visible = false;
+      ring.position.set(0, 0, 0);
+      ringBoxs = [];
+    }
   }
   window.ringTrigger = false;
 }
