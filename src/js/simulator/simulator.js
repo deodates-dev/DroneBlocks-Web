@@ -41,6 +41,45 @@ let isSpeedSet = false;
 const droneFlipSpeed = Math.PI * 3; //flip speed.
 const droneRotateSpeed = Math.PI;
 
+var ringsChangeCount = -1;
+var ringsPosConfig = [
+  [
+    { x: 1000, y: 1524, z: 0 },
+    { x: 2000, y: 1824, z: -420 },
+    { x: 3000, y: 2124, z: 0 },
+    { x: 4000, y: 2424, z: -420 },
+    { x: 5000, y: 2724, z: 0 },
+  ],
+  [
+    { x: 8952, y: 4418, z: -822 },
+    { x: 3641, y: 2380, z: 955 },
+    { x: 9457, y: 423, z: 455 },
+    { x: 1359, y: 2560, z: -331 },
+    { x: 7614, y: 3317, z: 424 },
+  ],
+  [
+    { x: 1528, y: 4887, z: 925 },
+    { x: 4310, y: 4642, z: -653 },
+    { x: 7525, y: 5285, z: 437 },
+    { x: 9926, y: 3204, z: 110 },
+    { x: 5158, y: 5161, z: -997 },
+  ],
+  [
+    { x: 1354, y: 4883, z: 962 },
+    { x: 6344, y: 776, z: 973 },
+    { x: 9314, y: 2648, z: 317 },
+    { x: 6457, y: 2119, z: -992 },
+    { x: 5665, y: 940, z: -423 },
+  ],
+  [
+    { x: 9668, y: 1568, z: 3328 },
+    { x: 3801, y: 9939, z: -1633 },
+    { x: 2191, y: 4910, z: 905 },
+    { x: 4296, y: 822, z: -246 },
+    { x: 9032, y: 9284, z: 1651 },
+  ]
+];
+
 scene = new THREE.Scene();
 scene.background = new THREE.Color(0xcccccc);
 var SCREEN_WIDTH = window.innerWidth / 2, SCREEN_HEIGHT = window.innerHeight;
@@ -187,7 +226,7 @@ var material = new THREE.MeshPhongMaterial({ color: 0xff6700, shininess: 100, si
 for (var i = 0; i < ringsCount; i++) {
   var mesh = new THREE.Mesh(geometry, material);
   mesh.rotation.y = Math.PI / 2;
-  mesh.position.set(1000 * (i + 1), 1524 + radius * i, (Math.pow(-1, i) - 1) * radius * 0.7);
+  mesh.visible = false;
   mesh.name = `ring${i}`;
   scene.add(mesh);
   ringData = {
@@ -748,9 +787,16 @@ function toggleGridHelper(value) {
 }
 
 function changeRings() {
+  ringsChangeCount++;
+  if (ringsChangeCount > 4) {
+    ringsChangeCount = 0;
+  }
   for (var i = 0; i < ringsCount; i++) {
     var ring = scene.getObjectByName(`ring${i}`);
-    ring.position.set(Math.random() * 10000, Math.random() * 10000 + radius, (Math.random() - 0.5) * 20000);
+    ring.visible = true;
+    ring.position.x  = ringsPosConfig[ringsChangeCount][i].x;
+    ring.position.y  = ringsPosConfig[ringsChangeCount][i].y;
+    ring.position.z  = ringsPosConfig[ringsChangeCount][i].z;
     ringBoxs = [];
     ringData = {
       ring: ring,
