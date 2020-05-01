@@ -764,7 +764,6 @@ function collisionDetect() {
     return;
   }
   var droneBox = new THREE.Box3().setFromObject(drone);
-  console.log(ringBoxs);
   ringBoxs.map(ringData => {
     var collision = ringData.box.intersectsBox(droneBox);
     var distanceFromCenter1 = distance2DVector(ringData.ring.position, droneBox.min);
