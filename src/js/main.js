@@ -311,6 +311,7 @@ $(document).ready(() => {
     //     const queryData = searchSplit.split('&');
 
     // }
+    $('.tooltipped').tooltip({delay: 50});
 
     if (pathname === '/chrome_app.html' || pathname === '/' || pathname === '/tello.html') {
         if (aircraft === 'DJI') {
