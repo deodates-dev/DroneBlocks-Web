@@ -89,7 +89,8 @@ var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20
 camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 // add the camera to the scene
 scene.add(camera);
-camera.position.set(-3000, 2000, 100);
+const zoomInverseFactor = 5;
+camera.position.set(-zoomInverseFactor*3000, zoomInverseFactor*2000, zoomInverseFactor*100);
 camera.lookAt(scene.position);
 scene.add(new THREE.AxesHelper(2600));
 
