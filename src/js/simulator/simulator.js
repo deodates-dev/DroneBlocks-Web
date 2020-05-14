@@ -790,6 +790,9 @@ function changeRings() {
   if (ringsChangeCount > 5) {
     ringsChangeCount = 0;
   }
+
+  Materialize.toast(`Ring Config ${ringsChangeCount}`,2000); //2000 means display length in ms
+
   if (ringsChangeCount < 5) {
     ringBoxs = [];
     for (var i = 0; i < ringsCount; i++) {
