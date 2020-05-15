@@ -90,9 +90,14 @@ camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 // add the camera to the scene
 scene.add(camera);
 const zoomInverseFactor = 5;
-camera.position.set(-zoomInverseFactor*3000, zoomInverseFactor*2000, zoomInverseFactor*100);
+camera.position.set(-zoomInverseFactor*3000, zoomInverseFactor*2000, 0);
 camera.lookAt(scene.position);
 scene.add(new THREE.AxesHelper(2600));
+
+//rotate camera around z axis
+const cameraRotateAngle = -Math.PI / 4;
+camera.position.z = camera.position.x * Math.sin(cameraRotateAngle);
+camera.position.x = camera.position.x * Math.cos(cameraRotateAngle);
 
 // create and start the renderer; choose antialias setting.
 if (Detector.webgl) {
