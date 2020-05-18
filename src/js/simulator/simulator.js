@@ -89,7 +89,7 @@ var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20
 camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 // add the camera to the scene
 scene.add(camera);
-const zoomInverseFactor = 5;
+const zoomInverseFactor = 2;
 camera.position.set(-zoomInverseFactor*3000, zoomInverseFactor*2000, 0);
 camera.lookAt(scene.position);
 scene.add(new THREE.AxesHelper(2600));
@@ -796,9 +796,8 @@ function changeRings() {
     ringsChangeCount = 0;
   }
 
-  Materialize.toast(`Ring Config ${ringsChangeCount}`,2000); //2000 means display length in ms
-
   if (ringsChangeCount < 5) {
+    Materialize.toast(`Ring Layout #${ringsChangeCount+1}`, 3000);
     ringBoxs = [];
     for (var i = 0; i < ringsCount; i++) {
       var ring = scene.getObjectByName(`ring${i}`);
