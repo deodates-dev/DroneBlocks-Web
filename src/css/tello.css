@@ -33,9 +33,7 @@ table {
   height: 30px !important;
   line-height: 30px !important;
 }
-.row .col{
-  float: none !important;
-}
+
 div#\:1 {
   background-color: #264653 !important;
   padding: 10px !important;
@@ -150,20 +148,17 @@ div#\:8 .blocklyTreeSelected {
 /* End block category styling */
 
 div#blocklyArea {
-  float: left !important;
-  width: 55%;
-  height: 100%;
-}
-div#blocklyArea.half {
-  float: left !important;
-  width: 55% !important;
+  float: left;
+  width: 100%;
   height: 100%;
 }
 
+div#blocklyArea.half {
+  width: 55% !important;
+}
+
 div#blocklyArea.full {
-  float: left !important;
   width: 100% !important;
-  height: 100%;
 }
 
 div#codeView {
@@ -181,21 +176,6 @@ div#codeView.hidden {
 }
 
 div#codeView.visible {
-  display: block;
-}
-div#droneArea {
-  float: left;
-  width: 45%;
-  height: 100%;
-  overflow: hidden;
-  display: block;
-}
-
-div#droneArea.hidden {
-  display: none;
-}
-
-div#droneArea.visible {
   display: block;
 }
 
