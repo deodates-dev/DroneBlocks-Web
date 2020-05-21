@@ -357,10 +357,9 @@ $(document).ready(() => {
 
                 if (localStorage.getItem('missionId') && !localStorage.getItem('backup')) {
                     firebase.getMission(localStorage.getItem('missionId')).then((v) => {
-                        console.log('entering another mission', v);
+                        //console.log('entering another mission', v);
                         if (v) {
                             $("#missionTitle").text(v.title);
-                            console.log(v);
 
                             setTimeout(() => {
                                 Blockly.getMainWorkspace().clear();
