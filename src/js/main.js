@@ -105,10 +105,14 @@ const bind = () => {
             $("#showCode").text("Hide Mission Code");
         } else {
             $("#showCode").text("Show Mission Code");
-            $("#blocklyArea").removeClass("half");
-            $("#blocklyArea").addClass("full");
             $("#codeView").addClass("hidden");
             $("#codeViewButton a").html("{ Code }");
+
+            if (location.pathname.indexOf('/simulator.html') == -1) {
+                $("#blocklyArea").removeClass("half");
+                $("#blocklyArea").addClass("full");
+            }
+
         }
 
         // Call to redraw the view
