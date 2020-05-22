@@ -47,7 +47,7 @@ const init = (onAfterInit = () => {}) => {
     }
     
     onAuthStateChanged((user) => {
-        console.log('user', user);
+        //console.log('user', user);
 
         if (user) {      
             db.collection('users').doc(user.uid).get().then((userData) => {
