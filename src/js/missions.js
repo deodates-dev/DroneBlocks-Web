@@ -68,16 +68,15 @@ $(document).ready(() => {
         select: function(id) {
           localStorage.removeItem('backup');
           localStorage.setItem('missionId', id);
-
-          // Trigger off chrome_app url param
-          if (location.search.indexOf('chrome_app') > -1) {
-            location.href = '/chrome_app.html';
-          } else if (location.search.indexOf('simulator') > -1) {
+          
+          if (location.search.indexOf('simulator') > -1) {
             location.href = '/simulator.html';
+          } else if (location.search.indexOf('chrome_app') > -1 || aircraft === 'Tello') {
+            location.href = '/chrome_app.html';
           } else {
             location.href = '/';
           }
-          //location.href = aircraft === 'Tello' ? '/chrome_app.html' : '/';
+          
         },
         removeItem: function(id) {
           const that = this;
