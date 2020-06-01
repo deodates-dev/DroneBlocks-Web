@@ -97,7 +97,10 @@ $(document).ready(() => {
         share: function(id){
           $("#shareModal").openModal();
   
-          if (aircraft == "Tello") {
+          if (location.search.indexOf('simulator') > -1) {
+            $("#iPadShareLink").val(`droneblocks://?missionId=${id}&uid=${user.uid}&aircraft=tello`);
+            $("#desktopShareLink").val(`https://dev.droneblocks.io/simulator.html?share=1&missionId=${id}&uid=${user.uid}`);
+          } else if (aircraft == "Tello") {
             $("#iPadShareLink").val(`droneblocks://?missionId=${id}&uid=${user.uid}&aircraft=tello`);
             $("#desktopShareLink").val(`https://dev.droneblocks.io/tello.html?share=1&missionId=${id}&uid=${user.uid}`);
           } else {
