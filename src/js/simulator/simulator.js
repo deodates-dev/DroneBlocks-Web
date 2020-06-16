@@ -887,5 +887,9 @@ $(document).keypress(function (e) {
   }
 
   if((e.which === 116) || (e.which === 84)) { // if T or t key pressed, Take off(Launch mision)
+    let code = 'var mission="";'
+    code += Blockly.JavaScript.workspaceToCode(Blockly.getMainWorkspace());
+    code = eval(code);
+    window.commands = code.split("|");
   }
 });
