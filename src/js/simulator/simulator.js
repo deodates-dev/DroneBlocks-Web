@@ -289,7 +289,7 @@ let then = 0;
         isFlying = true;
         isOnHeight = false;
         rotateSpeed = Math.PI / 180 * 80;
-        sound.play();
+        if(!sound.isPlaying) sound.play();
       }
     }
     if (window.commands[0] && window.commands[0].includes("fly") && !isFlyingForward) {
