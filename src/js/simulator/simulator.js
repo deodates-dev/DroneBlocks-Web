@@ -99,6 +99,13 @@ const cameraRotateAngle = -Math.PI / 4;
 camera.position.z = camera.position.x * Math.sin(cameraRotateAngle);
 camera.position.x = camera.position.x * Math.cos(cameraRotateAngle);
 
+// create an AudioListener and add it to the camera
+var listener = new THREE.AudioListener();
+camera.add( listener );
+
+// create a global audio source
+var sound = new THREE.Audio(listener);
+
 // create and start the renderer; choose antialias setting.
 if (Detector.webgl) {
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -181,6 +188,15 @@ var onProgress = function (xhr) {
   }
 };
 var onError = function (xhr) { };
+
+// load a sound and set it as the Audio object's buffer
+var audioLoader = new THREE.AudioLoader();
+audioLoader.setPath('assets/audio/');
+audioLoader.load( 'tello_sound.m4a', function( buffer ) {
+	sound.setBuffer( buffer );
+	sound.setLoop( true );
+  sound.setVolume(1);
+});
 
 var textureLoader = new THREE.TextureLoader();
 textureLoader.setPath('assets/textures/');
@@ -273,6 +289,7 @@ let then = 0;
         isFlying = true;
         isOnHeight = false;
         rotateSpeed = Math.PI / 180 * 80;
+        sound.play();
       }
     }
     if (window.commands[0] && window.commands[0].includes("fly") && !isFlyingForward) {
@@ -354,6 +371,7 @@ let then = 0;
       isSpeedSet = false;
       clock = 0;
       commands.shift();
+      sound.pause();
     }
   }
   //console.log(window.commands[0]);
@@ -660,6 +678,7 @@ function land(delta) {
         isOnHeight = false;
         window.commands.shift();
         clock = 0;
+        sound.pause();
       }
     } else {
       isFlying = false;
@@ -667,6 +686,7 @@ function land(delta) {
       isOnHeight = false;
       window.commands.shift();
       clock = 0;
+      sound.pause();
     }
   }
 }
