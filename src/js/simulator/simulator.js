@@ -821,3 +821,32 @@ function changeRings() {
   }
   window.ringTrigger = false;
 }
+
+//KeyPress Event
+$(document).keypress(function (e) {
+
+  if((e.which === 114) || (e.which === 82)) { // if R or r key pressed, Reset
+    window.commands = ['reset'];
+  }
+
+  if ((e.which === 103) || (e.which === 71)) { // if G or g key pressed, toogle Grid
+    var toggleGridButton = document.getElementById('toggleGrid');
+      if (window.toggle === undefined) {
+          window.toggle = false;
+          toggleGridButton.innerHTML = '<i class="material-icons">grid_on</i>';
+      } else if(window.toggle === true){
+          window.toggle = false;
+          toggleGridButton.innerHTML = '<i class="material-icons">grid_on</i>';
+      } else {
+          window.toggle = true;
+          toggleGridButton.innerHTML = '<i class="material-icons">grid_off</i>';
+      }
+  }
+
+  if((e.which === 108) || (e.which === 76)) { // if L or l key pressed, toogle Rings
+    window.ringTrigger = true;
+  }
+
+  if((e.which === 116) || (e.which === 84)) { // if T or t key pressed, Take off(Launch mision)
+  }
+});
