@@ -209,7 +209,6 @@ const bind = () => {
     $("#fullScreen").click(() => {
         var elem = document.getElementById("droneArea");
         openFullscreen(elem);
-        console.log('clicked');
     });
     $("#toggleGrid").click(() => {
         var toggleGridButton = document.getElementById('toggleGrid');
@@ -387,7 +386,6 @@ $(document).ready(() => {
 })
 
 function openFullscreen(elem) {
-    console.log(elem);
     if (elem.requestFullscreen) {
         elem.requestFullscreen();
     } else if (elem.mozRequestFullScreen) { /* Firefox */

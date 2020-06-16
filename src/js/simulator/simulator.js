@@ -842,6 +842,20 @@ function changeRings() {
   window.ringTrigger = false;
 }
 
+function openFullscreen() {
+
+  var elem = document.getElementById("droneArea");
+  if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+  } else if (elem.mozRequestFullScreen) { /* Firefox */
+      elem.mozRequestFullScreen();
+  } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+      elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE/Edge */
+      elem.msRequestFullscreen();
+  }
+}
+
 //KeyPress Event
 $(document).keypress(function (e) {
 
@@ -865,6 +879,10 @@ $(document).keypress(function (e) {
 
   if((e.which === 108) || (e.which === 76)) { // if L or l key pressed, toogle Rings
     window.ringTrigger = true;
+  }
+
+  if ((e.which === 102) || (e.which === 70)) { // if F or f key pressed, Full Screen
+    openFullscreen();
   }
 
   if((e.which === 116) || (e.which === 84)) { // if T or t key pressed, Take off(Launch mision)
