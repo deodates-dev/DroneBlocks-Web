@@ -63,33 +63,7 @@ const bind = () => {
     });
 
     $("#previewMission").click(() => {
-        let code = 'var mission="";'
-        code += Blockly.JavaScript.workspaceToCode(blockly.workspace);
-        code = eval(code);
-        window.commands = code.split("|"); //Send commands to simulator
-        console.log(window.commands);
-        var os = helpers.getMobileOS();
-
-        if (os == 'iOS') {
-
-            window.webkit.messageHandlers.observe.postMessage(code);
-
-        } else if (os == 'Android') {
-
-            Android.confirmMission(code);
-
-        } else if (aircraft == "DJI") {
-
-            $("#mapPreviewModal").html("<iframe src='map_preview.html?code=" + escape(code) + "' width='100%' height='100%'></iframe>");
-            $("#mapPreviewModal").openModal();
-
-            // Chrome App case
-        } else {
-
-            // Appwindow is so we can post to the chrome app
-            appWindow.postMessage(code, appOrigin);
-
-        }
+        launch();
     });
 
     $("#showCode").click(() => {
@@ -314,7 +288,7 @@ $(document).ready(() => {
     //     const queryData = searchSplit.split('&');
 
     // }
-    $('.tooltipped').tooltip({delay: 50});
+    $('.tooltipped').tooltip({ delay: 50 });
 
     if (pathname === '/chrome_app.html' || pathname === '/' || pathname === '/tello.html') {
         if (aircraft === 'DJI') {
@@ -396,3 +370,39 @@ function openFullscreen(elem) {
         elem.msRequestFullscreen();
     }
 }
+
+function launch() {
+    let code = 'var mission="";'
+        code += Blockly.JavaScript.workspaceToCode(blockly.workspace);
+        code = eval(code);
+        window.commands = code.split("|"); //Send commands to simulator
+        console.log(window.commands);
+        var os = helpers.getMobileOS();
+
+        if (os == 'iOS') {
+
+            window.webkit.messageHandlers.observe.postMessage(code);
+
+        } else if (os == 'Android') {
+
+            Android.confirmMission(code);
+
+        } else if (aircraft == "DJI") {
+
+            $("#mapPreviewModal").html("<iframe src='map_preview.html?code=" + escape(code) + "' width='100%' height='100%'></iframe>");
+            $("#mapPreviewModal").openModal();
+
+            // Chrome App case
+        } else {
+
+            // Appwindow is so we can post to the chrome app
+            appWindow.postMessage(code, appOrigin);
+
+        }
+}
+document.addEventListener("keypress", function (event) {
+    if ((event.keyCode == 116) || (event.keyCode == 84)) {
+        console.log('T clicked');
+        launch();
+    }
+});
