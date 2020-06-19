@@ -882,6 +882,14 @@ $(document).keypress(function (e) {
     window.ringTrigger = true;
   }
 
+  if ((e.which === 109) || (e.which === 77)) { // if M or m key pressed, toogle sound
+    if (!sound.isPlaying) {
+      sound.play();
+    } else {
+      sound.pause();
+    }
+  }
+
   if ((e.which === 102) || (e.which === 70)) { // if F or f key pressed, Full Screen
     openFullscreen();
   }
