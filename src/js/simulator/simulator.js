@@ -286,11 +286,11 @@ let then = 0;
     if (window.commands[0] && window.commands[0].includes("takeoff")) {
       hoverPeriod = 1; //hover 1s for every command
       clock += delta;
-      if (clock > hoverPeriod) {
+      if (!isFlying && clock > hoverPeriod) {
         isFlying = true;
         isOnHeight = false;
         rotateSpeed = Math.PI / 180 * 80;
-        if(!sound.isPlaying) sound.play();
+        if (!sound.isPlaying) sound.play();
       }
     }
     if (window.commands[0] && window.commands[0].includes("fly") && !isFlyingForward) {
@@ -857,6 +857,14 @@ function openFullscreen() {
   }
 }
 
+function soundIconToggle() {
+  var toggleSoundButton = document.getElementById('toogleSound');
+    if (isFlying && !!!sound.isPlaying) {
+      toggleSoundButton.innerHTML = '<i class="material-icons">volume_up</i>';
+    } else if(isFlying && sound.isPlaying){
+      toggleSoundButton.innerHTML = '<i class="material-icons">volume_off</i>';
+    }
+}
 //KeyPress Event
 $(document).keypress(function (e) {
 
@@ -882,16 +890,28 @@ $(document).keypress(function (e) {
     window.ringTrigger = true;
   }
 
-  if ((e.which === 109) || (e.which === 77)) { // if M or m key pressed, toogle sound
-    if (!sound.isPlaying) {
+  if ((e.which === 115) || (e.which === 83)) { // if S or s key pressed, toogle sound
+    if (isFlying && !!!sound.isPlaying) {
       sound.play();
-    } else {
+    } else if (sound.isPlaying){
       sound.pause();
     }
+    soundIconToggle();
   }
 
   if ((e.which === 102) || (e.which === 70)) { // if F or f key pressed, Full Screen
     openFullscreen();
   }
 
+});
+
+$( document ).ready(function() {
+  $("#toogleSound").click(() => {
+    if (isFlying && !!!sound.isPlaying) {
+      sound.play();
+    } else if (sound.isPlaying){
+      sound.pause();
+    }
+    soundIconToggle();
+  });
 });

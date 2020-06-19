@@ -41,6 +41,12 @@ button#ringGen {
   right: 8vw;
   top: 90vh;
 }
+button#toogleSound {
+  position: absolute !important;
+  right: 5.5vw;
+  top: 90vh;
+  padding: 0 5px 0 5px;
+}
 #toast-container {
   top: 0% !important;
   right: 1% !important;
