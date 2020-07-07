@@ -79,6 +79,7 @@ var ringsPosConfig = [
     { x: 9032, y: 9284, z: 1651 },
   ]
 ];
+const MAX_PATH_POINTS = 1000000;
 
 scene = new THREE.Scene();
 scene.position.y = scene.position.y - 2000 // Lower original axis
@@ -254,6 +255,17 @@ for (var i = 0; i < ringsCount; i++) {
   scene.add(mesh);
 }
 
+// Add Path init line
+const pathMaterial = new THREE.LineBasicMaterial({color: 0x0000ff});
+const pathGeometry = new THREE.Geometry();
+
+for (let i=0; i < MAX_PATH_POINTS; i++){
+	pathGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
+}
+const pathLine = new THREE.Line(pathGeometry, pathMaterial);
+pathLine.geometry.dynamic = true;
+scene.add(pathLine);
+
 let then = 0;
 
 (function animate(now) {
@@ -278,6 +290,7 @@ let then = 0;
       yawRotate(delta);
       flip(delta);
       curveFly(delta);
+      addPointToPath(drone.position);
     }
     toggleGridHelper(window.toggle);
     if (!!window.ringTrigger) {
@@ -915,3 +928,11 @@ $( document ).ready(function() {
     soundIconToggle();
   });
 });
+
+function addPointToPath(newPoint) {
+    // shift the array
+  pathLine.geometry.vertices.push(pathLine.geometry.vertices.shift());
+  // add the point to the end of the array
+  pathLine.geometry.vertices.push(newPoint);
+  pathLine.geometry.verticesNeedUpdate = true;
+}
