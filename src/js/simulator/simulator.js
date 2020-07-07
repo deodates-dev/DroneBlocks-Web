@@ -40,6 +40,7 @@ let speed = 20 * 10 * 2.54; // 30in/s in height;
 let isSpeedSet = false;
 const droneFlipSpeed = Math.PI * 3; //flip speed.
 const droneRotateSpeed = Math.PI;
+let pathCount = 0;
 
 var ringsChangeCount = 5;
 var ringsPosConfig = [
@@ -79,7 +80,8 @@ var ringsPosConfig = [
     { x: 9032, y: 9284, z: 1651 },
   ]
 ];
-const MAX_PATH_POINTS = 1000000;
+const MAX_PATH_POINTS = 100000;
+let positionBuffer = {};
 
 scene = new THREE.Scene();
 scene.position.y = scene.position.y - 2000 // Lower original axis
@@ -256,13 +258,16 @@ for (var i = 0; i < ringsCount; i++) {
 }
 
 // Add Path init line
-const pathMaterial = new THREE.LineBasicMaterial({color: 0x0000ff});
-const pathGeometry = new THREE.Geometry();
-
-for (let i=0; i < MAX_PATH_POINTS; i++){
-	pathGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
-}
+let pathPositions = new Float32Array(MAX_PATH_POINTS * 3);
+const pathMaterial = new THREE.LineDashedMaterial({
+	color: 0x0000FF,
+  dashSize: 10,
+  gapSize: 5
+});
+const pathGeometry = new THREE.BufferGeometry();
+pathGeometry.addAttribute('position', new THREE.BufferAttribute(pathPositions, 3));
 const pathLine = new THREE.Line(pathGeometry, pathMaterial);
+pathLine.computeLineDistances();
 pathLine.geometry.dynamic = true;
 scene.add(pathLine);
 
@@ -290,7 +295,6 @@ let then = 0;
       yawRotate(delta);
       flip(delta);
       curveFly(delta);
-      addPointToPath(drone.position);
     }
     toggleGridHelper(window.toggle);
     if (!!window.ringTrigger) {
@@ -386,6 +390,7 @@ let then = 0;
       clock = 0;
       commands.shift();
       sound.pause();
+      initPath();
     }
   }
   //console.log(window.commands[0]);
@@ -544,6 +549,7 @@ function curveSetting(command) {
 function verticalFly(delta) {
   if (!isOnHeight && drone.position.y < 1524) {  // Drone Height is 152.5cm=5feet;
     drone.position.y += delta * speed;
+    addPointToPath(drone.position);
   } else if ((drone.position.y >= 1524) && !isOnHeight) {
     isOnHeight = true;
     window.commands.shift();
@@ -591,6 +597,7 @@ function fly(delta) {
       //console.log(drone.position);
 
     }
+    addPointToPath(drone.position);
 
   } else if (isFlyingForward && !isOnForwardTarget && (shiftLength >= forwardDistance)) {
     isOnForwardTarget = true;
@@ -670,6 +677,7 @@ function curveFly(delta) {
       drone.position.x = originPosX + transform3DVector.x;
       drone.position.z = originPosZ - transform3DVector.y;
       drone.position.y = originPosY - transform3DVector.z;
+      addPointToPath(drone.position);
     } else {
       clock = 0;
       isCurving = false;
@@ -930,9 +938,24 @@ $( document ).ready(function() {
 });
 
 function addPointToPath(newPoint) {
-    // shift the array
-  pathLine.geometry.vertices.push(pathLine.geometry.vertices.shift());
-  // add the point to the end of the array
-  pathLine.geometry.vertices.push(newPoint);
-  pathLine.geometry.verticesNeedUpdate = true;
+  console.log('Drawing Line');
+  pathPositions[pathCount * 3 + 0] = newPoint.x;
+  pathPositions[pathCount * 3 + 1] = newPoint.y;
+  pathPositions[pathCount * 3 + 2] = newPoint.z;
+  pathCount++;
+  pathLine.geometry.setDrawRange(0, pathCount);
+
+  pathPositions[pathCount * 3 - 3] = newPoint.x;
+  pathPositions[pathCount * 3 - 2] = newPoint.y;
+  pathPositions[pathCount * 3 - 1] = newPoint.z;
+  pathLine.geometry.attributes.position.needsUpdate = true;
+  pathLine.computeLineDistances();
+}
+
+function initPath() {
+  for (let i = 0; i < MAX_PATH_POINTS * 3; i++) {
+    pathPositions[i] = 0;
+  }
+  pathLine.geometry.setDrawRange(0, MAX_PATH_POINTS);
+  pathLine.geometry.attributes.position.needsUpdate = true;
 }
