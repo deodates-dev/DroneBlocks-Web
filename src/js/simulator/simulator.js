@@ -260,7 +260,7 @@ for (var i = 0; i < ringsCount; i++) {
 // Add Path init line
 let pathPositions = new Float32Array(MAX_PATH_POINTS * 3);
 const pathMaterial = new THREE.LineDashedMaterial({
-	color: 0x0000FF,
+	color: 0xFFFF00,
   dashSize: 10,
   gapSize: 5
 });
@@ -688,6 +688,7 @@ function curveFly(delta) {
 function land(delta) {
   if (drone.position.y > 0) {
     drone.position.y -= delta * speed;
+    addPointToPath(drone.position);
   } else {
     let speedLimit;
     drone.position.y = 0;
