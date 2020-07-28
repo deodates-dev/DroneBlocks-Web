@@ -181,7 +181,7 @@ const login = () => {
 //       //Materialize.toast("Error with signinWithCredential", 3000);
 //     });
 //   }
-  
+
 //   // Called from Android onActivityResult
 //   function loginFromAndroid(idToken) {
 //     var credential = firebase.auth.GoogleAuthProvider.credential(idToken);

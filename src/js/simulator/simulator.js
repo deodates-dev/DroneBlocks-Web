@@ -813,8 +813,11 @@ function collisionDetect() {
     return;
   }
   var droneBox = new THREE.Box3().setFromObject(drone);
+  //Fix droneBox error in y
+  droneBox.min.y = 2000 + droneBox.min.y;
+  droneBox.max.y = 2000 + droneBox.max.y;
   ringBoxs.map(ringData => {
-    var collision = ringData.box.intersectsBox(droneBox);
+    var collision = ringData.box.intersectsBox(droneBox);    
     var distanceFromCenter1 = distance2DVector(ringData.ring.position, droneBox.min);
     var distanceFromCenter2 = distance2DVector(ringData.ring.position, droneBox.max);
     var distanceFromCenter = Math.max(distanceFromCenter1, distanceFromCenter2);
