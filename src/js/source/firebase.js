@@ -1,4 +1,4 @@
-import config from '../../../env/config.prod.json';
+import config from '../../../env/config.json';
 import * as helpers from './helpers';
 
 firebase.initializeApp(config);
@@ -47,15 +47,21 @@ const init = (onAfterInit = () => {}) => {
     }
     
     onAuthStateChanged((user) => {
-        //console.log('user', user);
+        let { pathname } = location;
 
-        if (user) {      
+        if (user) {
+
             db.collection('users').doc(user.uid).get().then((userData) => {
                 if(userData.exists){
                     db.collection('users').doc(user.uid).update({
                         loginAt: firebase.firestore.FieldValue.serverTimestamp()
                     })
-
+                    if (userData.data().has_simulator_access && userData.data().has_simulator_access === 1
+                        && !pathname.includes('simulator.html')) {
+                        document.location.href = 'simulator.html';
+                    } else if (!!pathname.includes('simulator.html')) {
+                        document.location.href = '/';
+                    }
                     launchScreen((userData.data().displayName));
                 }else{
                     const providerData = user.providerData[0];
@@ -67,14 +73,21 @@ const init = (onAfterInit = () => {}) => {
                         photoURL: providerData.photoURL,
                         email: providerData.email,
                         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        loginAt: firebase.firestore.FieldValue.serverTimestamp()
+                        loginAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        has_simulator_access: 0
                     });
-
+                    if (!!pathname.includes('simulator.html')) {
+                        document.location.href = '/';
+                    }
                     launchScreen(providerData.displayName);
                 }
 
                 onAfterInit();
             })
+        } else {
+            if (pathname.includes('simulator.html')) {
+                document.location.href = 'signin.html';
+            }
         }
     });
 }
