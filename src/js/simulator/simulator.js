@@ -128,6 +128,8 @@ controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.minDistance = 200;
 controls.maxDistance = 60000;
 controls.maxPolarAngle = Math.PI * 0.48;
+controls.panSpeed = 0.01;
+controls.dampingFactor = 100;
 
 const size = 25000; //2500cm, 10cm = 100, 1 = 0.1cm
 const divisions = 250; //1 division = 10cm;
