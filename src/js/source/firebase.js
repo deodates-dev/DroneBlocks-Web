@@ -60,7 +60,7 @@ const init = (onAfterInit = () => {}) => {
                         && !pathname.includes('simulator.html')) {
                         document.location.href = 'simulator.html';
                     } else if (!!pathname.includes('simulator.html')) {
-                        document.location.href = '/';
+                        // document.location.href = '/';
                     }
                     launchScreen((userData.data().displayName));
                 }else{
