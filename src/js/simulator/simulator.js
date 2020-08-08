@@ -1,3 +1,4 @@
+if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 var scene, camera, renderer, controls, drone;
 var blade = [];
 var keyboard = new THREEx.KeyboardState();
@@ -460,11 +461,143 @@ var geometry = new THREE.Geometry();
 
     var minecraftMesh = new THREE.Mesh(
       geometry,
-      new THREE.MeshLambertMaterial( { map: texture, vertexColors: true, side: THREE.DoubleSide } )
-);
-    console.log(minecraftMesh.position)
-    scene.add( minecraftMesh );
+      new THREE.MeshLambertMaterial({ map: texture, vertexColors: true, side: THREE.DoubleSide }));
+minecraftMesh.name = "minecraftMesh";
+// scene.add(minecraftMesh);
 
+// Dynamic Terrain
+
+var uniformsNoise, uniformsNormal, uniformsTerrain,
+  heightMap, normalMap,
+  quadTarget;
+
+var terrain;
+
+var textureCounter = 0;
+
+var animDelta = 0, animDeltaDir = -1;
+var lightVal = 0, lightDir = 1;
+
+var updateNoise = true;
+
+
+var mlib = {};
+
+// HEIGHT + NORMAL MAPS
+
+var normalShader = THREE.NormalMapShader;
+
+var rx = 256, ry = 256;
+var pars = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat };
+
+heightMap  = new THREE.WebGLRenderTarget( rx, ry, pars );
+heightMap.texture.generateMipmaps = false;
+
+normalMap = new THREE.WebGLRenderTarget( rx, ry, pars );
+normalMap.texture.generateMipmaps = false;
+
+uniformsNoise = {
+
+  time:   { value: 1.0 },
+  scale:  { value: new THREE.Vector2( 1.5, 1.5 ) },
+  offset: { value: new THREE.Vector2( 0, 0 ) }
+
+};
+
+uniformsNormal = THREE.UniformsUtils.clone( normalShader.uniforms );
+
+uniformsNormal.height.value = 0.05;
+uniformsNormal.resolution.value.set( rx, ry );
+uniformsNormal.heightMap.value = heightMap.texture;
+
+var vertexShader = document.getElementById( 'vertexShader' ).textContent;
+
+// TEXTURES
+
+var loadingManager = new THREE.LoadingManager( function(){
+  terrain.visible = true;
+});
+var textureLoader = new THREE.TextureLoader( loadingManager );
+
+var specularMap = new THREE.WebGLRenderTarget( 2048, 2048, pars );
+specularMap.texture.generateMipmaps = false;
+
+var diffuseTexture1 = textureLoader.load( "assets/textures/grasslight-big.jpg");
+var diffuseTexture2 = textureLoader.load( "assets/textures/backgrounddetailed6.jpg" );
+var detailTexture = textureLoader.load( "assets/textures/grasslight-big-nm.jpg" );
+
+diffuseTexture1.wrapS = diffuseTexture1.wrapT = THREE.RepeatWrapping;
+diffuseTexture2.wrapS = diffuseTexture2.wrapT = THREE.RepeatWrapping;
+detailTexture.wrapS = detailTexture.wrapT = THREE.RepeatWrapping;
+specularMap.texture.wrapS = specularMap.texture.wrapT = THREE.RepeatWrapping;
+
+// TERRAIN SHADER
+
+var terrainShader = THREE.ShaderTerrain[ "terrain" ];
+
+uniformsTerrain = THREE.UniformsUtils.clone( terrainShader.uniforms );
+
+uniformsTerrain[ 'tNormal' ].value = normalMap.texture;
+uniformsTerrain[ 'uNormalScale' ].value = 3.5;
+
+uniformsTerrain[ 'tDisplacement' ].value = heightMap.texture;
+
+uniformsTerrain[ 'tDiffuse1' ].value = diffuseTexture1;
+uniformsTerrain[ 'tDiffuse2' ].value = diffuseTexture2;
+uniformsTerrain[ 'tSpecular' ].value = specularMap.texture;
+uniformsTerrain[ 'tDetail' ].value = detailTexture;
+
+uniformsTerrain[ 'enableDiffuse1' ].value = true;
+uniformsTerrain[ 'enableDiffuse2' ].value = true;
+uniformsTerrain[ 'enableSpecular' ].value = true;
+
+uniformsTerrain[ 'diffuse' ].value.setHex( 0xffffff );
+uniformsTerrain[ 'specular' ].value.setHex( 0xffffff );
+
+uniformsTerrain[ 'shininess' ].value = 30;
+
+uniformsTerrain[ 'uDisplacementScale' ].value = 375;
+
+uniformsTerrain[ 'uRepeatOverlay' ].value.set( 6, 6 );
+
+var params = [
+  [ 'heightmap', 	document.getElementById( 'fragmentShaderNoise' ).textContent, 	vertexShader, uniformsNoise, false ],
+  [ 'normal', 	normalShader.fragmentShader,  normalShader.vertexShader, uniformsNormal, false ],
+  [ 'terrain', 	terrainShader.fragmentShader, terrainShader.vertexShader, uniformsTerrain, true ]
+];
+
+for( var i = 0; i < params.length; i ++ ) {
+
+  material = new THREE.ShaderMaterial( {
+
+    uniforms: 		params[ i ][ 3 ],
+    vertexShader: 	params[ i ][ 2 ],
+    fragmentShader: params[ i ][ 1 ],
+    lights: 		params[ i ][ 4 ],
+    fog: 			true
+    } );
+
+  mlib[ params[ i ][ 0 ] ] = material;
+
+}
+
+
+var plane = new THREE.PlaneBufferGeometry( SCREEN_WIDTH, SCREEN_HEIGHT );
+
+quadTarget = new THREE.Mesh( plane, new THREE.MeshBasicMaterial( { color: 0x000000 } ) );
+quadTarget.position.z = -500;
+// scene.add(quadTarget);
+// TERRAIN MESH
+
+var geometryTerrain = new THREE.PlaneBufferGeometry( 6000, 6000, 256, 256 );
+
+THREE.BufferGeometryUtils.computeTangents( geometryTerrain );
+
+terrain = new THREE.Mesh( geometryTerrain, mlib[ 'terrain' ] );
+terrain.position.set( 0, -125, 0 );
+terrain.rotation.x = -Math.PI / 2;
+terrain.visible = false;
+scene.add( terrain );
 
 let then = 0;
 
