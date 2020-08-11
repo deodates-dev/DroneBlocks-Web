@@ -44,6 +44,7 @@ const droneRotateSpeed = Math.PI;
 let pathCount = 0;
 
 var ringsChangeCount = 5;
+var colorChangeCount = 0;
 var ringsPosConfig = [
   [
     { x: 1000, y: 1524, z: 0 },
@@ -212,7 +213,13 @@ audioLoader.load( 'tello_sound.m4a', function( buffer ) {
 
 var textureLoader = new THREE.TextureLoader();
 textureLoader.setPath('assets/textures/');
-var bodyTexture = textureLoader.load('Drone_mat_Diffuse.png');
+var bodyTexture = [];
+bodyTexture[0] = textureLoader.load('Drone_mat_Diffuse.png');
+bodyTexture[1] = textureLoader.load('Drone_mat_Diffuse_white.png');
+bodyTexture[2] = textureLoader.load('Drone_mat_Diffuse_red.png');
+bodyTexture[3] = textureLoader.load('Drone_mat_Diffuse_green.png');
+bodyTexture[4] = textureLoader.load('Drone_mat_Diffuse_yellow.png');
+
 var lightTexture = textureLoader.load('LED_Emissive.png');
 var glassTexture = textureLoader.load('glass_mat _Normal.png');
 
@@ -222,7 +229,7 @@ objLoader.load('drone.obj', function (object) {
 
   object.traverse(function (child) {
     if (child instanceof THREE.Mesh) {
-      child.material.map = bodyTexture;
+      child.material.map = bodyTexture[0];
       if (child.name == "green_light") {
         child.material.map = lightTexture;
       }
@@ -597,7 +604,7 @@ terrain = new THREE.Mesh( geometryTerrain, mlib[ 'terrain' ] );
 terrain.position.set( 0, -125, 0 );
 terrain.rotation.x = -Math.PI / 2;
 terrain.visible = false;
-scene.add( terrain );
+// scene.add( terrain );
 
 let then = 0;
 
@@ -1255,7 +1262,17 @@ $(document).keypress(function (e) {
   if ((e.which === 102) || (e.which === 70)) { // if F or f key pressed, Full Screen
     openFullscreen();
   }
-
+  if ((e.which === 99) || (e.which === 67)) { // if C or c key pressed, Toggle Color
+    colorChangeCount++;
+    if (colorChangeCount > 5) {
+      colorChangeCount = 0;
+    }
+    drone && drone.traverse(function (child) {
+      if (child instanceof THREE.Mesh) {
+          child.material.map = bodyTexture[colorChangeCount];
+        }
+    });
+  }
 });
 
 function generateHeight( width, height ) {
