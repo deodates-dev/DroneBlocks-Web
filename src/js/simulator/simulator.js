@@ -1269,8 +1269,14 @@ $(document).keypress(function (e) {
     }
     drone && drone.traverse(function (child) {
       if (child instanceof THREE.Mesh) {
-          child.material.map = bodyTexture[colorChangeCount];
+        child.material.map = bodyTexture[colorChangeCount];
+        if (child.name == "green_light") {
+          child.material.map = lightTexture;
         }
+        if (child.name == "glass") {
+          child.material.map = glassTexture;
+        }
+      }
     });
   }
 });
