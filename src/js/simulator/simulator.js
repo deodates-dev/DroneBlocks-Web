@@ -1,4 +1,4 @@
-if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+if (!Detector.webgl) Detector.addGetWebGLMessage();
 var scene, camera, renderer, controls, drone;
 var blade = [];
 var keyboard = new THREEx.KeyboardState();
@@ -22,7 +22,7 @@ var rotateTarget = 0;
 var isOnRotateTarget = false;
 var isLanding = false;
 var islanded = false;
-let rotateSpeed = Math.PI / 180 * 80; //blade spin speed;
+let rotateSpeed = (Math.PI / 180) * 80; //blade spin speed;
 var isHovering = false;
 var isHovered = false;
 var isCurving = false;
@@ -80,28 +80,33 @@ var ringsPosConfig = [
     { x: 2191, y: 4910, z: 905 },
     { x: 4296, y: 822, z: -246 },
     { x: 9032, y: 9284, z: 1651 },
-  ]
+  ],
 ];
 const MAX_PATH_POINTS = 100000;
 let positionBuffer = {};
 
-var worldWidth = 200, worldDepth = 200;
+var worldWidth = 200,
+  worldDepth = 200;
 var worldHalfWidth = worldWidth / 2;
 var worldHalfDepth = worldDepth / 2;
 var data = generateHeight(worldWidth, worldDepth);
 
 scene = new THREE.Scene();
-scene.position.y = scene.position.y - 2000 // Lower original axis
+scene.position.y = scene.position.y - 2000; // Lower original axis
 scene.background = new THREE.Color(0xcccccc);
-var SCREEN_WIDTH = window.innerWidth / 2, SCREEN_HEIGHT = window.innerHeight;
+var SCREEN_WIDTH = window.innerWidth / 2,
+  SCREEN_HEIGHT = window.innerHeight;
 // camera attributes
-var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 200000;
+var VIEW_ANGLE = 45,
+  ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT,
+  NEAR = 0.1,
+  FAR = 200000;
 // set up camera
 camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 // add the camera to the scene
 scene.add(camera);
 const zoomInverseFactor = 2;
-camera.position.set(-zoomInverseFactor*3000, zoomInverseFactor*2000, 0);
+camera.position.set(-zoomInverseFactor * 3000, zoomInverseFactor * 2000, 0);
 camera.lookAt(scene.position);
 scene.add(new THREE.AxesHelper(2600));
 
@@ -112,7 +117,7 @@ camera.position.x = camera.position.x * Math.cos(cameraRotateAngle);
 
 // create an AudioListener and add it to the camera
 var listener = new THREE.AudioListener();
-camera.add( listener );
+camera.add(listener);
 
 // create a global audio source
 var sound = new THREE.Audio(listener);
@@ -125,7 +130,7 @@ if (Detector.webgl) {
 }
 
 renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-document.getElementById("droneArea").appendChild(renderer.domElement);
+document.getElementById('droneArea').appendChild(renderer.domElement);
 
 // automatically resize renderer
 THREEx.WindowResize(renderer, camera);
@@ -135,14 +140,13 @@ controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.minDistance = 200;
 controls.maxDistance = 60000;
 controls.maxPolarAngle = Math.PI * 0.48;
-controls.panSpeed = 0.01;
-controls.dampingFactor = 100;
+controls.userPanSpeed = 30;
 
 const size = 25000; //2500cm, 10cm = 100, 1 = 0.1cm
 const divisions = 250; //1 division = 10cm;
 const horizontalGridHelper = new THREE.GridHelper(size, divisions);
 let gridGroup = new THREE.Group();
-gridGroup.name = "gridHelper";
+gridGroup.name = 'gridHelper';
 gridGroup.add(horizontalGridHelper);
 //Vertical Grid 1 XOY plane
 const verticalGridHelper1 = new THREE.GridHelper(size, divisions);
@@ -167,19 +171,18 @@ light.position.multiplyScalar(1.3);
 
 var d = 300;
 
-light.shadow.camera.left = - d;
+light.shadow.camera.left = -d;
 light.shadow.camera.right = d;
 light.shadow.camera.top = d;
-light.shadow.camera.bottom = - d;
+light.shadow.camera.bottom = -d;
 
 light.shadow.camera.far = 1000;
 
 scene.add(light);
 
-
 var material = new THREE.MeshBasicMaterial({
   color: 0x999999, // Ground Color determine.
-})
+});
 
 /* var mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(100000, 100000), material);
 mesh.position.y = 1;
@@ -187,27 +190,25 @@ mesh.rotation.x = - Math.PI / 2;
 mesh.receiveShadow = true;
 scene.add(mesh); */
 
-
-
 var manager = new THREE.LoadingManager();
-manager.onProgress = function (item, loaded, total) {
+manager.onProgress = function(item, loaded, total) {
   console.log(item, loaded, total);
 };
 
-var onProgress = function (xhr) {
+var onProgress = function(xhr) {
   if (xhr.lengthComputable) {
-    var percentComplete = xhr.loaded / xhr.total * 100;
+    var percentComplete = (xhr.loaded / xhr.total) * 100;
     console.log(Math.round(percentComplete, 2) + '% downloaded');
   }
 };
-var onError = function (xhr) { };
+var onError = function(xhr) {};
 
 // load a sound and set it as the Audio object's buffer
 var audioLoader = new THREE.AudioLoader();
 audioLoader.setPath('assets/audio/');
-audioLoader.load( 'tello_sound.m4a', function( buffer ) {
-	sound.setBuffer( buffer );
-	sound.setLoop( true );
+audioLoader.load('tello_sound.m4a', function(buffer) {
+  sound.setBuffer(buffer);
+  sound.setLoop(true);
   sound.setVolume(1);
 });
 
@@ -225,31 +226,35 @@ var glassTexture = textureLoader.load('glass_mat _Normal.png');
 
 var objLoader = new THREE.OBJLoader(manager);
 objLoader.setPath('assets/');
-objLoader.load('drone.obj', function (object) {
-
-  object.traverse(function (child) {
-    if (child instanceof THREE.Mesh) {
-      child.material.map = bodyTexture[0];
-      if (child.name == "green_light") {
-        child.material.map = lightTexture;
+objLoader.load(
+  'drone.obj',
+  function(object) {
+    object.traverse(function(child) {
+      if (child instanceof THREE.Mesh) {
+        child.material.map = bodyTexture[0];
+        if (child.name == 'green_light') {
+          child.material.map = lightTexture;
+        }
+        if (child.name == 'glass') {
+          child.material.map = glassTexture;
+        }
       }
-      if (child.name == "glass") {
-        child.material.map = glassTexture;
-      }
-    }
-  });
-  drone = object;
-  drone.name = "drone";
-  scene.add(drone);
-  blade[0] = scene.getObjectByName("Blade01");
-  blade[1] = scene.getObjectByName("Blade02");
-  blade[2] = scene.getObjectByName("Blade03");
-  blade[3] = scene.getObjectByName("Blade04");
-  moveAxis(drone, blade[0]);
-  moveAxis(drone, blade[1]);
-  moveAxis(drone, blade[2]);
-  moveAxis(drone, blade[3]);
-}, onProgress, onError);
+    });
+    drone = object;
+    drone.name = 'drone';
+    scene.add(drone);
+    blade[0] = scene.getObjectByName('Blade01');
+    blade[1] = scene.getObjectByName('Blade02');
+    blade[2] = scene.getObjectByName('Blade03');
+    blade[3] = scene.getObjectByName('Blade04');
+    moveAxis(drone, blade[0]);
+    moveAxis(drone, blade[1]);
+    moveAxis(drone, blade[2]);
+    moveAxis(drone, blade[3]);
+  },
+  onProgress,
+  onError,
+);
 
 //add ring
 /* TorusGeometry(radius : Float, tube : Float, radialSegments : Integer, tubularSegments : Integer, arc : Float)
@@ -259,11 +264,20 @@ radialSegments — Default is 8
 tubularSegments — Default is 6.
 arc — Central angle. Default is Math.PI * 2 */
 const radius = 300; //Diameter = 60cm
-const tube = 50;     //You can control thickness here
+const tube = 50; //You can control thickness here
 const radialSegments = 50;
 const tubularSegments = 50;
-var geometry = new THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments);
-var material = new THREE.MeshPhongMaterial({ color: 0xff6700, shininess: 100, side: THREE.DoubleSide });
+var geometry = new THREE.TorusGeometry(
+  radius,
+  tube,
+  radialSegments,
+  tubularSegments,
+);
+var material = new THREE.MeshPhongMaterial({
+  color: 0xff6700,
+  shininess: 100,
+  side: THREE.DoubleSide,
+});
 for (var i = 0; i < ringsCount; i++) {
   var mesh = new THREE.Mesh(geometry, material);
   mesh.rotation.y = Math.PI / 2;
@@ -275,218 +289,216 @@ for (var i = 0; i < ringsCount; i++) {
 // Add Path init line
 let pathPositions = new Float32Array(MAX_PATH_POINTS * 3);
 const pathMaterial = new THREE.LineDashedMaterial({
-	color: 0xFFFF00,
+  color: 0xffff00,
   dashSize: 10,
-  gapSize: 5
+  gapSize: 5,
 });
 const pathGeometry = new THREE.BufferGeometry();
-pathGeometry.addAttribute('position', new THREE.BufferAttribute(pathPositions, 3));
+pathGeometry.addAttribute(
+  'position',
+  new THREE.BufferAttribute(pathPositions, 3),
+);
 const pathLine = new THREE.Line(pathGeometry, pathMaterial);
 pathLine.computeLineDistances();
 pathLine.geometry.dynamic = true;
 scene.add(pathLine);
 
 // MineCraft Terrain
-var mineLight = new THREE.Color( 0xffffff );
-var mineShadow = new THREE.Color( 0x505050 );
+var mineLight = new THREE.Color(0xffffff);
+var mineShadow = new THREE.Color(0x505050);
 
 var matrix = new THREE.Matrix4();
 
-var pxGeometry = new THREE.PlaneGeometry( 100, 100 );
-pxGeometry.faces[ 0 ].vertexColors = [ mineLight, mineShadow, mineLight ];
-pxGeometry.faces[ 1 ].vertexColors = [ mineShadow, mineShadow, mineLight ];
-pxGeometry.faceVertexUvs[ 0 ][ 0 ][ 0 ].y = 0.5;
-pxGeometry.faceVertexUvs[ 0 ][ 0 ][ 2 ].y = 0.5;
-pxGeometry.faceVertexUvs[ 0 ][ 1 ][ 2 ].y = 0.5;
-pxGeometry.rotateY( Math.PI / 2 );
-pxGeometry.translate( 50, 0, 0 );
+var pxGeometry = new THREE.PlaneGeometry(100, 100);
+pxGeometry.faces[0].vertexColors = [mineLight, mineShadow, mineLight];
+pxGeometry.faces[1].vertexColors = [mineShadow, mineShadow, mineLight];
+pxGeometry.faceVertexUvs[0][0][0].y = 0.5;
+pxGeometry.faceVertexUvs[0][0][2].y = 0.5;
+pxGeometry.faceVertexUvs[0][1][2].y = 0.5;
+pxGeometry.rotateY(Math.PI / 2);
+pxGeometry.translate(50, 0, 0);
 
-var nxGeometry = new THREE.PlaneGeometry( 100, 100 );
-nxGeometry.faces[ 0 ].vertexColors = [ mineLight, mineShadow, mineLight ];
-nxGeometry.faces[ 1 ].vertexColors = [ mineShadow, mineShadow, mineLight ];
-nxGeometry.faceVertexUvs[ 0 ][ 0 ][ 0 ].y = 0.5;
-nxGeometry.faceVertexUvs[ 0 ][ 0 ][ 2 ].y = 0.5;
-nxGeometry.faceVertexUvs[ 0 ][ 1 ][ 2 ].y = 0.5;
-nxGeometry.rotateY( - Math.PI / 2 );
-nxGeometry.translate( - 50, 0, 0 );
+var nxGeometry = new THREE.PlaneGeometry(100, 100);
+nxGeometry.faces[0].vertexColors = [mineLight, mineShadow, mineLight];
+nxGeometry.faces[1].vertexColors = [mineShadow, mineShadow, mineLight];
+nxGeometry.faceVertexUvs[0][0][0].y = 0.5;
+nxGeometry.faceVertexUvs[0][0][2].y = 0.5;
+nxGeometry.faceVertexUvs[0][1][2].y = 0.5;
+nxGeometry.rotateY(-Math.PI / 2);
+nxGeometry.translate(-50, 0, 0);
 
-var pyGeometry = new THREE.PlaneGeometry( 100, 100 );
-pyGeometry.faces[ 0 ].vertexColors = [ mineLight, mineLight, mineLight ];
-pyGeometry.faces[ 1 ].vertexColors = [ mineLight, mineLight, mineLight ];
-pyGeometry.faceVertexUvs[ 0 ][ 0 ][ 1 ].y = 0.5;
-pyGeometry.faceVertexUvs[ 0 ][ 1 ][ 0 ].y = 0.5;
-pyGeometry.faceVertexUvs[ 0 ][ 1 ][ 1 ].y = 0.5;
-pyGeometry.rotateX( - Math.PI / 2 );
-pyGeometry.translate( 0, 50, 0 );
+var pyGeometry = new THREE.PlaneGeometry(100, 100);
+pyGeometry.faces[0].vertexColors = [mineLight, mineLight, mineLight];
+pyGeometry.faces[1].vertexColors = [mineLight, mineLight, mineLight];
+pyGeometry.faceVertexUvs[0][0][1].y = 0.5;
+pyGeometry.faceVertexUvs[0][1][0].y = 0.5;
+pyGeometry.faceVertexUvs[0][1][1].y = 0.5;
+pyGeometry.rotateX(-Math.PI / 2);
+pyGeometry.translate(0, 50, 0);
 
-var py2Geometry = new THREE.PlaneGeometry( 100, 100 );
-py2Geometry.faces[ 0 ].vertexColors = [ mineLight, mineLight, mineLight ];
-py2Geometry.faces[ 1 ].vertexColors = [ mineLight, mineLight, mineLight ];
-py2Geometry.faceVertexUvs[ 0 ][ 0 ][ 1 ].y = 0.5;
-py2Geometry.faceVertexUvs[ 0 ][ 1 ][ 0 ].y = 0.5;
-py2Geometry.faceVertexUvs[ 0 ][ 1 ][ 1 ].y = 0.5;
-py2Geometry.rotateX( - Math.PI / 2 );
-py2Geometry.rotateY( Math.PI / 2 );
-py2Geometry.translate( 0, 50, 0 );
+var py2Geometry = new THREE.PlaneGeometry(100, 100);
+py2Geometry.faces[0].vertexColors = [mineLight, mineLight, mineLight];
+py2Geometry.faces[1].vertexColors = [mineLight, mineLight, mineLight];
+py2Geometry.faceVertexUvs[0][0][1].y = 0.5;
+py2Geometry.faceVertexUvs[0][1][0].y = 0.5;
+py2Geometry.faceVertexUvs[0][1][1].y = 0.5;
+py2Geometry.rotateX(-Math.PI / 2);
+py2Geometry.rotateY(Math.PI / 2);
+py2Geometry.translate(0, 50, 0);
 
-var pzGeometry = new THREE.PlaneGeometry( 100, 100 );
-pzGeometry.faces[ 0 ].vertexColors = [ mineLight, mineShadow, mineLight ];
-pzGeometry.faces[ 1 ].vertexColors = [ mineShadow, mineShadow, mineLight ];
-pzGeometry.faceVertexUvs[ 0 ][ 0 ][ 0 ].y = 0.5;
-pzGeometry.faceVertexUvs[ 0 ][ 0 ][ 2 ].y = 0.5;
-pzGeometry.faceVertexUvs[ 0 ][ 1 ][ 2 ].y = 0.5;
-pzGeometry.translate( 0, 0, 50 );
+var pzGeometry = new THREE.PlaneGeometry(100, 100);
+pzGeometry.faces[0].vertexColors = [mineLight, mineShadow, mineLight];
+pzGeometry.faces[1].vertexColors = [mineShadow, mineShadow, mineLight];
+pzGeometry.faceVertexUvs[0][0][0].y = 0.5;
+pzGeometry.faceVertexUvs[0][0][2].y = 0.5;
+pzGeometry.faceVertexUvs[0][1][2].y = 0.5;
+pzGeometry.translate(0, 0, 50);
 
-var nzGeometry = new THREE.PlaneGeometry( 100, 100 );
-nzGeometry.faces[ 0 ].vertexColors = [ mineLight, mineShadow, mineLight ];
-nzGeometry.faces[ 1 ].vertexColors = [ mineShadow, mineShadow, mineLight ];
-nzGeometry.faceVertexUvs[ 0 ][ 0 ][ 0 ].y = 0.5;
-nzGeometry.faceVertexUvs[ 0 ][ 0 ][ 2 ].y = 0.5;
-nzGeometry.faceVertexUvs[ 0 ][ 1 ][ 2 ].y = 0.5;
-nzGeometry.rotateY( Math.PI );
-nzGeometry.translate( 0, 0, - 50 );
+var nzGeometry = new THREE.PlaneGeometry(100, 100);
+nzGeometry.faces[0].vertexColors = [mineLight, mineShadow, mineLight];
+nzGeometry.faces[1].vertexColors = [mineShadow, mineShadow, mineLight];
+nzGeometry.faceVertexUvs[0][0][0].y = 0.5;
+nzGeometry.faceVertexUvs[0][0][2].y = 0.5;
+nzGeometry.faceVertexUvs[0][1][2].y = 0.5;
+nzGeometry.rotateY(Math.PI);
+nzGeometry.translate(0, 0, -50);
 
 var geometry = new THREE.Geometry();
 
-				for ( var z = 0; z < worldDepth; z ++ ) {
+for (var z = 0; z < worldDepth; z++) {
+  for (var x = 0; x < worldWidth; x++) {
+    var h = getY(x, z);
 
-					for ( var x = 0; x < worldWidth; x ++ ) {
+    matrix.makeTranslation(
+      x * 100 - worldHalfWidth * 100,
+      h * 100,
+      z * 100 - worldHalfDepth * 100,
+    );
 
-						var h = getY( x, z );
+    var px = getY(x + 1, z);
+    var nx = getY(x - 1, z);
+    var pz = getY(x, z + 1);
+    var nz = getY(x, z - 1);
 
-						matrix.makeTranslation(
-							x * 100 - worldHalfWidth * 100,
-							h * 100,
-							z * 100 - worldHalfDepth * 100
-						);
+    var pxpz = getY(x + 1, z + 1);
+    var nxpz = getY(x - 1, z + 1);
+    var pxnz = getY(x + 1, z - 1);
+    var nxnz = getY(x - 1, z - 1);
 
-						var px = getY( x + 1, z );
-						var nx = getY( x - 1, z );
-						var pz = getY( x, z + 1 );
-						var nz = getY( x, z - 1 );
+    var a = nx > h || nz > h || nxnz > h ? 0 : 1;
+    var b = nx > h || pz > h || nxpz > h ? 0 : 1;
+    var c = px > h || pz > h || pxpz > h ? 0 : 1;
+    var d = px > h || nz > h || pxnz > h ? 0 : 1;
 
-						var pxpz = getY( x + 1, z + 1 );
-						var nxpz = getY( x - 1, z + 1 );
-						var pxnz = getY( x + 1, z - 1 );
-						var nxnz = getY( x - 1, z - 1 );
+    if (a + c > b + d) {
+      var colors = py2Geometry.faces[0].vertexColors;
+      colors[0] = b === 0 ? mineShadow : mineLight;
+      colors[1] = c === 0 ? mineShadow : mineLight;
+      colors[2] = a === 0 ? mineShadow : mineLight;
 
-						var a = nx > h || nz > h || nxnz > h ? 0 : 1;
-						var b = nx > h || pz > h || nxpz > h ? 0 : 1;
-						var c = px > h || pz > h || pxpz > h ? 0 : 1;
-						var d = px > h || nz > h || pxnz > h ? 0 : 1;
+      var colors = py2Geometry.faces[1].vertexColors;
+      colors[0] = c === 0 ? mineShadow : mineLight;
+      colors[1] = d === 0 ? mineShadow : mineLight;
+      colors[2] = a === 0 ? mineShadow : mineLight;
 
-						if ( a + c > b + d ) {
+      geometry.merge(py2Geometry, matrix);
+    } else {
+      var colors = pyGeometry.faces[0].vertexColors;
+      colors[0] = a === 0 ? mineShadow : mineLight;
+      colors[1] = b === 0 ? mineShadow : mineLight;
+      colors[2] = d === 0 ? mineShadow : mineLight;
 
-							var colors = py2Geometry.faces[ 0 ].vertexColors;
-							colors[ 0 ] = b === 0 ? mineShadow : mineLight;
-							colors[ 1 ] = c === 0 ? mineShadow : mineLight;
-							colors[ 2 ] = a === 0 ? mineShadow : mineLight;
+      var colors = pyGeometry.faces[1].vertexColors;
+      colors[0] = b === 0 ? mineShadow : mineLight;
+      colors[1] = c === 0 ? mineShadow : mineLight;
+      colors[2] = d === 0 ? mineShadow : mineLight;
 
-							var colors = py2Geometry.faces[ 1 ].vertexColors;
-							colors[ 0 ] = c === 0 ? mineShadow : mineLight;
-							colors[ 1 ] = d === 0 ? mineShadow : mineLight;
-							colors[ 2 ] = a === 0 ? mineShadow : mineLight;
+      geometry.merge(pyGeometry, matrix);
+    }
 
-							geometry.merge( py2Geometry, matrix );
+    if ((px != h && px != h + 1) || x == 0) {
+      var colors = pxGeometry.faces[0].vertexColors;
+      colors[0] = pxpz > px && x > 0 ? mineShadow : mineLight;
+      colors[2] = pxnz > px && x > 0 ? mineShadow : mineLight;
 
-						} else {
+      var colors = pxGeometry.faces[1].vertexColors;
+      colors[2] = pxnz > px && x > 0 ? mineShadow : mineLight;
 
-							var colors = pyGeometry.faces[ 0 ].vertexColors;
-							colors[ 0 ] = a === 0 ? mineShadow : mineLight;
-							colors[ 1 ] = b === 0 ? mineShadow : mineLight;
-							colors[ 2 ] = d === 0 ? mineShadow : mineLight;
+      geometry.merge(pxGeometry, matrix);
+    }
 
-							var colors = pyGeometry.faces[ 1 ].vertexColors;
-							colors[ 0 ] = b === 0 ? mineShadow : mineLight;
-							colors[ 1 ] = c === 0 ? mineShadow : mineLight;
-							colors[ 2 ] = d === 0 ? mineShadow : mineLight;
+    if ((nx != h && nx != h + 1) || x == worldWidth - 1) {
+      var colors = nxGeometry.faces[0].vertexColors;
+      colors[0] = nxnz > nx && x < worldWidth - 1 ? mineShadow : mineLight;
+      colors[2] = nxpz > nx && x < worldWidth - 1 ? mineShadow : mineLight;
 
-							geometry.merge( pyGeometry, matrix );
+      var colors = nxGeometry.faces[1].vertexColors;
+      colors[2] = nxpz > nx && x < worldWidth - 1 ? mineShadow : mineLight;
 
-						}
+      geometry.merge(nxGeometry, matrix);
+    }
 
-						if ( ( px != h && px != h + 1 ) || x == 0 ) {
+    if ((pz != h && pz != h + 1) || z == worldDepth - 1) {
+      var colors = pzGeometry.faces[0].vertexColors;
+      colors[0] = nxpz > pz && z < worldDepth - 1 ? mineShadow : mineLight;
+      colors[2] = pxpz > pz && z < worldDepth - 1 ? mineShadow : mineLight;
 
-							var colors = pxGeometry.faces[ 0 ].vertexColors;
-							colors[ 0 ] = pxpz > px && x > 0 ? mineShadow : mineLight;
-							colors[ 2 ] = pxnz > px && x > 0 ? mineShadow : mineLight;
+      var colors = pzGeometry.faces[1].vertexColors;
+      colors[2] = pxpz > pz && z < worldDepth - 1 ? mineShadow : mineLight;
 
-							var colors = pxGeometry.faces[ 1 ].vertexColors;
-							colors[ 2 ] = pxnz > px && x > 0 ? mineShadow : mineLight;
+      geometry.merge(pzGeometry, matrix);
+    }
 
-							geometry.merge( pxGeometry, matrix );
+    if ((nz != h && nz != h + 1) || z == 0) {
+      var colors = nzGeometry.faces[0].vertexColors;
+      colors[0] = pxnz > nz && z > 0 ? mineShadow : mineLight;
+      colors[2] = nxnz > nz && z > 0 ? mineShadow : mineLight;
 
-						}
+      var colors = nzGeometry.faces[1].vertexColors;
+      colors[2] = nxnz > nz && z > 0 ? mineShadow : mineLight;
 
-						if ( ( nx != h && nx != h + 1 ) || x == worldWidth - 1 ) {
+      geometry.merge(nzGeometry, matrix);
+    }
+  }
+}
+geometry = new THREE.BufferGeometry().fromGeometry(geometry);
 
-							var colors = nxGeometry.faces[ 0 ].vertexColors;
-							colors[ 0 ] = nxnz > nx && x < worldWidth - 1 ? mineShadow : mineLight;
-							colors[ 2 ] = nxpz > nx && x < worldWidth - 1 ? mineShadow : mineLight;
+var texture = new THREE.TextureLoader().load(
+  'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/minecraft/atlas.png',
+);
+texture.magFilter = THREE.NearestFilter;
+texture.minFilter = THREE.LinearMipmapLinearFilter;
 
-							var colors = nxGeometry.faces[ 1 ].vertexColors;
-							colors[ 2 ] = nxpz > nx && x < worldWidth - 1 ? mineShadow : mineLight;
-
-							geometry.merge( nxGeometry, matrix );
-
-						}
-
-						if ( ( pz != h && pz != h + 1 ) || z == worldDepth - 1 ) {
-
-							var colors = pzGeometry.faces[ 0 ].vertexColors;
-							colors[ 0 ] = nxpz > pz && z < worldDepth - 1 ? mineShadow : mineLight;
-							colors[ 2 ] = pxpz > pz && z < worldDepth - 1 ? mineShadow : mineLight;
-
-							var colors = pzGeometry.faces[ 1 ].vertexColors;
-							colors[ 2 ] = pxpz > pz && z < worldDepth - 1 ? mineShadow : mineLight;
-
-							geometry.merge( pzGeometry, matrix );
-
-						}
-
-						if ( ( nz != h && nz != h + 1 ) || z == 0 ) {
-
-							var colors = nzGeometry.faces[ 0 ].vertexColors;
-							colors[ 0 ] = pxnz > nz && z > 0 ? mineShadow : mineLight;
-							colors[ 2 ] = nxnz > nz && z > 0 ? mineShadow : mineLight;
-
-							var colors = nzGeometry.faces[ 1 ].vertexColors;
-							colors[ 2 ] = nxnz > nz && z > 0 ? mineShadow : mineLight;
-
-							geometry.merge( nzGeometry, matrix );
-
-						}
-
-					}
-
-				}
-    geometry = new THREE.BufferGeometry().fromGeometry( geometry );
-
-    var texture = new THREE.TextureLoader().load( 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/minecraft/atlas.png' );
-    texture.magFilter = THREE.NearestFilter;
-    texture.minFilter = THREE.LinearMipmapLinearFilter;
-
-    var minecraftMesh = new THREE.Mesh(
-      geometry,
-      new THREE.MeshLambertMaterial({ map: texture, vertexColors: true, side: THREE.DoubleSide }));
-minecraftMesh.name = "minecraftMesh";
+var minecraftMesh = new THREE.Mesh(
+  geometry,
+  new THREE.MeshLambertMaterial({
+    map: texture,
+    vertexColors: true,
+    side: THREE.DoubleSide,
+  }),
+);
+minecraftMesh.name = 'minecraftMesh';
 // scene.add(minecraftMesh);
 
 // Dynamic Terrain
 
-var uniformsNoise, uniformsNormal, uniformsTerrain,
-  heightMap, normalMap,
+var uniformsNoise,
+  uniformsNormal,
+  uniformsTerrain,
+  heightMap,
+  normalMap,
   quadTarget;
 
 var terrain;
 
 var textureCounter = 0;
 
-var animDelta = 0, animDeltaDir = -1;
-var lightVal = 0, lightDir = 1;
+var animDelta = 0,
+  animDeltaDir = -1;
+var lightVal = 0,
+  lightDir = 1;
 
 var updateNoise = true;
-
 
 var mlib = {};
 
@@ -494,44 +506,49 @@ var mlib = {};
 
 var normalShader = THREE.NormalMapShader;
 
-var rx = 256, ry = 256;
-var pars = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat };
+var rx = 256,
+  ry = 256;
+var pars = {
+  minFilter: THREE.LinearFilter,
+  magFilter: THREE.LinearFilter,
+  format: THREE.RGBFormat,
+};
 
-heightMap  = new THREE.WebGLRenderTarget( rx, ry, pars );
+heightMap = new THREE.WebGLRenderTarget(rx, ry, pars);
 heightMap.texture.generateMipmaps = false;
 
-normalMap = new THREE.WebGLRenderTarget( rx, ry, pars );
+normalMap = new THREE.WebGLRenderTarget(rx, ry, pars);
 normalMap.texture.generateMipmaps = false;
 
 uniformsNoise = {
-
-  time:   { value: 1.0 },
-  scale:  { value: new THREE.Vector2( 1.5, 1.5 ) },
-  offset: { value: new THREE.Vector2( 0, 0 ) }
-
+  time: { value: 1.0 },
+  scale: { value: new THREE.Vector2(1.5, 1.5) },
+  offset: { value: new THREE.Vector2(0, 0) },
 };
 
-uniformsNormal = THREE.UniformsUtils.clone( normalShader.uniforms );
+uniformsNormal = THREE.UniformsUtils.clone(normalShader.uniforms);
 
 uniformsNormal.height.value = 0.05;
-uniformsNormal.resolution.value.set( rx, ry );
+uniformsNormal.resolution.value.set(rx, ry);
 uniformsNormal.heightMap.value = heightMap.texture;
 
-var vertexShader = document.getElementById( 'vertexShader' ).textContent;
+var vertexShader = document.getElementById('vertexShader').textContent;
 
 // TEXTURES
 
-var loadingManager = new THREE.LoadingManager( function(){
+var loadingManager = new THREE.LoadingManager(function() {
   terrain.visible = true;
 });
-var textureLoader = new THREE.TextureLoader( loadingManager );
+var textureLoader = new THREE.TextureLoader(loadingManager);
 
-var specularMap = new THREE.WebGLRenderTarget( 2048, 2048, pars );
+var specularMap = new THREE.WebGLRenderTarget(2048, 2048, pars);
 specularMap.texture.generateMipmaps = false;
 
-var diffuseTexture1 = textureLoader.load( "assets/textures/grasslight-big.jpg");
-var diffuseTexture2 = textureLoader.load( "assets/textures/backgrounddetailed6.jpg" );
-var detailTexture = textureLoader.load( "assets/textures/grasslight-big-nm.jpg" );
+var diffuseTexture1 = textureLoader.load('assets/textures/grasslight-big.jpg');
+var diffuseTexture2 = textureLoader.load(
+  'assets/textures/backgrounddetailed6.jpg',
+);
+var detailTexture = textureLoader.load('assets/textures/grasslight-big-nm.jpg');
 
 diffuseTexture1.wrapS = diffuseTexture1.wrapT = THREE.RepeatWrapping;
 diffuseTexture2.wrapS = diffuseTexture2.wrapT = THREE.RepeatWrapping;
@@ -540,84 +557,102 @@ specularMap.texture.wrapS = specularMap.texture.wrapT = THREE.RepeatWrapping;
 
 // TERRAIN SHADER
 
-var terrainShader = THREE.ShaderTerrain[ "terrain" ];
+var terrainShader = THREE.ShaderTerrain['terrain'];
 
-uniformsTerrain = THREE.UniformsUtils.clone( terrainShader.uniforms );
+uniformsTerrain = THREE.UniformsUtils.clone(terrainShader.uniforms);
 
-uniformsTerrain[ 'tNormal' ].value = normalMap.texture;
-uniformsTerrain[ 'uNormalScale' ].value = 3.5;
+uniformsTerrain['tNormal'].value = normalMap.texture;
+uniformsTerrain['uNormalScale'].value = 3.5;
 
-uniformsTerrain[ 'tDisplacement' ].value = heightMap.texture;
+uniformsTerrain['tDisplacement'].value = heightMap.texture;
 
-uniformsTerrain[ 'tDiffuse1' ].value = diffuseTexture1;
-uniformsTerrain[ 'tDiffuse2' ].value = diffuseTexture2;
-uniformsTerrain[ 'tSpecular' ].value = specularMap.texture;
-uniformsTerrain[ 'tDetail' ].value = detailTexture;
+uniformsTerrain['tDiffuse1'].value = diffuseTexture1;
+uniformsTerrain['tDiffuse2'].value = diffuseTexture2;
+uniformsTerrain['tSpecular'].value = specularMap.texture;
+uniformsTerrain['tDetail'].value = detailTexture;
 
-uniformsTerrain[ 'enableDiffuse1' ].value = true;
-uniformsTerrain[ 'enableDiffuse2' ].value = true;
-uniformsTerrain[ 'enableSpecular' ].value = true;
+uniformsTerrain['enableDiffuse1'].value = true;
+uniformsTerrain['enableDiffuse2'].value = true;
+uniformsTerrain['enableSpecular'].value = true;
 
-uniformsTerrain[ 'diffuse' ].value.setHex( 0xffffff );
-uniformsTerrain[ 'specular' ].value.setHex( 0xffffff );
+uniformsTerrain['diffuse'].value.setHex(0xffffff);
+uniformsTerrain['specular'].value.setHex(0xffffff);
 
-uniformsTerrain[ 'shininess' ].value = 30;
+uniformsTerrain['shininess'].value = 30;
 
-uniformsTerrain[ 'uDisplacementScale' ].value = 375;
+uniformsTerrain['uDisplacementScale'].value = 375;
 
-uniformsTerrain[ 'uRepeatOverlay' ].value.set( 6, 6 );
+uniformsTerrain['uRepeatOverlay'].value.set(6, 6);
 
 var params = [
-  [ 'heightmap', 	document.getElementById( 'fragmentShaderNoise' ).textContent, 	vertexShader, uniformsNoise, false ],
-  [ 'normal', 	normalShader.fragmentShader,  normalShader.vertexShader, uniformsNormal, false ],
-  [ 'terrain', 	terrainShader.fragmentShader, terrainShader.vertexShader, uniformsTerrain, true ]
+  [
+    'heightmap',
+    document.getElementById('fragmentShaderNoise').textContent,
+    vertexShader,
+    uniformsNoise,
+    false,
+  ],
+  [
+    'normal',
+    normalShader.fragmentShader,
+    normalShader.vertexShader,
+    uniformsNormal,
+    false,
+  ],
+  [
+    'terrain',
+    terrainShader.fragmentShader,
+    terrainShader.vertexShader,
+    uniformsTerrain,
+    true,
+  ],
 ];
 
-for( var i = 0; i < params.length; i ++ ) {
+for (var i = 0; i < params.length; i++) {
+  material = new THREE.ShaderMaterial({
+    uniforms: params[i][3],
+    vertexShader: params[i][2],
+    fragmentShader: params[i][1],
+    lights: params[i][4],
+    fog: true,
+  });
 
-  material = new THREE.ShaderMaterial( {
-
-    uniforms: 		params[ i ][ 3 ],
-    vertexShader: 	params[ i ][ 2 ],
-    fragmentShader: params[ i ][ 1 ],
-    lights: 		params[ i ][ 4 ],
-    fog: 			true
-    } );
-
-  mlib[ params[ i ][ 0 ] ] = material;
-
+  mlib[params[i][0]] = material;
 }
 
+var plane = new THREE.PlaneBufferGeometry(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-var plane = new THREE.PlaneBufferGeometry( SCREEN_WIDTH, SCREEN_HEIGHT );
-
-quadTarget = new THREE.Mesh( plane, new THREE.MeshBasicMaterial( { color: 0x000000 } ) );
+quadTarget = new THREE.Mesh(
+  plane,
+  new THREE.MeshBasicMaterial({ color: 0x000000 }),
+);
 quadTarget.position.z = -500;
 // scene.add(quadTarget);
 // TERRAIN MESH
 
-var geometryTerrain = new THREE.PlaneBufferGeometry( 6000, 6000, 256, 256 );
+var geometryTerrain = new THREE.PlaneBufferGeometry(6000, 6000, 256, 256);
 
-THREE.BufferGeometryUtils.computeTangents( geometryTerrain );
+THREE.BufferGeometryUtils.computeTangents(geometryTerrain);
 
-terrain = new THREE.Mesh( geometryTerrain, mlib[ 'terrain' ] );
-terrain.position.set( 0, -125, 0 );
+terrain = new THREE.Mesh(geometryTerrain, mlib['terrain']);
+terrain.position.set(0, -125, 0);
 terrain.rotation.x = -Math.PI / 2;
 terrain.visible = false;
-// scene.add( terrain );
+scene.add(terrain);
 
 let then = 0;
 
 (function animate(now) {
-  window.addEventListener("resize", handleWindowResize);
-  now *= 0.001;  // make it seconds
+  window.addEventListener('resize', handleWindowResize);
+  now *= 0.001; // make it seconds
   if (!window.commands) {
     window.commands = ['stay'];
   }
   window.commands = window.commands.filter(command => command.length > 0);
   const delta = now - then;
   then = now;
-  if (drone) {             //If model is loaded
+  if (drone) {
+    //If model is loaded
     //camera.lookAt(drone.position);
     if (isFlying) {
       blade[0].rotation.y -= rotateSpeed;
@@ -635,24 +670,32 @@ let then = 0;
     if (!!window.ringTrigger) {
       changeRings();
     }
-    if (window.commands[0] && window.commands[0].includes("takeoff")) {
+    if (window.commands[0] && window.commands[0].includes('takeoff')) {
       hoverPeriod = 1; //hover 1s for every command
       clock += delta;
       if (!isFlying && clock > hoverPeriod) {
         isFlying = true;
         isOnHeight = false;
-        rotateSpeed = Math.PI / 180 * 80;
+        rotateSpeed = (Math.PI / 180) * 80;
         if (!sound.isPlaying) sound.play();
       }
     }
-    if (window.commands[0] && window.commands[0].includes("fly") && !isFlyingForward) {
+    if (
+      window.commands[0] &&
+      window.commands[0].includes('fly') &&
+      !isFlyingForward
+    ) {
       hoverPeriod = 1; //hover 1s for every command
       clock += delta;
       if (clock > hoverPeriod) {
         flySetting(window.commands[0]);
       }
     }
-    if (window.commands[0] && window.commands[0].includes("curve") && !isCurving) {
+    if (
+      window.commands[0] &&
+      window.commands[0].includes('curve') &&
+      !isCurving
+    ) {
       hoverPeriod = 1; //hover 1s for every command
       clock += delta;
       if (clock > hoverPeriod) {
@@ -660,20 +703,28 @@ let then = 0;
         curveSetting(window.commands[0]);
       }
     }
-    if (window.commands[0] && window.commands[0].includes("yaw") && !isRotating) {
+    if (
+      window.commands[0] &&
+      window.commands[0].includes('yaw') &&
+      !isRotating
+    ) {
       hoverPeriod = 1; //hover 1s for every command
       clock += delta;
       if (clock > hoverPeriod) {
         yawRotateSetting(window.commands[0]);
       }
     }
-    if (window.commands[0] && window.commands[0].includes("speed") && !isSpeedSet) {
+    if (
+      window.commands[0] &&
+      window.commands[0].includes('speed') &&
+      !isSpeedSet
+    ) {
       speedControl(window.commands[0]);
       window.commands.shift();
     }
-    if (window.commands[0] && window.commands[0].includes("hover")) {
+    if (window.commands[0] && window.commands[0].includes('hover')) {
       isOnHeight = true;
-      const subcommands = window.commands[0].split(",");
+      const subcommands = window.commands[0].split(',');
       hoverPeriod = subcommands[1];
       clock += delta;
       if (clock > hoverPeriod) {
@@ -681,32 +732,40 @@ let then = 0;
         clock = 0;
       }
     }
-    if (window.commands[0] && window.commands[0].includes("flip") && !isFliping) {
+    if (
+      window.commands[0] &&
+      window.commands[0].includes('flip') &&
+      !isFliping
+    ) {
       hoverPeriod = 1;
       clock += delta;
       const direction = getDirection(window.commands[0]);
       if (clock > hoverPeriod) {
         clock = 0;
         isFliping = true;
-        if ((direction == 'left') || (direction == 'right')) {
+        if (direction == 'left' || direction == 'right') {
           originAngle = drone.rotation.x;
         } else {
           originAngle = drone.rotation.z;
         }
       }
     }
-    if (window.commands[0] && window.commands[0].includes("land") && !islanded) {
+    if (
+      window.commands[0] &&
+      window.commands[0].includes('land') &&
+      !islanded
+    ) {
       hoverPeriod = 1;
       clock += delta;
       if (clock > hoverPeriod) {
         land(delta);
       }
     }
-    if (window.commands[0] && window.commands[0].includes("stay")) {
+    if (window.commands[0] && window.commands[0].includes('stay')) {
       clock = 0;
     }
 
-    if (window.commands[0] && window.commands[0].includes("reset")) {
+    if (window.commands[0] && window.commands[0].includes('reset')) {
       drone.position.set(0, 0, 0);
       drone.rotation.set(0, 0, 0);
       isFlying = false;
@@ -741,8 +800,8 @@ function render() {
   renderer.render(scene, camera);
 }
 function handleWindowResize() {
-  const width = document.getElementById("droneArea").clientWidth;
-  const height = document.getElementById("droneArea").clientHeight;
+  const width = document.getElementById('droneArea').clientWidth;
+  const height = document.getElementById('droneArea').clientHeight;
 
   this.renderer.setSize(width, height);
   camera.aspect = width / height;
@@ -750,7 +809,7 @@ function handleWindowResize() {
   // Note that after making changes to most of camera properties you have to call
   // .updateProjectionMatrix for the changes to take effect.
   camera.updateProjectionMatrix();
-};
+}
 
 function moveAxis(object, mesh) {
   // Create a bounding box:
@@ -783,14 +842,14 @@ function distance2DVector(point1, point2) {
 function yawRotateSetting(command) {
   isRotating = true;
   originAngle = drone.rotation.y;
-  const subcommands = command.split(",");
+  const subcommands = command.split(',');
   //console.log(subcommands);
-  distanceAngle = subcommands[1] * Math.PI / 180;
+  distanceAngle = (subcommands[1] * Math.PI) / 180;
 }
 
 function yawRotate(delta) {
   const shiftAngle = Math.abs(drone.rotation.y - originAngle);
-  if (isRotating && (shiftAngle < distanceAngle)) {
+  if (isRotating && shiftAngle < distanceAngle) {
     isOnRotateTarget = false;
     const direction = getDirection(window.commands[0]);
     if (direction == 'right') {
@@ -798,7 +857,7 @@ function yawRotate(delta) {
     } else {
       drone.rotation.y += delta * droneRotateSpeed;
     }
-  } else if (isRotating && (shiftAngle >= distanceAngle) && !isOnRotateTarget) {
+  } else if (isRotating && shiftAngle >= distanceAngle && !isOnRotateTarget) {
     isOnRotateTarget = true;
     isOnForwardTarget = false;
     isRotating = false;
@@ -812,33 +871,32 @@ function flySetting(command) {
   originPosX = drone.position.x;
   originPosY = drone.position.y;
   originPosZ = drone.position.z;
-  const subcommands = command.split(",");
+  const subcommands = command.split(',');
   const distanceUnit = subcommands[subcommands.length - 1];
   const direction = getDirection(command);
   console.log(direction);
   let distance;
   if (direction == 'xyz') {
-    if (distanceUnit == "in") {
+    if (distanceUnit == 'in') {
       target = {
         x: drone.position.x + subcommands[1] * 10 * 2.54, //webGl x asix = x in real;
         y: drone.position.y + subcommands[3] * 10 * 2.54, //webGL y axis = z in real;
-        z: drone.position.z - subcommands[2] * 10 * 2.54,  //webGL z axis = -y in real 
-      }
-    } else if (distanceUnit == "cm") {
+        z: drone.position.z - subcommands[2] * 10 * 2.54, //webGL z axis = -y in real
+      };
+    } else if (distanceUnit == 'cm') {
       target = {
         x: drone.position.x + subcommands[1] * 10, //webGl x asix = y in real;
         y: drone.position.y + subcommands[3] * 10, //webGL y axis = z in real;
-        z: drone.position.z - subcommands[2] * 10,  //webGL z axis = -x in real;
-      }
+        z: drone.position.z - subcommands[2] * 10, //webGL z axis = -x in real;
+      };
     }
     forwardDistance = distanceVector(drone.position, target);
   } else {
     distance = subcommands[1];
-    if (distanceUnit == "in") {
-      forwardDistance = distance * 10 * 2.54 // Inchi to cm;
-    } else if (distanceUnit == "cm") {
-      forwardDistance = distance * 10 // number to cm
-
+    if (distanceUnit == 'in') {
+      forwardDistance = distance * 10 * 2.54; // Inchi to cm;
+    } else if (distanceUnit == 'cm') {
+      forwardDistance = distance * 10; // number to cm
     }
   }
 }
@@ -847,7 +905,7 @@ function curveSetting(command) {
   originPosX = drone.position.x;
   originPosY = drone.position.y;
   originPosZ = drone.position.z;
-  const subcommands = command.split(",");
+  const subcommands = command.split(',');
   const distanceUnit = subcommands[subcommands.length - 1];
   const P1x = subcommands[1];
   const P1y = subcommands[2];
@@ -858,7 +916,11 @@ function curveSetting(command) {
 
   var Vector1 = new THREE.Vector3(P1x, P1y, P1z);
   var Vector2 = new THREE.Vector3(P2x, P2y, P2z);
-  var normalVector = new THREE.Vector3(P1y * P2z - P2y * P1z, P2x * P1z - P1x * P2z, P1x * P2y - P2x * P1y);
+  var normalVector = new THREE.Vector3(
+    P1y * P2z - P2y * P1z,
+    P2x * P1z - P1x * P2z,
+    P1x * P2y - P2x * P1y,
+  );
   const { rotationMatrix, inverseMatrix } = getRotationMatrix(normalVector);
   inverseRotationMatrix = inverseMatrix;
   //console.log(rotationMatrix);
@@ -866,12 +928,18 @@ function curveSetting(command) {
   var newVector1 = Vector1.applyMatrix3(rotationMatrix);
   var newVector2 = Vector2.applyMatrix3(rotationMatrix);
 
-  const { center, radius, initialPhase, middlePhase, targetPhase } = getCircleFromThreePoints(newVector1, newVector2);
-  if (distanceUnit == "in") {
+  const {
+    center,
+    radius,
+    initialPhase,
+    middlePhase,
+    targetPhase,
+  } = getCircleFromThreePoints(newVector1, newVector2);
+  if (distanceUnit == 'in') {
     curveCenter.x = center.x * 10 * 2.54;
     curveCenter.y = center.y * 10 * 2.54;
     curveRadius = radius * 10 * 2.54;
-  } else if (distanceUnit == "cm") {
+  } else if (distanceUnit == 'cm') {
     curveCenter.x = center.x * 10;
     curveCenter.y = center.y * 10;
     curveRadius = radius * 10;
@@ -879,21 +947,32 @@ function curveSetting(command) {
   curveInitialPhase = initialPhase;
   curveTargetPhase = targetPhase;
   curveMiddlePhase = middlePhase;
-  console.log(curveInitialPhase, '--->', curveMiddlePhase, '---', curveTargetPhase);
+  console.log(
+    curveInitialPhase,
+    '--->',
+    curveMiddlePhase,
+    '---',
+    curveTargetPhase,
+  );
 }
 function verticalFly(delta) {
-  if (!isOnHeight && drone.position.y < 1524) {  // Drone Height is 152.5cm=5feet;
+  if (!isOnHeight && drone.position.y < 1524) {
+    // Drone Height is 152.5cm=5feet;
     drone.position.y += delta * speed;
     addPointToPath(drone.position);
-  } else if ((drone.position.y >= 1524) && !isOnHeight) {
+  } else if (drone.position.y >= 1524 && !isOnHeight) {
     isOnHeight = true;
     window.commands.shift();
     clock = 0;
   }
 }
 function fly(delta) {
-  const shiftLength = distanceVector(drone.position, { x: originPosX, y: originPosY, z: originPosZ });
-  if (isOnHeight && isFlyingForward && (shiftLength < forwardDistance)) {
+  const shiftLength = distanceVector(drone.position, {
+    x: originPosX,
+    y: originPosY,
+    z: originPosZ,
+  });
+  if (isOnHeight && isFlyingForward && shiftLength < forwardDistance) {
     isOnForwardTarget = false;
     const direction = getDirection(window.commands[0]);
     switch (direction) {
@@ -914,27 +993,36 @@ function fly(delta) {
         }
         break;
       case 'right':
-        drone.position.z += delta * speed * Math.sin(-drone.rotation.y + Math.PI / 2);
-        drone.position.x += delta * speed * Math.cos(-drone.rotation.y + Math.PI / 2);
+        drone.position.z +=
+          delta * speed * Math.sin(-drone.rotation.y + Math.PI / 2);
+        drone.position.x +=
+          delta * speed * Math.cos(-drone.rotation.y + Math.PI / 2);
         break;
       case 'left':
-        drone.position.z += delta * speed * Math.sin(-drone.rotation.y - Math.PI / 2);
-        drone.position.x += delta * speed * Math.cos(-drone.rotation.y - Math.PI / 2);
+        drone.position.z +=
+          delta * speed * Math.sin(-drone.rotation.y - Math.PI / 2);
+        drone.position.x +=
+          delta * speed * Math.cos(-drone.rotation.y - Math.PI / 2);
         break;
       case 'xyz':
         if (drone.position.y > 0) {
-          drone.position.x += delta * speed * (target.x - originPosX) / forwardDistance;
-          drone.position.y += delta * speed * (target.y - originPosY) / forwardDistance;
-          drone.position.z += delta * speed * (target.z - originPosZ) / forwardDistance;
+          drone.position.x +=
+            (delta * speed * (target.x - originPosX)) / forwardDistance;
+          drone.position.y +=
+            (delta * speed * (target.y - originPosY)) / forwardDistance;
+          drone.position.z +=
+            (delta * speed * (target.z - originPosZ)) / forwardDistance;
         }
         break;
       default:
       //console.log(drone.position);
-
     }
     addPointToPath(drone.position);
-
-  } else if (isFlyingForward && !isOnForwardTarget && (shiftLength >= forwardDistance)) {
+  } else if (
+    isFlyingForward &&
+    !isOnForwardTarget &&
+    shiftLength >= forwardDistance
+  ) {
     isOnForwardTarget = true;
     isFlyingForward = false;
     window.commands.shift();
@@ -947,12 +1035,12 @@ function flip(delta) {
     const direction = getDirection(window.commands[0]);
     const distanceAngle = Math.PI * 2;
     let angleShift;
-    if ((direction == 'left') || (direction == 'right')) {
+    if (direction == 'left' || direction == 'right') {
       angleShift = Math.abs(drone.rotation.x - originAngle);
     } else {
       angleShift = Math.abs(drone.rotation.z - originAngle);
     }
-    if ((angleShift <= distanceAngle) && isFliping) {
+    if (angleShift <= distanceAngle && isFliping) {
       switch (direction) {
         case 'forward':
           drone.rotation.z -= delta * droneFlipSpeed;
@@ -967,7 +1055,7 @@ function flip(delta) {
           drone.rotation.x -= delta * droneFlipSpeed;
           break;
       }
-    } else if ((angleShift > distanceAngle) && isFliping) {
+    } else if (angleShift > distanceAngle && isFliping) {
       isFliping = false;
       drone.rotation.x = 0;
       drone.rotation.z = 0;
@@ -983,22 +1071,28 @@ function curveFly(delta) {
     const omega = speed / curveRadius;
     distance = Math.abs(curveTargetPhase - curveInitialPhase);
     if (curveInitialPhase > curveMiddlePhase) {
-      if (curveMiddlePhase > curveTargetPhase) { //A>B>C
+      if (curveMiddlePhase > curveTargetPhase) {
+        //A>B>C
         angle = -curveInitialPhase + omega * clock;
-      } else if (curveTargetPhase > curveInitialPhase) { //C>A>B
+      } else if (curveTargetPhase > curveInitialPhase) {
+        //C>A>B
         distance = Math.PI * 2 - distance;
         angle = -curveInitialPhase + omega * clock;
-      } else {  //A>C>B
+      } else {
+        //A>C>B
         distance = Math.PI * 2 - distance;
         angle = -curveInitialPhase - omega * clock;
       }
     } else if (curveInitialPhase < curveMiddlePhase) {
-      if (curveMiddlePhase < curveTargetPhase) { //A<B<C
+      if (curveMiddlePhase < curveTargetPhase) {
+        //A<B<C
         angle = -curveInitialPhase - omega * clock;
-      } else if (curveTargetPhase < curveInitialPhase) { //C<A<B
+      } else if (curveTargetPhase < curveInitialPhase) {
+        //C<A<B
         distance = Math.PI * 2 - distance;
         angle = -curveInitialPhase - omega * clock;
-      } else { //A<C<B
+      } else {
+        //A<C<B
         distance = Math.PI * 2 - distance;
         angle = -curveInitialPhase + omega * clock;
       }
@@ -1007,7 +1101,9 @@ function curveFly(delta) {
       const deltaX = curveCenter.x + curveRadius * Math.cos(angle);
       const deltaY = curveCenter.y - curveRadius * Math.sin(angle);
       var transform2DVector = new THREE.Vector3(deltaX, deltaY, 0);
-      var transform3DVector = transform2DVector.applyMatrix3(inverseRotationMatrix);
+      var transform3DVector = transform2DVector.applyMatrix3(
+        inverseRotationMatrix,
+      );
       //console.log(transform3DVector);
       drone.position.x = originPosX + transform3DVector.x;
       drone.position.z = originPosZ - transform3DVector.y;
@@ -1050,13 +1146,13 @@ function land(delta) {
 }
 
 function getDirection(command) {
-  const subcommands = command.split(",");
-  const direction = subcommands[0].split("_")[1];
+  const subcommands = command.split(',');
+  const direction = subcommands[0].split('_')[1];
   return direction;
 }
 
 function speedControl(command) {
-  const subcommands = command.split(",");
+  const subcommands = command.split(',');
   const speedFactor = subcommands[1];
   const speedUnit = subcommands[2];
   if (speedUnit == 'in/s') {
@@ -1083,16 +1179,15 @@ function getCircleFromThreePoints(Vector1, Vector2) {
   const circleData = {
     center: {
       x: centerX,
-      y: centerY
+      y: centerY,
     },
     radius: radius,
     initialPhase,
     middlePhase: phase1,
-    targetPhase: phase2
+    targetPhase: phase2,
   };
   return circleData;
 }
-
 
 function getRotationMatrix(normalVector) {
   const a = normalVector.x;
@@ -1114,14 +1209,12 @@ function getRotationMatrix(normalVector) {
   const a32 = -a23;
   const a33 = cosAlpha;
   var rotationMatrix = new THREE.Matrix3();
-  rotationMatrix.set(a11, a12, a13,
-    a21, a22, a23,
-    a31, a32, a33);
+  rotationMatrix.set(a11, a12, a13, a21, a22, a23, a31, a32, a33);
   var inverseMatrix = getInverseMatrix([...rotationMatrix.elements]);
   const result = {
     rotationMatrix,
-    inverseMatrix
-  }
+    inverseMatrix,
+  };
   return result;
 }
 
@@ -1137,9 +1230,7 @@ function getInverseMatrix([a, b, c, d, e, f, g, h, i]) {
   const a32 = (b * g - a * h) / det;
   const a33 = (a * e - b * d) / det;
   var inverseMatrix = new THREE.Matrix3();
-  inverseMatrix.set(a11, a12, a13,
-    a21, a22, a23,
-    a31, a32, a33);
+  inverseMatrix.set(a11, a12, a13, a21, a22, a23, a31, a32, a33);
   return inverseMatrix;
 }
 
@@ -1152,23 +1243,29 @@ function collisionDetect() {
   droneBox.min.y = 2000 + droneBox.min.y;
   droneBox.max.y = 2000 + droneBox.max.y;
   ringBoxs.map(ringData => {
-    var collision = ringData.box.intersectsBox(droneBox);    
-    var distanceFromCenter1 = distance2DVector(ringData.ring.position, droneBox.min);
-    var distanceFromCenter2 = distance2DVector(ringData.ring.position, droneBox.max);
+    var collision = ringData.box.intersectsBox(droneBox);
+    var distanceFromCenter1 = distance2DVector(
+      ringData.ring.position,
+      droneBox.min,
+    );
+    var distanceFromCenter2 = distance2DVector(
+      ringData.ring.position,
+      droneBox.max,
+    );
     var distanceFromCenter = Math.max(distanceFromCenter1, distanceFromCenter2);
 
-    if (!!collision && (distanceFromCenter > (radius - tube))) {
+    if (!!collision && distanceFromCenter > radius - tube) {
       console.log('collision Detected');
       window.commands = ['reset'];
     }
-  })
+  });
 }
 
 function toggleGridHelper(value) {
-  var gridHelper = scene.getObjectByName("gridHelper");
+  var gridHelper = scene.getObjectByName('gridHelper');
   gridHelper.children.map(grid => {
     grid.visible = value;
-  })
+  });
 }
 
 function changeRings() {
@@ -1178,7 +1275,7 @@ function changeRings() {
   }
 
   if (ringsChangeCount < 5) {
-    Materialize.toast(`Ring Layout #${ringsChangeCount+1}`, 3000);
+    Materialize.toast(`Ring Layout #${ringsChangeCount + 1}`, 3000);
     ringBoxs = [];
     for (var i = 0; i < ringsCount; i++) {
       var ring = scene.getObjectByName(`ring${i}`);
@@ -1188,8 +1285,8 @@ function changeRings() {
       ring.position.z = ringsPosConfig[ringsChangeCount][i].z;
       ringData = {
         ring: ring,
-        box: new THREE.Box3().setFromObject(ring)
-      }
+        box: new THREE.Box3().setFromObject(ring),
+      };
       ringBoxs.push(ringData);
     }
   } else {
@@ -1204,112 +1301,118 @@ function changeRings() {
 }
 
 function openFullscreen() {
-
-  var elem = document.getElementById("droneArea");
+  var elem = document.getElementById('droneArea');
   if (elem.requestFullscreen) {
-      elem.requestFullscreen();
-  } else if (elem.mozRequestFullScreen) { /* Firefox */
-      elem.mozRequestFullScreen();
-  } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-      elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) { /* IE/Edge */
-      elem.msRequestFullscreen();
+    elem.requestFullscreen();
+  } else if (elem.mozRequestFullScreen) {
+    /* Firefox */
+    elem.mozRequestFullScreen();
+  } else if (elem.webkitRequestFullscreen) {
+    /* Chrome, Safari & Opera */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) {
+    /* IE/Edge */
+    elem.msRequestFullscreen();
   }
 }
 
 function soundIconToggle() {
   var toggleSoundButton = document.getElementById('toogleSound');
-    if (isFlying && !!!sound.isPlaying) {
-      toggleSoundButton.innerHTML = '<i class="material-icons">volume_up</i>';
-    } else if(isFlying && sound.isPlaying){
-      toggleSoundButton.innerHTML = '<i class="material-icons">volume_off</i>';
-    }
+  if (isFlying && !!!sound.isPlaying) {
+    toggleSoundButton.innerHTML = '<i class="material-icons">volume_up</i>';
+  } else if (isFlying && sound.isPlaying) {
+    toggleSoundButton.innerHTML = '<i class="material-icons">volume_off</i>';
+  }
 }
 //KeyPress Event
-$(document).keypress(function (e) {
-
-  if((e.which === 114) || (e.which === 82)) { // if R or r key pressed, Reset
+$(document).keypress(function(e) {
+  if (e.which === 114 || e.which === 82) {
+    // if R or r key pressed, Reset
     window.commands = ['reset'];
   }
 
-  if ((e.which === 103) || (e.which === 71)) { // if G or g key pressed, toogle Grid
+  if (e.which === 103 || e.which === 71) {
+    // if G or g key pressed, toogle Grid
     var toggleGridButton = document.getElementById('toggleGrid');
-      if (window.toggle === undefined) {
-          window.toggle = false;
-          toggleGridButton.innerHTML = '<i class="material-icons">grid_on</i>';
-      } else if(window.toggle === true){
-          window.toggle = false;
-          toggleGridButton.innerHTML = '<i class="material-icons">grid_on</i>';
-      } else {
-          window.toggle = true;
-          toggleGridButton.innerHTML = '<i class="material-icons">grid_off</i>';
-      }
+    if (window.toggle === undefined) {
+      window.toggle = false;
+      toggleGridButton.innerHTML = '<i class="material-icons">grid_on</i>';
+    } else if (window.toggle === true) {
+      window.toggle = false;
+      toggleGridButton.innerHTML = '<i class="material-icons">grid_on</i>';
+    } else {
+      window.toggle = true;
+      toggleGridButton.innerHTML = '<i class="material-icons">grid_off</i>';
+    }
   }
 
-  if((e.which === 108) || (e.which === 76)) { // if L or l key pressed, toogle Rings
+  if (e.which === 108 || e.which === 76) {
+    // if L or l key pressed, toogle Rings
     window.ringTrigger = true;
   }
 
-  if ((e.which === 115) || (e.which === 83)) { // if S or s key pressed, toogle sound
+  if (e.which === 115 || e.which === 83) {
+    // if S or s key pressed, toogle sound
     if (isFlying && !!!sound.isPlaying) {
       sound.play();
-    } else if (sound.isPlaying){
+    } else if (sound.isPlaying) {
       sound.pause();
     }
     soundIconToggle();
   }
 
-  if ((e.which === 102) || (e.which === 70)) { // if F or f key pressed, Full Screen
+  if (e.which === 102 || e.which === 70) {
+    // if F or f key pressed, Full Screen
     openFullscreen();
   }
-  if ((e.which === 99) || (e.which === 67)) { // if C or c key pressed, Toggle Color
+  if (e.which === 99 || e.which === 67) {
+    // if C or c key pressed, Toggle Color
     colorChangeCount++;
     if (colorChangeCount > 5) {
       colorChangeCount = 0;
     }
-    drone && drone.traverse(function (child) {
-      if (child instanceof THREE.Mesh) {
-        child.material.map = bodyTexture[colorChangeCount];
-        if (child.name == "green_light") {
-          child.material.map = lightTexture;
+    drone &&
+      drone.traverse(function(child) {
+        if (child instanceof THREE.Mesh) {
+          child.material.map = bodyTexture[colorChangeCount];
+          if (child.name == 'green_light') {
+            child.material.map = lightTexture;
+          }
+          if (child.name == 'glass') {
+            child.material.map = glassTexture;
+          }
         }
-        if (child.name == "glass") {
-          child.material.map = glassTexture;
-        }
-      }
-    });
+      });
   }
 });
 
-function generateHeight( width, height ) {
+function generateHeight(width, height) {
+  var data = [],
+    perlin = new ImprovedNoise(),
+    size = width * height,
+    quality = 2,
+    z = Math.random() * 100;
 
-  var data = [], perlin = new ImprovedNoise(),
-    size = width * height, quality = 2, z = Math.random() * 100;
+  for (var j = 0; j < 4; j++) {
+    if (j == 0) for (var i = 0; i < size; i++) data[i] = 0;
 
-  for ( var j = 0; j < 4; j ++ ) {
-
-    if ( j == 0 ) for ( var i = 0; i < size; i ++ ) data[ i ] = 0;
-
-    for ( var i = 0; i < size; i ++ ) {
-
-      var x = i % width, y = ( i / width ) | 0;
-      data[ i ] += perlin.noise( x / quality, y / quality, z ) * quality;
-
+    for (var i = 0; i < size; i++) {
+      var x = i % width,
+        y = (i / width) | 0;
+      data[i] += perlin.noise(x / quality, y / quality, z) * quality;
     }
 
     quality *= 4;
-
   }
 
   return data;
-
 }
 
-$( document ).ready(function() {
-  $("#toogleSound").click(() => {
+$(document).ready(function() {
+  $('#toogleSound').click(() => {
     if (isFlying && !!!sound.isPlaying) {
       sound.play();
-    } else if (sound.isPlaying){
+    } else if (sound.isPlaying) {
       sound.pause();
     }
     soundIconToggle();
@@ -1339,8 +1442,6 @@ function initPath() {
   pathLine.geometry.attributes.position.needsUpdate = true;
 }
 
-function getY( x, z ) {
-
-  return ( data[ x + z * worldWidth ] * 0.2 ) | 0;
-
+function getY(x, z) {
+  return (data[x + z * worldWidth] * 0.2) | 0;
 }
