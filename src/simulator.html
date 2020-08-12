@@ -1,484 +1,415 @@
 <!DOCTYPE html>
 <html manifest="tello.appcache">
-<!-- <html> -->
+  <!-- <html> -->
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-  <title>DroneBlocks</title>
-  <script src="./js/jquery-2.2.3.min.js"></script>
-  <script src="./blockly/blockly_compressed.js"></script>
-  <script src="./blockly/blocks_compressed.js"></script>
-  <script src="./blockly/javascript_compressed.js"></script>
-  <script src="./blockly/python_compressed.js"></script>
-  <script src="./blockly/storage.js"></script>
-  <script src="./blockly/run_prettify.js"></script>
-  <script src="./blockly/generators/javascript/tello.js"></script>
-  <script src="./blockly/generators/python/tello.js"></script>
-  <script src="./blockly/msg/js/en.js"></script>
-  <script src="./blockly/blocks/tello/takeoff.js"></script>
-  <script src="./blockly/blocks/tello/land_then_takeoff.js"></script>
-  <script src="./blockly/blocks/tello/land.js"></script>
-  <script src="./blockly/blocks/tello/speed.js"></script>
-  <script src="./blockly/blocks/tello/fly_forward.js"></script>
-  <script src="./blockly/blocks/tello/fly_backward.js"></script>
-  <script src="./blockly/blocks/tello/fly_left.js"></script>
-  <script src="./blockly/blocks/tello/fly_right.js"></script>
-  <script src="./blockly/blocks/tello/fly_up.js"></script>
-  <script src="./blockly/blocks/tello/fly_down.js"></script>
-  <script src="./blockly/blocks/tello/fly_xyz.js"></script>
-  <script src="./blockly/blocks/tello/curve.js"></script>
-  <script src="./blockly/blocks/tello/hover.js"></script>
-  <script src="./blockly/blocks/tello/yaw_right.js"></script>
-  <script src="./blockly/blocks/tello/yaw_left.js"></script>
-  <script src="./blockly/blocks/tello/flip_forward.js"></script>
-  <script src="./blockly/blocks/tello/flip_backward.js"></script>
-  <script src="./blockly/blocks/tello/flip_right.js"></script>
-  <script src="./blockly/blocks/tello/flip_left.js"></script>
-  <script src="./blockly/blocks/tello/loop_with_variable.js"></script>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <title>DroneBlocks</title>
+    <script src="./js/jquery-2.2.3.min.js"></script>
+    <script src="./blockly/blockly_compressed.js"></script>
+    <script src="./blockly/blocks_compressed.js"></script>
+    <script src="./blockly/javascript_compressed.js"></script>
+    <script src="./blockly/python_compressed.js"></script>
+    <script src="./blockly/storage.js"></script>
+    <script src="./blockly/run_prettify.js"></script>
+    <script src="./blockly/generators/javascript/tello.js"></script>
+    <script src="./blockly/generators/python/tello.js"></script>
+    <script src="./blockly/msg/js/en.js"></script>
+    <script src="./blockly/blocks/tello/takeoff.js"></script>
+    <script src="./blockly/blocks/tello/land_then_takeoff.js"></script>
+    <script src="./blockly/blocks/tello/land.js"></script>
+    <script src="./blockly/blocks/tello/speed.js"></script>
+    <script src="./blockly/blocks/tello/fly_forward.js"></script>
+    <script src="./blockly/blocks/tello/fly_backward.js"></script>
+    <script src="./blockly/blocks/tello/fly_left.js"></script>
+    <script src="./blockly/blocks/tello/fly_right.js"></script>
+    <script src="./blockly/blocks/tello/fly_up.js"></script>
+    <script src="./blockly/blocks/tello/fly_down.js"></script>
+    <script src="./blockly/blocks/tello/fly_xyz.js"></script>
+    <script src="./blockly/blocks/tello/curve.js"></script>
+    <script src="./blockly/blocks/tello/hover.js"></script>
+    <script src="./blockly/blocks/tello/yaw_right.js"></script>
+    <script src="./blockly/blocks/tello/yaw_left.js"></script>
+    <script src="./blockly/blocks/tello/flip_forward.js"></script>
+    <script src="./blockly/blocks/tello/flip_backward.js"></script>
+    <script src="./blockly/blocks/tello/flip_right.js"></script>
+    <script src="./blockly/blocks/tello/flip_left.js"></script>
+    <script src="./blockly/blocks/tello/loop_with_variable.js"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
-  <script src='https://stemkoski.github.io/Three.js/js/Detector.js'></script>
-  <script src='https://stemkoski.github.io/Three.js/js/OrbitControls.js'></script>
-  <script src='https://stemkoski.github.io/Three.js/js/THREEx.KeyboardState.js'></script>
-  <script src='https://stemkoski.github.io/Three.js/js/THREEx.FullScreen.js'></script>
-  <script src='https://stemkoski.github.io/Three.js/js/THREEx.WindowResize.js'></script>
-  <script src="./js/simulator/objLoader.js"></script>
-  <script src="./js/simulator/ImprovedNoise.js"></script>
-  <script src="./js/simulator/BufferGeometryUtils.js"></script>
-  <script src="./js/simulator/NormalMapShader.js"></script>
-  <script src="./js/simulator/ShaderTerrain.js"></script>
-  <script src="./js/simulator/stats.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+    <script src="https://stemkoski.github.io/Three.js/js/Detector.js"></script>
+    <script src="https://stemkoski.github.io/Three.js/js/OrbitControls.js"></script>
+    <script src="https://stemkoski.github.io/Three.js/js/THREEx.KeyboardState.js"></script>
+    <script src="https://stemkoski.github.io/Three.js/js/THREEx.FullScreen.js"></script>
+    <script src="https://stemkoski.github.io/Three.js/js/THREEx.WindowResize.js"></script>
+    <script src="./js/simulator/objLoader.js"></script>
+    <script src="./js/simulator/ImprovedNoise.js"></script>
+    <script src="./js/simulator/BufferGeometryUtils.js"></script>
+    <script src="./js/simulator/NormalMapShader.js"></script>
+    <script src="./js/simulator/ShaderTerrain.js"></script>
+    <script src="./js/simulator/stats.min.js"></script>
 
-  <link rel="stylesheet" type="text/css" href="./css/tello.css">
-  <link rel="stylesheet" type="text/css" href="./css/simulator.css">
-  <link rel="stylesheet" type="text/css" href="./blockly/prettify.css">
-  <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" type="text/css" href="./css/tello.css" />
+    <link rel="stylesheet" type="text/css" href="./css/simulator.css" />
+    <link rel="stylesheet" type="text/css" href="./blockly/prettify.css" />
+    <link rel="stylesheet" href="./css/style.css" />
 
-  <!-- Material -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link type="text/css" rel="stylesheet" href="./lib/materialize/css/materialize.min.css" media="screen,projection" />
+    <!-- Material -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="./lib/materialize/css/materialize.min.css"
+      media="screen,projection"
+    />
 
-  <script>
-    var aircraft = "Tello";
-    // Initialize Firebase
-    // var config = {
-    //   apiKey: "AIzaSyBcbAt69BGUjPiOucQbkcNNbcdaSmE-G0o",
-    //   authDomain: "fiery-inferno-4972.firebaseapp.com",
-    //   databaseURL: "https://fiery-inferno-4972.firebaseio.com",
-    //   storageBucket: "",
-    // };
-    // var config = {
-    //   apiKey: "AIzaSyAGgqla_TWV4wVgaQ87HG3VDT0igLA8KhU",
-    //   authDomain: "droneblocks-staging.firebaseapp.com",
-    //   databaseURL: "https://droneblocks-staging.firebaseio.com",
-    //   projectId: "droneblocks-staging",
-    //   storageBucket: "droneblocks-staging.appspot.com",
-    // };
-    // firebase.initializeApp(config);
+    <script>
+      var aircraft = 'Tello';
+      // Initialize Firebase
+      // var config = {
+      //   apiKey: "AIzaSyBcbAt69BGUjPiOucQbkcNNbcdaSmE-G0o",
+      //   authDomain: "fiery-inferno-4972.firebaseapp.com",
+      //   databaseURL: "https://fiery-inferno-4972.firebaseio.com",
+      //   storageBucket: "",
+      // };
+      // var config = {
+      //   apiKey: "AIzaSyAGgqla_TWV4wVgaQ87HG3VDT0igLA8KhU",
+      //   authDomain: "droneblocks-staging.firebaseapp.com",
+      //   databaseURL: "https://droneblocks-staging.firebaseio.com",
+      //   projectId: "droneblocks-staging",
+      //   storageBucket: "droneblocks-staging.appspot.com",
+      // };
+      // firebase.initializeApp(config);
 
-    // For Tello metric/standard units
-    if (localStorage.getItem('units') != null) {
-      var units = localStorage.getItem('units');
-      if (units == "metric") {
-        document.location.href = "tello_metric.html" + document.location.search;
+      // For Tello metric/standard units
+      if (localStorage.getItem('units') != null) {
+        var units = localStorage.getItem('units');
+        if (units == 'metric') {
+          document.location.href =
+            'tello_metric.html' + document.location.search;
+        }
       }
-    }
-  </script>
-  <script id="vertexShader" type="x-shader/x-vertex">
+    </script>
+    <script src="./lib/firebase/firebase.js"></script>
+    <script src="./lib/firebase/firebase-firestore.js"></script>
 
-    varying vec2 vUv;
-    uniform vec2 scale;
-    uniform vec2 offset;
+    <script src="./lib/materialize/js/materialize.min.js"></script>
+    <script src="./js/lib/main.min.js"></script>
+    <script src="./js/firebase.js"></script>
+  </head>
 
-    void main( void ) {
-
-      vUv = uv * scale + offset;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-
-    }
-
-  </script>
-  <script id="fragmentShaderNoise" type="x-shader/x-fragment">
-
-    //
-    // Description : Array and textureless GLSL 3D simplex noise function.
-    //      Author : Ian McEwan, Ashima Arts.
-    //  Maintainer : ijm
-    //     Lastmod : 20110409 (stegu)
-    //     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
-    //               Distributed under the MIT License. See LICENSE file.
-    //
-    #include <common>
-    uniform float time;
-    varying vec2 vUv;
-
-    vec4 permute( vec4 x ) {
-
-      return mod( ( ( x * 34.0 ) + 1.0 ) * x, 289.0 );
-
-    }
-
-    vec4 taylorInvSqrt( vec4 r ) {
-
-      return 1.79284291400159 - 0.85373472095314 * r;
-
-    }
-
-    float snoise( vec3 v ) {
-
-      const vec2 C = vec2( 1.0 / 6.0, 1.0 / 3.0 );
-      const vec4 D = vec4( 0.0, 0.5, 1.0, 2.0 );
-
-      // First corner
-
-      vec3 i  = floor( v + dot( v, C.yyy ) );
-      vec3 x0 = v - i + dot( i, C.xxx );
-
-      // Other corners
-
-      vec3 g = step( x0.yzx, x0.xyz );
-      vec3 l = 1.0 - g;
-      vec3 i1 = min( g.xyz, l.zxy );
-      vec3 i2 = max( g.xyz, l.zxy );
-
-      vec3 x1 = x0 - i1 + 1.0 * C.xxx;
-      vec3 x2 = x0 - i2 + 2.0 * C.xxx;
-      vec3 x3 = x0 - 1. + 3.0 * C.xxx;
-
-      // Permutations
-
-      i = mod( i, 289.0 );
-      vec4 p = permute( permute( permute(
-           i.z + vec4( 0.0, i1.z, i2.z, 1.0 ) )
-           + i.y + vec4( 0.0, i1.y, i2.y, 1.0 ) )
-           + i.x + vec4( 0.0, i1.x, i2.x, 1.0 ) );
-
-      // Gradients
-      // ( N*N points uniformly over a square, mapped onto an octahedron.)
-
-      float n_ = 1.0 / 7.0; // N=7
-
-      vec3 ns = n_ * D.wyz - D.xzx;
-
-      vec4 j = p - 49.0 * floor( p * ns.z *ns.z );  //  mod(p,N*N)
-
-      vec4 x_ = floor( j * ns.z );
-      vec4 y_ = floor( j - 7.0 * x_ );    // mod(j,N)
-
-      vec4 x = x_ *ns.x + ns.yyyy;
-      vec4 y = y_ *ns.x + ns.yyyy;
-      vec4 h = 1.0 - abs( x ) - abs( y );
-
-      vec4 b0 = vec4( x.xy, y.xy );
-      vec4 b1 = vec4( x.zw, y.zw );
-
-
-      vec4 s0 = floor( b0 ) * 2.0 + 1.0;
-      vec4 s1 = floor( b1 ) * 2.0 + 1.0;
-      vec4 sh = -step( h, vec4( 0.0 ) );
-
-      vec4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
-      vec4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
-
-      vec3 p0 = vec3( a0.xy, h.x );
-      vec3 p1 = vec3( a0.zw, h.y );
-      vec3 p2 = vec3( a1.xy, h.z );
-      vec3 p3 = vec3( a1.zw, h.w );
-
-      // Normalise gradients
-
-      vec4 norm = taylorInvSqrt( vec4( dot( p0, p0 ), dot( p1, p1 ), dot( p2, p2 ), dot( p3, p3 ) ) );
-      p0 *= norm.x;
-      p1 *= norm.y;
-      p2 *= norm.z;
-      p3 *= norm.w;
-
-      // Mix final noise value
-
-      vec4 m = max( 0.6 - vec4( dot( x0, x0 ), dot( x1, x1 ), dot( x2, x2 ), dot( x3, x3 ) ), 0.0 );
-      m = m * m;
-      return 42.0 * dot( m*m, vec4( dot( p0, x0 ), dot( p1, x1 ),
-                      dot( p2, x2 ), dot( p3, x3 ) ) );
-
-    }
-
-    float surface3( vec3 coord ) {
-
-      float n = 0.0;
-
-      n += 1.0 * abs( snoise( coord ) );
-      n += 0.5 * abs( snoise( coord * 2.0 ) );
-      n += 0.25 * abs( snoise( coord * 4.0 ) );
-      n += 0.125 * abs( snoise( coord * 8.0 ) );
-
-      return n;
-
-    }
-
-    void main( void ) {
-
-      vec3 coord = vec3( vUv, -time );
-      float n = surface3( coord );
-
-      gl_FragColor = vec4( vec3( n, n, n ), 1.0 );
-
-    }
-
-  </script>
-  <script src="./lib/firebase/firebase.js"></script>
-  <script src="./lib/firebase/firebase-firestore.js"></script>
-
-  <script src="./lib/materialize/js/materialize.min.js"></script>
-  <script src="./js/lib/main.min.js"></script>
-  <script src="./js/firebase.js"></script>
-</head>
-
-<body>
-
-  <!-- Side nav -->
-  <ul id="nav-mobile" class="side-nav">
-    <li class="center-align" id="login"><span
-        class="waves-effect waves-light btn z-depth-0 light-blue btn-login">Login</span></li>
-    <li class="divider"></li>
-    <li><a href="#" id="newMission">New Mission</a></li>
-    <li class="divider"></li>
-    <li><a href="#" id="previewMission">Launch Mission</a></li>
-    <li class="divider"></li>
-    <li><a href="#" id="showCode">Show Mission Code</a></li>
-    <li class="divider"></li>
-    <li><a href="#" id="saveMission">Save Mission</a></li>
-    <li class="divider" id="d1"></li>
-    <li><a href="#" id="saveMissionAs">Save Mission As...</a></li>
-    <li class="divider" id="d2"></li>
-    <li><a href="tello_missions.html?simulator=1" id="myMissions">My Missions</a></li>
-    <li class="divider" id="d3"></li>
-    <!--
+  <body>
+    <!-- Side nav -->
+    <ul id="nav-mobile" class="side-nav">
+      <li class="center-align" id="login">
+        <span
+          class="waves-effect waves-light btn z-depth-0 light-blue btn-login"
+          >Login</span
+        >
+      </li>
+      <li class="divider"></li>
+      <li><a href="#" id="newMission">New Mission</a></li>
+      <li class="divider"></li>
+      <li><a href="#" id="previewMission">Launch Mission</a></li>
+      <li class="divider"></li>
+      <li><a href="#" id="showCode">Show Mission Code</a></li>
+      <li class="divider"></li>
+      <li><a href="#" id="saveMission">Save Mission</a></li>
+      <li class="divider" id="d1"></li>
+      <li><a href="#" id="saveMissionAs">Save Mission As...</a></li>
+      <li class="divider" id="d2"></li>
+      <li>
+        <a href="tello_missions.html?simulator=1" id="myMissions"
+          >My Missions</a
+        >
+      </li>
+      <li class="divider" id="d3"></li>
+      <!--
     <li><a href="#" id="setUnits" data-units="metric">Switch to Metric Units</a></li>
     <li class="divider" id="d4"></li>
     <li><a href="#" id="connectTo">DJI Blocks</a></li>
     <li class="divider" id="d5"></li>
     -->
-    <li class="center-align" id="logout"><span class="waves-effect waves-light btn z-depth-0 light-blue">Logout</span>
-    </li>
-  </ul>
+      <li class="center-align" id="logout">
+        <span class="waves-effect waves-light btn z-depth-0 light-blue"
+          >Logout</span
+        >
+      </li>
+    </ul>
 
-  <!-- Hamburger icon -->
-  <a href="#" data-activates="nav-mobile" class="right button-collapse show-on-large" id="hamburger"><i
-      class="medium material-icons">menu</i></a>
+    <!-- Hamburger icon -->
+    <a
+      href="#"
+      data-activates="nav-mobile"
+      class="right button-collapse show-on-large"
+      id="hamburger"
+      ><i class="medium material-icons">menu</i></a
+    >
 
-  <div id="missionTitle">Untitled Mission</div>
+    <div id="missionTitle">Untitled Mission</div>
 
-  <!-- Save modal -->
-  <div id="saveMissionModal" class="modal">
+    <!-- Save modal -->
+    <div id="saveMissionModal" class="modal">
+      <div class="modal-content">
+        <h6>Please enter a mission title below and click SAVE</h6>
+        <div class="input-field">
+          <input placeholder="Mission Title" id="title" type="text" />
+        </div>
+      </div>
 
-    <div class="modal-content">
-      <h6>Please enter a mission title below and click SAVE</h6>
-      <div class="input-field">
-        <input placeholder="Mission Title" id="title" type="text" />
+      <div class="modal-footer">
+        <a
+          href="#!"
+          class=" modal-action waves-effect waves-light btn z-depth-0"
+          id="saveModal"
+          >Save</a
+        >
+        <a
+          href="#!"
+          class=" modal-action modal-close waves-effect waves-light btn-flat"
+          >Cancel</a
+        >
       </div>
     </div>
 
-    <div class="modal-footer">
-      <a href="#!" class=" modal-action waves-effect waves-light btn z-depth-0" id="saveModal">Save</a>
-      <a href="#!" class=" modal-action modal-close waves-effect waves-light btn-flat">Cancel</a>
+    <!-- Map preview modal -->
+    <div
+      id="mapPreviewModal"
+      class="modal"
+      style="width: 95% !important; height: 100% !important"
+    ></div>
+    <div id="blocklyArea"></div>
+    <div id="droneArea" class="visible">
+      <div id="toast-container"></div>
+      <button
+        id="resetSimulator"
+        class="btn green tooltipped"
+        data-position="top"
+        data-tooltip="Reset Tello"
+      >
+        RESET
+      </button>
+      <button
+        id="fullScreen"
+        class="btn green tooltipped"
+        data-position="top"
+        data-tooltip="View full screen"
+        type="button"
+      >
+        <i class="material-icons">fullscreen</i>
+      </button>
+      <button
+        id="toggleGrid"
+        class="btn green tooltipped"
+        data-position="top"
+        data-tooltip="Toggle grid"
+      >
+        <i class="material-icons">grid_off</i>
+      </button>
+      <button
+        id="ringGen"
+        class="btn green tooltipped"
+        data-position="top"
+        data-tooltip="Toggle ring layout"
+      >
+        <i class="material-icons">panorama_fish_eye</i>
+      </button>
+      <button
+        id="toogleSound"
+        class="btn green tooltipped"
+        data-position="top"
+        data-tooltip="Mute/Unmute sound"
+      >
+        <i class="material-icons">volume_off</i>
+      </button>
     </div>
 
-  </div>
+    <!-- Code preview -->
+    <div id="codeView">
+      <pre id="code" class="prettyprint linenums"></pre>
+    </div>
+    <div id="blocklyDiv" style="position: absolute"></div>
 
-  <!-- Map preview modal -->
-  <div id="mapPreviewModal" class="modal" style="width: 95% !important; height: 100% !important">
+    <xml id="toolbox" style="display: none">
+      <category name="Takeoff">
+        <block type="takeoff"></block>
+      </category>
+      <category name="Navigation">
+        <block type="set_speed">
+          <value name="speed">
+            <shadow type="math_number">
+              <field name="NUM">30</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="fly_forward">
+          <value name="distance">
+            <shadow type="math_number">
+              <field name="NUM">20</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="fly_backward">
+          <value name="distance">
+            <shadow type="math_number">
+              <field name="NUM">20</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="fly_left">
+          <value name="distance">
+            <shadow type="math_number">
+              <field name="NUM">20</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="fly_right">
+          <value name="distance">
+            <shadow type="math_number">
+              <field name="NUM">20</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="fly_up">
+          <value name="distance">
+            <shadow type="math_number">
+              <field name="NUM">20</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="fly_down">
+          <value name="distance">
+            <shadow type="math_number">
+              <field name="NUM">20</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="fly_xyz">
+          <value name="xdistance">
+            <shadow type="math_number">
+              <field name="NUM">20</field>
+            </shadow>
+          </value>
+          <value name="ydistance">
+            <shadow type="math_number">
+              <field name="NUM">20</field>
+            </shadow>
+          </value>
+          <value name="zdistance">
+            <shadow type="math_number">
+              <field name="NUM">20</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="curve">
+          <value name="x1distance">
+            <shadow type="math_number">
+              <field name="NUM">25</field>
+            </shadow>
+          </value>
+          <value name="y1distance">
+            <shadow type="math_number">
+              <field name="NUM">25</field>
+            </shadow>
+          </value>
+          <value name="z1distance">
+            <shadow type="math_number">
+              <field name="NUM">0</field>
+            </shadow>
+          </value>
+          <value name="x2distance">
+            <shadow type="math_number">
+              <field name="NUM">0</field>
+            </shadow>
+          </value>
+          <value name="y2distance">
+            <shadow type="math_number">
+              <field name="NUM">50</field>
+            </shadow>
+          </value>
+          <value name="z2distance">
+            <shadow type="math_number">
+              <field name="NUM">0</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="hover">
+          <value name="duration">
+            <shadow type="math_number">
+              <field name="NUM">5</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="yaw_right">
+          <value name="angle">
+            <shadow type="math_number">
+              <field name="NUM">90</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="yaw_left">
+          <value name="angle">
+            <shadow type="math_number">
+              <field name="NUM">90</field>
+            </shadow>
+          </value>
+        </block>
+      </category>
+      <category name="Flip">
+        <block type="flip_forward"></block>
+        <block type="flip_backward"></block>
+        <block type="flip_left"></block>
+        <block type="flip_right"></block>
+      </category>
+      <category name="Loops">
+        <block type="loop">
+          <value name="TIMES">
+            <block type="math_number">
+              <field name="NUM">3</field>
+            </block>
+          </value>
+        </block>
+      </category>
+      <category name="Logic">
+        <block type="controls_if"></block>
+        <block type="logic_compare"></block>
+        <block type="logic_operation"></block>
+      </category>
+      <category name="Math">
+        <block type="math_number">
+          <field name="NUM">20</field>
+        </block>
+        <block type="math_arithmetic"></block>
+        <block type="math_number_property"></block>
+        <block type="math_single"></block>
+        <block type="math_trig"></block>
+        <block type="math_constant"></block>
+      </category>
+      <category name="Variables" custom="VARIABLE"> </category>
 
-  </div>
-  <div id="blocklyArea"></div>
-  <div id="droneArea" class="visible">
-    <div id="toast-container"></div>
-    <button id="resetSimulator" class="btn green tooltipped" data-position="top" data-tooltip="Reset Tello" >RESET</button>
-    <button id="fullScreen" class="btn green tooltipped" data-position="top" data-tooltip="View full screen" type="button"><i class="material-icons">fullscreen</i></button>
-    <button id="toggleGrid" class="btn green tooltipped" data-position="top" data-tooltip="Toggle grid"><i class="material-icons">grid_off</i></button>
-    <button id="ringGen" class="btn green tooltipped" data-position="top" data-tooltip="Toggle ring layout"><i class="material-icons">panorama_fish_eye</i></button>
-    <button id="toogleSound" class="btn green tooltipped" data-position="top" data-tooltip="Mute/Unmute sound"><i class="material-icons">volume_off</i></button>
-  </div>
-  
+      <category name="Land">
+        <block type="land_then_takeoff">
+          <value name="duration">
+            <shadow type="math_number">
+              <field name="NUM">5</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="land"></block>
+      </category>
+    </xml>
 
-  <!-- Code preview -->
-  <div id="codeView">
-    <pre id="code" class="prettyprint linenums"></pre>
-  </div>
-  <div id="blocklyDiv" style="position: absolute"></div>
-
-  <xml id="toolbox" style="display: none">
-    <category name="Takeoff">
-      <block type="takeoff"></block>
-    </category>
-    <category name="Navigation">
-      <block type="set_speed">
-        <value name="speed">
-          <shadow type="math_number">
-            <field name="NUM">30</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="fly_forward">
-        <value name="distance">
-          <shadow type="math_number">
-            <field name="NUM">20</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="fly_backward">
-        <value name="distance">
-          <shadow type="math_number">
-            <field name="NUM">20</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="fly_left">
-        <value name="distance">
-          <shadow type="math_number">
-            <field name="NUM">20</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="fly_right">
-        <value name="distance">
-          <shadow type="math_number">
-            <field name="NUM">20</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="fly_up">
-        <value name="distance">
-          <shadow type="math_number">
-            <field name="NUM">20</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="fly_down">
-        <value name="distance">
-          <shadow type="math_number">
-            <field name="NUM">20</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="fly_xyz">
-        <value name="xdistance">
-          <shadow type="math_number">
-            <field name="NUM">20</field>
-          </shadow>
-        </value>
-        <value name="ydistance">
-          <shadow type="math_number">
-            <field name="NUM">20</field>
-          </shadow>
-        </value>
-        <value name="zdistance">
-          <shadow type="math_number">
-            <field name="NUM">20</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="curve">
-        <value name="x1distance">
-          <shadow type="math_number">
-            <field name="NUM">25</field>
-          </shadow>
-        </value>
-        <value name="y1distance">
-          <shadow type="math_number">
-            <field name="NUM">25</field>
-          </shadow>
-        </value>
-        <value name="z1distance">
-          <shadow type="math_number">
-            <field name="NUM">0</field>
-          </shadow>
-        </value>
-        <value name="x2distance">
-          <shadow type="math_number">
-            <field name="NUM">0</field>
-          </shadow>
-        </value>
-        <value name="y2distance">
-          <shadow type="math_number">
-            <field name="NUM">50</field>
-          </shadow>
-        </value>
-        <value name="z2distance">
-          <shadow type="math_number">
-            <field name="NUM">0</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="hover">
-        <value name="duration">
-          <shadow type="math_number">
-            <field name="NUM">5</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="yaw_right">
-        <value name="angle">
-          <shadow type="math_number">
-            <field name="NUM">90</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="yaw_left">
-        <value name="angle">
-          <shadow type="math_number">
-            <field name="NUM">90</field>
-          </shadow>
-        </value>
-      </block>
-    </category>
-    <category name="Flip">
-      <block type="flip_forward"></block>
-      <block type="flip_backward"></block>
-      <block type="flip_left"></block>
-      <block type="flip_right"></block>
-    </category>
-    <category name="Loops">
-      <block type="loop">
-        <value name="TIMES">
-          <block type="math_number">
-            <field name="NUM">3</field>
-          </block>
-        </value>
-      </block>
-    </category>
-    <category name="Logic">
-      <block type="controls_if"></block>
-      <block type="logic_compare"></block>
-      <block type="logic_operation"></block>
-    </category>
-    <category name="Math">
-      <block type="math_number">
-        <field name="NUM">20</field>
-      </block>
-      <block type="math_arithmetic"></block>
-      <block type="math_number_property"></block>
-      <block type="math_single"></block>
-      <block type="math_trig"></block>
-      <block type="math_constant"></block>
-    </category>
-    <category name="Variables" custom="VARIABLE">
-    </category>
-
-    <category name="Land">
-      <block type="land_then_takeoff">
-        <value name="duration">
-          <shadow type="math_number">
-            <field name="NUM">5</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="land"></block>
-    </category>
-  </xml>
-
-  <script type="text/javascript" src="./lib/materialize/js/materialize.js"></script>
-  <script type="text/javascript" src="./js/simulator/simulator.js"></script>
-</body>
-
+    <script
+      type="text/javascript"
+      src="./lib/materialize/js/materialize.js"
+    ></script>
+    <script type="text/javascript" src="./js/simulator/simulator.js"></script>
+  </body>
 </html>
