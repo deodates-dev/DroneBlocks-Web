@@ -56,12 +56,12 @@ const init = (onAfterInit = () => {}) => {
                     db.collection('users').doc(user.uid).update({
                         loginAt: firebase.firestore.FieldValue.serverTimestamp()
                     })
-                    if (userData.data().has_simulator_access && userData.data().has_simulator_access === 1
-                        && !pathname.includes('simulator.html')) {
-                        document.location.href = 'simulator.html';
-                    } else if (!!pathname.includes('simulator.html')) {
-                        // document.location.href = '/';
-                    }
+                    // if (userData.data().has_simulator_access && userData.data().has_simulator_access === 1
+                    //     && !pathname.includes('simulator.html')) {
+                    //     document.location.href = 'simulator.html';
+                    // } else if (!!pathname.includes('simulator.html')) {
+                    //     // document.location.href = '/';
+                    // }
                     launchScreen((userData.data().displayName));
                 }else{
                     const providerData = user.providerData[0];
@@ -84,10 +84,10 @@ const init = (onAfterInit = () => {}) => {
 
                 onAfterInit();
             })
-        } else {
-            if (pathname.includes('simulator.html')) {
-                document.location.href = 'signin.html';
-            }
+        // } else {
+        //     if (pathname.includes('simulator.html')) {
+        //         document.location.href = 'signin.html';
+        //     }
         }
     });
 }
