@@ -107,7 +107,6 @@ camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 scene.add(camera);
 const zoomInverseFactor = 2;
 camera.position.set(-zoomInverseFactor * 3000, zoomInverseFactor * 2000, 0);
-camera.lookAt(scene.position);
 scene.add(new THREE.AxesHelper(2600));
 
 //rotate camera around z axis
@@ -158,27 +157,7 @@ verticalGridHelper2.rotation.x = Math.PI / 2;
 gridGroup.add(verticalGridHelper2);
 scene.add(gridGroup);
 
-scene.add(new THREE.AmbientLight(0x666666));
-
-var light = new THREE.DirectionalLight(0xdfebff, 1);
-light.position.set(0, 200, 0);
-light.position.multiplyScalar(1.3);
-
-//light.castShadow = true;
-
-//light.shadow.mapSize.width = 1024;
-//light.shadow.mapSize.height = 1024;
-
-var d = 300;
-
-light.shadow.camera.left = -d;
-light.shadow.camera.right = d;
-light.shadow.camera.top = d;
-light.shadow.camera.bottom = -d;
-
-light.shadow.camera.far = 1000;
-
-scene.add(light);
+scene.add(new THREE.AmbientLight(0xffffff));
 
 var material = new THREE.MeshBasicMaterial({
   color: 0x999999, // Ground Color determine.
@@ -479,7 +458,6 @@ var minecraftMesh = new THREE.Mesh(
 );
 minecraftMesh.name = 'minecraftMesh';
 // scene.add(minecraftMesh);
-
 
 let then = 0;
 
