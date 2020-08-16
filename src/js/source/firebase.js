@@ -127,7 +127,8 @@ const saveMission = (workspace) => {
                     aircraft,
                     title: $("#title").val(),
                     missionXML,
-                    createdAt: new Date()
+                    createdAt: new Date(),
+                    is_public: false
                 })
             }else{
                 db.collection('missions').doc(_missionId).update({
