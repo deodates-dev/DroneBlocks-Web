@@ -34,10 +34,11 @@ $(document).ready(() => {
                         <td>{{mission.createdAt}}</td>
                         <td>{{mission.createdAtShort}}</td>
                         <td>
-                          <div class="switch">
+                          <div class="switch" :id="mission.id">
                             <label>
                               Off
-                              <input type="checkbox">
+                              <input type="checkbox" checked v-if="mission.is_public">
+                              <input type="checkbox" v-if="!mission.is_public">
                               <span class="lever"></span>
                               On
                             </label>
@@ -73,6 +74,18 @@ $(document).ready(() => {
       },
       mounted: function(){
         this.getData();
+      },
+      updated: function () {
+        this.$nextTick(function () {
+          this.missions.forEach(mission => {
+            $(`#${mission.id}`).find("input[type=checkbox]").on("change",function() {
+              var status = $(this).prop('checked');
+              db.collection('missions').doc(mission.id).update({
+                is_public: status
+              })
+            });
+          })
+        })
       },
       methods: {
         select: function(id) {
@@ -138,7 +151,7 @@ $(document).ready(() => {
                   }
                   return false;
                 })
-                .sort((a,b) => a.createdAtTime > b.createdAtTime ? -1 : 1);
+                .sort((a, b) => a.createdAtTime > b.createdAtTime ? -1 : 1);
             }else{
               this.missions = [];
             }
