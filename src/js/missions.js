@@ -24,7 +24,7 @@ $(document).ready(() => {
                         <th>#</th>
                         <th>Title</th>
                         <th>Created</th>
-                        <th></th>
+                        <th>Make Public</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -33,6 +33,16 @@ $(document).ready(() => {
                         <td><div>{{mission.title}}</div></td>
                         <td>{{mission.createdAt}}</td>
                         <td>{{mission.createdAtShort}}</td>
+                        <td>
+                          <div class="switch">
+                            <label>
+                              Off
+                              <input type="checkbox">
+                              <span class="lever"></span>
+                              On
+                            </label>
+                          </div>
+                        </td>
                         <td style="text-align: right;">
                           <button v-on:click="select(mission.id)" class="waves-effect waves-light btn z-depth-0 light-blue">
                             <i class="material-icons">edit</i>
