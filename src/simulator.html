@@ -3,11 +3,8 @@
   <!-- <html> -->
 
   <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-    />
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
     <title>DroneBlocks</title>
     <script src="./js/jquery-2.2.3.min.js"></script>
     <script src="./blockly/blockly_compressed.js"></script>
@@ -53,22 +50,14 @@
     <script src="./js/simulator/ShaderTerrain.js"></script>
     <script src="./js/simulator/stats.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="./css/tello.css" />
-    <link rel="stylesheet" type="text/css" href="./css/simulator.css" />
-    <link rel="stylesheet" type="text/css" href="./blockly/prettify.css" />
-    <link rel="stylesheet" href="./css/style.css" />
+    <link href="./css/tello.css" rel="stylesheet" type="text/css"/>
+    <link href="./css/simulator.css" rel="stylesheet" type="text/css"/>
+    <link href="./blockly/prettify.css" rel="stylesheet" type="text/css"/>
+    <link href="./css/style.css" rel="stylesheet"/>
 
     <!-- Material -->
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-    <link
-      type="text/css"
-      rel="stylesheet"
-      href="./lib/materialize/css/materialize.min.css"
-      media="screen,projection"
-    />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link href="./lib/materialize/css/materialize.min.css" media="screen,projection" rel="stylesheet" type="text/css"/>
 
     <script>
       var aircraft = 'Tello';
@@ -107,28 +96,37 @@
 
   <body>
     <!-- Side nav -->
-    <ul id="nav-mobile" class="side-nav">
+    <ul class="side-nav" id="nav-mobile">
       <li class="center-align" id="login">
-        <span
-          class="waves-effect waves-light btn z-depth-0 light-blue btn-login"
-          >Login</span
-        >
+        <span class="waves-effect waves-light btn z-depth-0 light-blue btn-login">Login</span>
       </li>
       <li class="divider"></li>
-      <li><a href="#" id="newMission">New Mission</a></li>
+      <li>
+        <a href="#" id="newMission">New Mission</a>
+      </li>
       <li class="divider"></li>
-      <li><a href="#" id="previewMission">Launch Mission</a></li>
+      <li>
+        <a href="#" id="previewMission">Launch Mission</a>
+      </li>
       <li class="divider"></li>
-      <li><a href="#" id="showCode">Show Mission Code</a></li>
+      <li>
+        <a href="#" id="showCode">Show Mission Code</a>
+      </li>
       <li class="divider"></li>
-      <li><a href="#" id="saveMission">Save Mission</a></li>
+      <li>
+        <a href="#" id="saveMission">Save Mission</a>
+      </li>
       <li class="divider" id="d1"></li>
-      <li><a href="#" id="saveMissionAs">Save Mission As...</a></li>
+      <li>
+        <a href="#" id="saveMissionAs">Save Mission As...</a>
+      </li>
       <li class="divider" id="d2"></li>
       <li>
-        <a href="tello_missions.html?simulator=1" id="myMissions"
-          >My Missions</a
-        >
+        <a href="tello_missions.html?simulator=1" id="myMissions">My Missions</a>
+      </li>
+      <li class="divider" id="d6"></li>
+      <li>
+        <a href="code_board.html">Pubic Missions</a>
       </li>
       <li class="divider" id="d3"></li>
       <!--
@@ -138,95 +136,50 @@
     <li class="divider" id="d5"></li>
     -->
       <li class="center-align" id="logout">
-        <span class="waves-effect waves-light btn z-depth-0 light-blue"
-          >Logout</span
-        >
+        <span class="waves-effect waves-light btn z-depth-0 light-blue">Logout</span>
       </li>
     </ul>
 
     <!-- Hamburger icon -->
-    <a
-      href="#"
-      data-activates="nav-mobile"
-      class="right button-collapse show-on-large"
-      id="hamburger"
-      ><i class="medium material-icons">menu</i></a
-    >
+    <a class="right button-collapse show-on-large" data-activates="nav-mobile" href="#" id="hamburger">
+      <i class="medium material-icons">menu</i>
+    </a>
 
     <div id="missionTitle">Untitled Mission</div>
 
     <!-- Save modal -->
-    <div id="saveMissionModal" class="modal">
+    <div class="modal" id="saveMissionModal">
       <div class="modal-content">
         <h6>Please enter a mission title below and click SAVE</h6>
         <div class="input-field">
-          <input placeholder="Mission Title" id="title" type="text" />
+          <input id="title" placeholder="Mission Title" type="text"/>
         </div>
       </div>
 
       <div class="modal-footer">
-        <a
-          href="#!"
-          class=" modal-action waves-effect waves-light btn z-depth-0"
-          id="saveModal"
-          >Save</a
-        >
-        <a
-          href="#!"
-          class=" modal-action modal-close waves-effect waves-light btn-flat"
-          >Cancel</a
-        >
+        <a class=" modal-action waves-effect waves-light btn z-depth-0" href="#!" id="saveModal">Save</a>
+        <a class=" modal-action modal-close waves-effect waves-light btn-flat" href="#!">Cancel</a>
       </div>
     </div>
 
     <!-- Map preview modal -->
-    <div
-      id="mapPreviewModal"
-      class="modal"
-      style="width: 95% !important; height: 100% !important"
-    ></div>
+    <div class="modal" id="mapPreviewModal" style="width: 95% !important; height: 100% !important"></div>
     <div id="blocklyArea"></div>
-    <div id="droneArea" class="visible">
+    <div class="visible" id="droneArea">
       <div id="toast-container"></div>
-      <button
-        id="resetSimulator"
-        class="btn green tooltipped"
-        data-position="top"
-        data-tooltip="Reset Tello"
-      >
+      <button class="btn green tooltipped" data-position="top" data-tooltip="Reset Tello" id="resetSimulator">
         RESET
       </button>
-      <button
-        id="fullScreen"
-        class="btn green tooltipped"
-        data-position="top"
-        data-tooltip="View full screen"
-        type="button"
-      >
+      <button class="btn green tooltipped" data-position="top" data-tooltip="View full screen" id="fullScreen" type="button">
         <i class="material-icons">fullscreen</i>
       </button>
-      <button
-        id="toggleGrid"
-        class="btn green tooltipped"
-        data-position="top"
-        data-tooltip="Toggle grid"
-      >
+      <button class="btn green tooltipped" data-position="top" data-tooltip="Toggle grid" id="toggleGrid">
         <i class="material-icons">grid_off</i>
       </button>
-      <button
-        id="ringGen"
-        class="btn green tooltipped"
-        data-position="top"
-        data-tooltip="Toggle ring layout"
-      >
+      <button class="btn green tooltipped" data-position="top" data-tooltip="Toggle ring layout" id="ringGen">
         <i class="material-icons">panorama_fish_eye</i>
       </button>
-      <button
-        id="toogleSound"
-        class="btn green tooltipped"
-        data-position="top"
-        data-tooltip="Mute/Unmute sound"
-      >
+      <button class="btn green tooltipped" data-position="top" data-tooltip="Mute/Unmute sound" id="toogleSound">
         <i class="material-icons">volume_off</i>
       </button>
     </div>
@@ -392,7 +345,7 @@
         <block type="math_trig"></block>
         <block type="math_constant"></block>
       </category>
-      <category name="Variables" custom="VARIABLE"> </category>
+      <category custom="VARIABLE" name="Variables"></category>
 
       <category name="Land">
         <block type="land_then_takeoff">
@@ -406,10 +359,7 @@
       </category>
     </xml>
 
-    <script
-      type="text/javascript"
-      src="./lib/materialize/js/materialize.js"
-    ></script>
-    <script type="text/javascript" src="./js/simulator/simulator.js"></script>
+    <script src="./lib/materialize/js/materialize.js" type="text/javascript"></script>
+    <script src="./js/simulator/simulator.js" type="text/javascript"></script>
   </body>
 </html>
