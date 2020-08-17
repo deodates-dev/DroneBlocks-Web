@@ -82,7 +82,10 @@ $(document).ready(() => {
               var status = $(this).prop('checked');
               db.collection('missions').doc(mission.id).update({
                 is_public: status
-              })
+              }).then(() => {
+                var description = status ? 'public' : 'private';
+                Materialize.toast(`"${mission.title}" is ${description} now.`, 3000);
+                });
             });
           })
         })
