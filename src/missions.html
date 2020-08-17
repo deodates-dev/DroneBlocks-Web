@@ -61,6 +61,7 @@
         <div class="input-field col s6">
           <strong>iPad Share Link</strong>
           <input id="iPadShareLink" type="text" class="validate">
+          <a class="btn-floating halfway-fab waves-effect waves-light light-blue visitShare" onclick="copy('iPadShareLink')"><i class="material-icons">content_copy</i></a>
         </div>
       </div>
       
@@ -68,6 +69,7 @@
         <div class="input-field col s6">
           <strong>Desktop Share Link</strong>
           <input id="desktopShareLink" type="text" class="validate">
+          <a class="btn-floating halfway-fab waves-effect waves-light light-blue visitShare" onclick="copyLink('desktopShareLink')"><i class="material-icons">content_copy</i></a>
         </div>
       </div>
     </div>
@@ -77,5 +79,14 @@
     </div>
     
   </div>
+  <script>
+    function copyLink(linkId) {
+      var link = document.getElementById(linkId);
+      link.select();
+      link.setSelectionRange(0, 99999)
+      document.execCommand("copy");
+      Materialize.toast('Link copied into clipboard', 3000);
+    }
+  </script>
 </body>
 </html>
