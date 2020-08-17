@@ -67,3 +67,9 @@
         white-space: nowrap;
     }
 }
+
+.publicMissionShare {
+    left: 84%;
+    top: 54%;
+    position: absolute;
+}

@@ -169,32 +169,20 @@ $(document).ready(() => {
         <template v-if="missions">
           <div v-if="missions.length">
             <div class="container">
-
-              <div class="card">
-                <div class="card-content">
-                  <table class="highlight missions-table">
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>Title</th>
-                        <th>Created</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(mission, index) in missions">
-                        <td>{{index + 1}}</td>
-                        <td><div>{{mission.title}}</div></td>
-                        <td>{{mission.createdAt}}</td>
-                        <td>{{mission.createdAtShort}}</td>
-                        <td style="text-align: right;">
-                          <button v-on:click="share(mission.id)" class="waves-effect waves-light btn z-depth-0 light-blue">
-                            <i class="material-icons">share</i>
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+              <div class="row">
+                <div class="col s12 m3" v-for="(mission, index) in missions" :key="mission.id">
+                  <div class="card small">
+                    <div class="card-image">
+                      <img :src="randomImage">
+                    </div>
+                    <div class="card-content">
+                      <p>
+                        Title: {{ mission.title }} <br/>
+                        Created At: {{ mission.createdAt }}
+                      </p>
+                      <a v-on:click="share(mission.id)" class="btn-floating halfway-fab waves-effect waves-light light-blue publicMissionShare"><i class="material-icons">share</i></a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -207,7 +195,8 @@ $(document).ready(() => {
           <i class="fa fa-spinner fa-spin fa-2x"></i>
         </div>`,
       data: {
-        missions: undefined
+        missions: undefined,
+        randomImage: 'https://picsum.photos/200'
       },
       mounted: function(){
         this.getData();
