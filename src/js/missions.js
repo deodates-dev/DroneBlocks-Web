@@ -178,7 +178,7 @@ $(document).ready(() => {
                         <th>#</th>
                         <th>Title</th>
                         <th>Created</th>
-                        <th>Make Public</th>
+                        <th></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -187,26 +187,9 @@ $(document).ready(() => {
                         <td><div>{{mission.title}}</div></td>
                         <td>{{mission.createdAt}}</td>
                         <td>{{mission.createdAtShort}}</td>
-                        <td>
-                          <div class="switch" :id="mission.id">
-                            <label>
-                              Off
-                              <input type="checkbox" checked v-if="mission.is_public">
-                              <input type="checkbox" v-if="!mission.is_public">
-                              <span class="lever"></span>
-                              On
-                            </label>
-                          </div>
-                        </td>
                         <td style="text-align: right;">
-                          <button v-on:click="select(mission.id)" class="waves-effect waves-light btn z-depth-0 light-blue">
-                            <i class="material-icons">edit</i>
-                          </button>
                           <button v-on:click="share(mission.id)" class="waves-effect waves-light btn z-depth-0 light-blue">
                             <i class="material-icons">share</i>
-                          </button>
-                          <button v-on:click="removeItem(mission.id)" class="waves-effect waves-light btn z-depth-0 materialize-red">
-                            <i class="material-icons">delete</i>
                           </button>
                         </td>
                       </tr>
@@ -228,18 +211,6 @@ $(document).ready(() => {
       },
       mounted: function(){
         this.getData();
-      },
-      updated: function () {
-        this.$nextTick(function () {
-          this.missions.forEach(mission => {
-            $(`#${mission.id}`).find("input[type=checkbox]").on("change",function() {
-              var status = $(this).prop('checked');
-              db.collection('missions').doc(mission.id).update({
-                is_public: status
-              })
-            });
-          })
-        })
       },
       methods: {
         select: function(id) {
@@ -286,7 +257,7 @@ $(document).ready(() => {
           }
         },
         getData: function() {
-          db.collection('missions').where('uid', '==', user.uid).get().then((v) => {
+          db.collection('missions').where('is_public', '==', true).get().then((v) => {
             if(!v.empty){
               this.missions = v.docs
                 .map(v => ({
