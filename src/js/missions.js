@@ -167,7 +167,7 @@ $(document).ready(() => {
       el: '#publicMissions',
       template: `
         <template v-if="missions">
-          <div v-if="missions.length">
+          <div>
             <div class="container">
               <div class="row">
                 <form action="#">
@@ -175,14 +175,14 @@ $(document).ready(() => {
                     Align missions by:
                   </p>
                   <p>
-                    <input class="with-gap" name="group1" type="radio" id="test3"  />
-                    <label for="test3">Recents</label>
-                    <input class="with-gap" name="group1" type="radio" id="test4"  />
-                    <label for="test4">Ratings</label>
+                    <input class="with-gap" name="group1" type="radio" id="recenMissionFirst" checked />
+                    <label for="recenMissionFirst">Recents</label>
+                    <input class="with-gap" name="group1" type="radio" id="highRatingFirst" />
+                    <label for="highRatingFirst">Ratings</label>
                   </p>
                 </form>
               </div>
-              <div class="row">
+              <div class="row" v-if="missions.length">
                 <div class="col s12 m3" v-for="(mission, index) in missions" :key="mission.id">
                   <div class="card small">
                     <div class="card-image">
@@ -202,10 +202,11 @@ $(document).ready(() => {
                   </div>
                 </div>
               </div>
+              <div v-else class="center-align pt-20">
+                <i v-if="filterIndex > -1" class="fa fa-spinner fa-spin fa-2x"></i>
+                <p v-else>You don't have any missions.</p>
+              </div>
             </div>
-          </div>
-          <div v-else class="center-align pt-20">
-            <p>You don't have any missions.</p>
           </div>
         </template>
         <div v-else class="center-align pt-20">
@@ -213,10 +214,33 @@ $(document).ready(() => {
         </div>`,
       data: {
         missions: undefined,
-        randomImage: 'https://picsum.photos/200'
+        randomImage: 'https://picsum.photos/200',
+        filterIndex: -1,
       },
       mounted: function(){
         this.getData();
+      },
+      updated: function () {
+        this.$nextTick(function () {
+          var container = this;
+          $("#recenMissionFirst").on("change", function () {
+            var status = $(this).prop('checked');
+            if (status === true) {
+              container.missions = [];
+              container.filterIndex = 0;
+              container.getData();
+            }
+          });
+
+          $("#highRatingFirst").on("change", function () {
+            var status = $(this).prop('checked');
+            if (status === true) {
+              container.missions = [];
+              container.filterIndex = 1;
+              container.getData();
+            }
+          });
+        })
       },
       methods: {
         select: function(id) {
@@ -317,8 +341,16 @@ $(document).ready(() => {
             Materialize.toast(`You liked Mission`, 3000);
           }); */
         },
-        getData: function() {
-          db.collection('missions').where('is_public', '==', true).get().then((v) => {
+        getData: function () {
+          var dataQuery;
+          
+          if (this.filterIndex > 0) {
+            dataQuery = db.collection('missions').where('is_public', '==', true).orderBy('likeCount', 'desc');
+          } else {
+            dataQuery = db.collection('missions').where('is_public', '==', true)
+          }
+          
+          dataQuery.get().then((v) => {
             if(!v.empty){
               this.missions = v.docs
                 .map(v => ({
