@@ -85,7 +85,7 @@ $(document).ready(() => {
               }).then(() => {
                 var description = status ? 'public' : 'private';
                 Materialize.toast(`"${mission.title}" is ${description} now.`, 3000);
-                });
+              });
             });
           })
         })
@@ -182,7 +182,7 @@ $(document).ready(() => {
                       </p>
                       <div class="publicMissionShare">
                         <h5 class="likeCount"><small>{{ mission.likeCount || 0 }}</small></h5>
-                        <a v-on:click="share(mission.id)" class="btn-floating halfway-fab waves-effect waves-light pink iconMission"><i class="material-icons">favorite</i>123</a>
+                        <a v-on:click="likeMission(mission)" class="btn-floating halfway-fab waves-effect waves-light pink iconMission"><i class="material-icons">favorite</i>123</a>
                         <a v-on:click="share(mission.id)" class="btn-floating halfway-fab waves-effect waves-light light-blue iconMission"><i class="material-icons">share</i></a>
                       </div>
                     </div>
@@ -248,6 +248,61 @@ $(document).ready(() => {
             $("#iPadShareLink").val(`droneblocks://?missionId=${id}&uid=${user.uid}`);
             $("#desktopShareLink").val(`https://dev.droneblocks.io?share=1&missionId=${id}&uid=${user.uid}`);
           }
+        },
+        likeMission: function (myMission) {
+          console.log(this.missions);
+          if (!myMission.likeMembers || (myMission.likeMembers.length === 0)) {
+            db.collection('missions').doc(myMission.id).update({
+              likeCount: 1,
+              likeMembers: [user.uid]
+            }).then(() => {
+              Materialize.toast(`You liked this mission.`, 3000);
+              this.missions.map(mission => {
+                if (mission.id === myMission.id) {
+                  mission.likeCount = 1;
+                  mission.likeMembers = [user.uid];
+                }
+              });
+            });
+            return;
+          }
+          if (!myMission.likeMembers.includes(user.uid)) {
+            db.collection('missions').doc(myMission.id).update({
+              likeCount: firebase.firestore.FieldValue.increment(1),
+              likeMembers: firebase.firestore.FieldValue.arrayUnion(user.uid),
+            }).then(() => {
+              Materialize.toast(`You liked this mission`, 3000);
+              this.missions.map(mission => {
+                if (mission.id === myMission.id) {
+                  mission.likeCount++;
+                  mission.likeMembers.push(user.uid);
+                }
+              });
+            });
+            return;
+          }
+          if (myMission.likeMembers.includes(user.uid)) {
+
+            db.collection('missions').doc(myMission.id).update({
+              likeCount: firebase.firestore.FieldValue.increment(-1),
+              likeMembers: firebase.firestore.FieldValue.arrayRemove(user.uid),
+            }).then(() => {
+              Materialize.toast(`You disliked this mission`, 3000);
+              this.missions.map(mission => {
+                if (mission.id === myMission.id) {
+                  mission.likeCount--;
+                  const index = mission.likeMembers.indexOf(user.uid);
+                  mission.likeMembers.splice(index, 1);
+                }
+              });
+            });
+            return;
+          }
+          /* db.collection('missions').doc(myMission.id).update({
+            likeCount: firebase.firestore.FieldValue.increment(1)
+          }).then(() => {
+            Materialize.toast(`You liked Mission`, 3000);
+          }); */
         },
         getData: function() {
           db.collection('missions').where('is_public', '==', true).get().then((v) => {
