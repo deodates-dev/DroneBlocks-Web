@@ -86,3 +86,14 @@
     top: 30%;
     position: absolute;
 }
+.card-image {
+    width: 300px;
+    height: 180px;
+    text-align: center;
+}
+.card-image h5 {
+    padding: 70px;
+}
+.card-content {
+    margin-top: 10%;
+}

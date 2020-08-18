@@ -5,6 +5,10 @@ $(document).ready(() => {
   if(!location.pathname.match(/missions.html/) && !location.pathname.match(/code_board.html/)){
     return;
   }
+  var randomColors = [
+    '#ddf3f5', '#a6dcef', '#f2aaaa', '#e36387',
+    '#efee9d', '#d1eaa3', '#dbc6eb', '#abc2e8'
+  ]
 
   const db = firebase.firestore();
 
@@ -185,12 +189,13 @@ $(document).ready(() => {
               <div class="row" v-if="missions.length">
                 <div class="col s12 m3" v-for="(mission, index) in missions" :key="mission.id">
                   <div class="card small">
-                    <div class="card-image">
-                      <img :src="randomImage">
+                    <div class="card-image" :id="index">
+                      <h5>
+                        {{ mission.title.slice(0, 15) }}
+                      </h5>
                     </div>
                     <div class="card-content">
                       <p>
-                        Title: {{ mission.title }} <br/>
                         Created At: {{ mission.createdAt }}
                       </p>
                       <div class="publicMissionShare">
@@ -214,7 +219,6 @@ $(document).ready(() => {
         </div>`,
       data: {
         missions: undefined,
-        randomImage: 'https://picsum.photos/200',
         filterIndex: -1,
       },
       mounted: function(){
@@ -223,6 +227,9 @@ $(document).ready(() => {
       updated: function () {
         this.$nextTick(function () {
           var container = this;
+          this.missions.map((mission, index) => {
+            $(`#${index}`).css("background-color", randomColors[Math.floor(Math.random() * 8)]);
+          });
           $("#recenMissionFirst").on("change", function () {
             var status = $(this).prop('checked');
             if (status === true) {
