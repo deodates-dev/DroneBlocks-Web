@@ -128,7 +128,8 @@ const saveMission = (workspace) => {
                     title: $("#title").val(),
                     missionXML,
                     createdAt: new Date(),
-                    is_public: false
+                    is_public: false,
+                    likeCount: 0
                 })
             }else{
                 db.collection('missions').doc(_missionId).update({
