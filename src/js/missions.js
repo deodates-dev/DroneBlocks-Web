@@ -364,12 +364,14 @@ $(document).ready(() => {
                   createdAtShort: moment(v.createdAt.toDate()).format('l LT')
                 }))
                 .filter(v => {
-                  if(v.aircraft === aircraft){
+                  if (v.aircraft === aircraft) {
                     return true;
                   }
                   return false;
-                })
-                .sort((a, b) => a.createdAtTime > b.createdAtTime ? -1 : 1);
+                });
+              if (this.filterIndex < 1) {
+                this.missions.sort((a, b) => a.createdAtTime > b.createdAtTime ? -1 : 1);
+              }
             }else{
               this.missions = [];
             }
