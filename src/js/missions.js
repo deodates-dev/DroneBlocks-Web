@@ -170,6 +170,19 @@ $(document).ready(() => {
           <div v-if="missions.length">
             <div class="container">
               <div class="row">
+                <form action="#">
+                  <p>
+                    Align missions by:
+                  </p>
+                  <p>
+                    <input class="with-gap" name="group1" type="radio" id="test3"  />
+                    <label for="test3">Recents</label>
+                    <input class="with-gap" name="group1" type="radio" id="test4"  />
+                    <label for="test4">Ratings</label>
+                  </p>
+                </form>
+              </div>
+              <div class="row">
                 <div class="col s12 m3" v-for="(mission, index) in missions" :key="mission.id">
                   <div class="card small">
                     <div class="card-image">
