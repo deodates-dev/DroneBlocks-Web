@@ -69,9 +69,17 @@
 }
 
 .publicMissionShare {
-    left: 84%;
-    top: 54%;
+    right: 5%;
+    top: 57%;
     position: absolute;
+    display: flex;
+    color: royalblue;
+}
+.likeCount {
+    margin-top: 5px !important;
+}
+.iconMission {
+    margin-left: 7px;
 }
 .visitShare {
     right: 0%;

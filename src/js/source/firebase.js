@@ -129,7 +129,8 @@ const saveMission = (workspace) => {
                     missionXML,
                     createdAt: new Date(),
                     is_public: false,
-                    likeCount: 0
+                    likeCount: 0,
+                    likeMembers: [],
                 })
             }else{
                 db.collection('missions').doc(_missionId).update({
