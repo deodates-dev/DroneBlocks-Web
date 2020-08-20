@@ -196,12 +196,11 @@ $(document).ready(() => {
                     </div>
                     <div class="card-content">
                       <p>
-                        Created At: {{ mission.createdAt }}
+                        Created : {{ mission.createdAt }}
                       </p>
                       <div class="publicMissionShare">
                         <h5 class="likeCount"><small>{{ mission.likeCount || 0 }}</small></h5>
                         <a v-on:click="likeMission(mission)" class="btn-floating halfway-fab waves-effect waves-light pink iconMission"><i class="material-icons">favorite</i>123</a>
-                        <a v-on:click="share(mission.id)" class="btn-floating halfway-fab waves-effect waves-light light-blue iconMission"><i class="material-icons">share</i></a>
                       </div>
                     </div>
                   </div>
@@ -229,6 +228,9 @@ $(document).ready(() => {
           var container = this;
           this.missions.map((mission, index) => {
             $(`#${index}`).css("background-color", randomColors[Math.floor(Math.random() * 8)]);
+            $(`#${index}`).click(function(){
+              window.location = '/simulator.html';
+            });
           });
           $("#recenMissionFirst").on("change", function () {
             var status = $(this).prop('checked');
