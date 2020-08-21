@@ -58,6 +58,14 @@ gulp.task('js', () => {
         .pipe(gulp.dest('dist/js/lib/'));
 })
 
+gulp.task('build', () => {
+    gulp.src('src/**/*.*')
+        .pipe(gulp.dest('dist'));
+    gulp.src(['src/js/main.js', 'src/js/missions.js'])
+        .pipe(webpackStream(webpackConfig))
+        .pipe(gulp.dest('dist/js/lib/'));
+})
+
 gulp.task('watch', () => {
     gulp.watch('src/js/**/*.js', ['js']);
     gulp.watch('src/**/*.*', ['views']);
