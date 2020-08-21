@@ -296,7 +296,10 @@ $(document).ready(() => {
           }
         },
         likeMission: function (myMission) {
-          console.log(this.missions);
+          if (!user) {
+            $("#redirectLoginModal").openModal();
+            return;
+          }
           if (!myMission.likeMembers || (myMission.likeMembers.length === 0)) {
             db.collection('missions').doc(myMission.id).update({
               likeCount: 1,
