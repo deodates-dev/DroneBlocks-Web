@@ -176,7 +176,7 @@ $(document).ready(() => {
               <div class="row">
                 <form action="#">
                   <p>
-                    Align missions by:
+                    Sort By:
                   </p>
                   <p>
                     <input class="with-gap" name="group1" type="radio" id="recenMissionFirst" checked />
