@@ -668,15 +668,22 @@ function yawRotateSetting(command) {
 
 function yawRotate(delta) {
   const shiftAngle = Math.abs(drone.rotation.y - originAngle);
+  var direction;
+
   if (isRotating && shiftAngle < distanceAngle) {
     isOnRotateTarget = false;
-    const direction = getDirection(window.commands[0]);
+    direction = getDirection(window.commands[0]);
     if (direction == 'right') {
       drone.rotation.y -= delta * droneRotateSpeed;
     } else {
       drone.rotation.y += delta * droneRotateSpeed;
     }
   } else if (isRotating && shiftAngle >= distanceAngle && !isOnRotateTarget) {
+    if (direction == 'right') {
+      drone.rotation.y = originAngle - distanceAngle;
+    } else {
+      drone.rotation.y =  originAngle + distanceAngle;
+    }
     isOnRotateTarget = true;
     isOnForwardTarget = false;
     isRotating = false;
