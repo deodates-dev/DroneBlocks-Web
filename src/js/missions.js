@@ -229,7 +229,7 @@ $(document).ready(() => {
           this.missions.map((mission, index) => {
             $(`#${index}`).css("background-color", randomColors[Math.floor(Math.random() * 8)]);
             $(`#${index}`).click(function(){
-              window.location = `/simulator.html?share=1&missionId=${mission.id}&uid=${user.uid}`;
+              window.location = `/simulator.html?share=1&missionId=${mission.id}&uid=${mission.uid}`;
             });
           });
           $("#recenMissionFirst").on("change", function () {
