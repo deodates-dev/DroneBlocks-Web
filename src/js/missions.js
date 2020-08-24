@@ -9,6 +9,7 @@ $(document).ready(() => {
     '#ddf3f5', '#a6dcef', '#f2aaaa', '#e36387',
     '#efee9d', '#d1eaa3', '#dbc6eb', '#abc2e8'
   ]
+  var cardColors = [];
 
   const db = firebase.firestore();
 
@@ -227,7 +228,7 @@ $(document).ready(() => {
         this.$nextTick(function () {
           var container = this;
           this.missions.map((mission, index) => {
-            $(`#${index}`).css("background-color", randomColors[Math.floor(Math.random() * 8)]);
+            $(`#${index}`).css("background-color", cardColors[index]);
             $(`#${index}`).click(function(){
               window.location = `/simulator.html?share=1&missionId=${mission.id}&uid=${mission.uid}`;
             });
@@ -355,7 +356,6 @@ $(document).ready(() => {
         },
         getData: function () {
           var dataQuery;
-          
           if (this.filterIndex > 0) {
             dataQuery = db.collection('missions').where('is_public', '==', true).orderBy('likeCount', 'desc');
           } else {
@@ -363,7 +363,7 @@ $(document).ready(() => {
           }
           
           dataQuery.get().then((v) => {
-            if(!v.empty){
+            if (!v.empty) {
               this.missions = v.docs
                 .map(v => ({
                   id: v.ref.id,
@@ -383,6 +383,9 @@ $(document).ready(() => {
                 });
               if (this.filterIndex < 1) {
                 this.missions.sort((a, b) => a.createdAtTime > b.createdAtTime ? -1 : 1);
+              }
+              for (var i = 0; i < this.missions.length; i++) {
+                cardColors.push(randomColors[Math.floor(Math.random() * 8)]);
               }
             }else{
               this.missions = [];
