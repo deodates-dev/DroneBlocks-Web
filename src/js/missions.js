@@ -191,7 +191,7 @@ $(document).ready(() => {
                   <div class="card small">
                     <div class="card-image" :id="index">
                       <h5>
-                        {{ mission.title.slice(0, 15) }}
+                        {{ mission.title }}
                       </h5>
                     </div>
                     <div class="card-content">
