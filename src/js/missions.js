@@ -180,9 +180,9 @@ $(document).ready(() => {
                   </p>
                   <p>
                     <input class="with-gap" name="group1" type="radio" id="recenMissionFirst" checked />
-                    <label for="recenMissionFirst">Recents</label>
+                    <label for="recenMissionFirst">Recent</label>
                     <input class="with-gap" name="group1" type="radio" id="highRatingFirst" />
-                    <label for="highRatingFirst">Ratings</label>
+                    <label for="highRatingFirst">Popular</label>
                   </p>
                 </form>
               </div>
