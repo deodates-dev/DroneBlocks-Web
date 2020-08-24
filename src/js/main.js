@@ -162,7 +162,7 @@ const bind = () => {
             if (pathname === '/chrome_app.html') {
                 document.location.href = `signin.html?successUrl=${encodeURIComponent(href)}`;
             } else {
-                firebase.login();
+                window.location = '/signin.html';
             }
             // window.open('/signin-widget.html', "Sign In", "width=985,height=735");
         }
