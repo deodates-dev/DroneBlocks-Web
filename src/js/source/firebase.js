@@ -76,9 +76,6 @@ const init = (onAfterInit = () => {}) => {
                         loginAt: firebase.firestore.FieldValue.serverTimestamp(),
                         has_simulator_access: 0
                     });
-                    if (!!pathname.includes('simulator.html')) {
-                        document.location.href = '/';
-                    }
                     launchScreen(providerData.displayName);
                 }
 
