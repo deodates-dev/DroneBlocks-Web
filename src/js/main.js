@@ -164,7 +164,7 @@ const bind = () => {
             } else {
                 document.location.href = `signin.html?successUrl=${encodeURIComponent(href)}`;
             } */
-            document.location.href = `signin.html?successUrl=${encodeURIComponent(href)}`;
+            document.location.href = `signin.html?successUrl=${href}`;
             // window.open('/signin-widget.html', "Sign In", "width=985,height=735");
         }
     });
