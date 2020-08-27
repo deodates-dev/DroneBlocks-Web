@@ -159,13 +159,11 @@ const bind = () => {
         if ($("#login").html().includes('btn-login')) {
             // let successUrl = '/'
             let { pathname, href } = location;
-          /*   if (pathname === '/chrome_app.html') {
+            if (pathname === '/chrome_app.html' || pathname === '/simulator.html') {
                 document.location.href = `signin.html?successUrl=${encodeURIComponent(href)}`;
             } else {
-                document.location.href = `signin.html?successUrl=${encodeURIComponent(href)}`;
-            } */
-            document.location.href = `signin.html?successUrl=${href}`;
-            // window.open('/signin-widget.html', "Sign In", "width=985,height=735");
+                firebase.login();
+            }
         }
     });
 
