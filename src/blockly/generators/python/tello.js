@@ -2,6 +2,11 @@ Blockly.Python['takeoff'] = function(block) {
   return 'takeOff();\n';
 };
 
+Blockly.Python['takeoff_after'] = function(block) {
+  var delay = Blockly.JavaScript.valueToCode(block, 'delay', Blockly.JavaScript.ORDER_NONE);
+  return 'takeOffAfter(' + delay + ');\n';
+};
+
 Blockly.Python['set_speed'] = function(block) {
   var distance = Blockly.Python.valueToCode(block, 'speed', Blockly.JavaScript.ORDER_NONE);
   var units = block.getFieldValue("units");

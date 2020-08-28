@@ -16,6 +16,7 @@
     <script src="./blockly/generators/python/tello.js"></script>
     <script src="./blockly/msg/js/en.js"></script>
     <script src="./blockly/blocks/tello/takeoff.js"></script>
+    <script src="./blockly/blocks/tello/takeoff_after.js"></script>
     <script src="./blockly/blocks/tello/land_then_takeoff.js"></script>
     <script src="./blockly/blocks/tello/land.js"></script>
     <script src="./blockly/blocks/tello/speed.js"></script>
@@ -166,6 +167,13 @@
     <xml id="toolbox" style="display: none">
       <category name="Takeoff">
         <block type="takeoff"></block>
+        <block type="takeoff_after">
+          <value name="delay">
+            <shadow type="math_number">
+              <field name="NUM">5</field>
+            </shadow>
+          </value>
+        </block>
       </category>
       <category name="Navigation">
         <block type="set_speed">
@@ -319,7 +327,6 @@
         <block type="math_constant"></block>
       </category>
       <category custom="VARIABLE" name="Variables"></category>
-
       <category name="Land">
         <block type="land_then_takeoff">
           <value name="duration">
