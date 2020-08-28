@@ -29,10 +29,6 @@ table {
 .blocklyTreeRoot {
   padding: 0px !important;
 }
-.blocklyTreeRow {
-  height: 30px !important;
-  line-height: 30px !important;
-}
 
 div#blockly-1 {
   background-color: #264653 !important;
