@@ -1247,7 +1247,7 @@ $(document).ready(function() {
 });
 
 function addPointToPath(newPoint) {
-  console.log('Drawing Line');
+  //console.log('Drawing Line');
   pathPositions[pathCount * 3 + 0] = newPoint.x;
   pathPositions[pathCount * 3 + 1] = newPoint.y;
   pathPositions[pathCount * 3 + 2] = newPoint.z;

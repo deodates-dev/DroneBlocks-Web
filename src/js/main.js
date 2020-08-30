@@ -399,9 +399,14 @@ function launch() {
 
         }
 }
-document.addEventListener("keypress", function (event) {
-    if ((event.keyCode == 116) || (event.keyCode == 84)) {
-        console.log('T clicked');
-        launch();
-    }
-});
+
+// We only want to launch with the T key on simulator
+// Otherwise this will trigger on Chrome app and possibly mobile
+if (document.location.href.includes("simulator")) {
+    document.addEventListener("keypress", function (event) {
+        if ((event.keyCode == 116) || (event.keyCode == 84)) {
+            console.log('T clicked');
+            launch();
+        }
+    });
+}
