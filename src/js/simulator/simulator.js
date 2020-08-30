@@ -679,10 +679,11 @@ function yawRotate(delta) {
       drone.rotation.y += delta * droneRotateSpeed;
     }
   } else if (isRotating && shiftAngle >= distanceAngle && !isOnRotateTarget) {
+    direction = getDirection(window.commands[0]);
     if (direction == 'right') {
-      drone.rotation.y = originAngle + distanceAngle;
-    } else {
-      drone.rotation.y =  originAngle - distanceAngle;
+      drone.rotation.y = originAngle - distanceAngle;
+    } else if(direction == 'left'){
+      drone.rotation.y =  originAngle + distanceAngle;
     }
     isOnRotateTarget = true;
     isOnForwardTarget = false;
