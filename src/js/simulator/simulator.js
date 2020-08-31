@@ -474,7 +474,7 @@ let then = 0;
     //If model is loaded
     //camera.lookAt(drone.position);
     //Display Drone Height
-    $("#altitude-status").html(`Altitude: ${drone.position.y.toFixed(1)/10} Cm`);
+    $("#altitude-status").html(`Altitude: ${Math.round(drone.position.y)/10} Cm`);
 
     if (isFlying) {
       blade[0].rotation.y -= rotateSpeed;
