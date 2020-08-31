@@ -41,7 +41,10 @@ let speed = 20 * 10 * 2.54; // 30in/s in height;
 let isSpeedSet = false;
 const droneFlipSpeed = Math.PI * 3; //flip speed.
 const droneRotateSpeed = Math.PI;
+const MAX_FLYING_PERIOD = 600; //600s
 let pathCount = 0;
+let flyingPeriod = 0;
+
 
 var ringsChangeCount = 5;
 var colorChangeCount = 0;
@@ -475,8 +478,10 @@ let then = 0;
     //camera.lookAt(drone.position);
     //Display Drone Height
     $("#altitude-status").html(`Altitude: ${Math.round(drone.position.y)/10} Cm`);
+    displayBattery(flyingPeriod);
 
     if (isFlying) {
+      flyingPeriod += delta;
       blade[0].rotation.y -= rotateSpeed;
       blade[1].rotation.y += rotateSpeed;
       blade[2].rotation.y -= rotateSpeed;
@@ -604,6 +609,7 @@ let then = 0;
       isHovered = false;
       isSpeedSet = false;
       clock = 0;
+      flyingPeriod = 0;
       commands.shift();
       sound.pause();
       initPath();
@@ -1274,4 +1280,9 @@ function initPath() {
 
 function getY(x, z) {
   return (data[x + z * worldWidth] * 0.2) | 0;
+}
+
+function displayBattery(flyingPeriod) {
+  var batteryPercent = (MAX_FLYING_PERIOD - flyingPeriod) / MAX_FLYING_PERIOD * 100;
+  $("#battery-status").html(`Battery: ${Math.round(batteryPercent)} %`);
 }
