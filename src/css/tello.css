@@ -30,6 +30,12 @@ table {
   padding: 0px !important;
 }
 
+/* This controls the category item height */
+div[role='treeitem'] {
+  height: 42px !important;
+  line-height: 20px !important;
+}
+
 div#blockly-1 {
   background-color: #264653 !important;
   padding: 10px !important;
