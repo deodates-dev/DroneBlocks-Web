@@ -1,4 +1,4 @@
-import config from '../../../env/config.prod.json';
+import config from '../../../env/config.json';
 import * as helpers from './helpers';
 
 firebase.initializeApp(config);

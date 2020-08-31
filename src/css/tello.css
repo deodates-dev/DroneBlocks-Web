@@ -29,121 +29,131 @@ table {
 .blocklyTreeRoot {
   padding: 0px !important;
 }
-.blocklyTreeRow {
-  height: 30px !important;
-  line-height: 30px !important;
-}
 
-div#\:1 {
+div#blockly-1 {
   background-color: #264653 !important;
   padding: 10px !important;
   color: #FFFFFF !important;
 }
 
-div#\:1 .blocklyTreeRow:hover {
+div#blockly-1 .blocklyTreeRow:hover {
   background-color: #172B33 !important;
 }
 
-div#\:1 .blocklyTreeSelected {
+div#blockly-1 .blocklyTreeSelected {
   background-color: #172B33 !important;
 }
 
-div#\:2 {
+div#blockly-2 {
   background-color: #2A9D8F !important;
   padding: 10px !important;
   color: #FFFFFF !important;
 }
 
-div#\:2 .blocklyTreeRow:hover {
+div#blockly-2 .blocklyTreeRow:hover {
   background-color: #1E7268 !important;
 }
 
-div#\:2 .blocklyTreeSelected {
+div#blockly-2 .blocklyTreeSelected {
   background-color: #1E7268 !important;
 }
 
-div#\:3 {
+div#blockly-3 {
   background-color: #64c2d9 !important;
   padding: 10px !important;
   color: #FFFFFF !important;
 }
 
-div#\:3 .blocklyTreeRow:hover {
+div#blockly-3 .blocklyTreeRow:hover {
   background-color: #428a9c !important;
 }
 
-div#\:3 .blocklyTreeSelected {
+div#blockly-3 .blocklyTreeSelected {
   background-color: #428a9c !important;
 }
 
-div#\:4 {
+div#blockly-4 {
   background-color: #E9C46A !important;
   padding: 10px !important;
   color: #FFFFFF !important;
 }
 
-div#\:4 .blocklyTreeRow:hover {
+div#blockly-4 .blocklyTreeRow:hover {
   background-color: #AD924E !important;
 }
 
-div#\:4 .blocklyTreeSelected {
+div#blockly-4 .blocklyTreeSelected {
   background-color: #AD924E !important;
 }
 
-div#\:5 {
+div#blockly-5 {
   background-color: #aa3a3a !important;
   padding: 10px !important;
   color: #FFFFFF !important;
 }
 
-div#\:5 .blocklyTreeRow:hover {
+div#blockly-5 .blocklyTreeRow:hover {
   background-color: #662121 !important;
 }
 
-div#\:5 .blocklyTreeSelected {
+div#blockly-5 .blocklyTreeSelected {
   background-color: #662121 !important;
 }
 
-div#\:6 {
+div#blockly-6 {
   background-color: #5a65a7 !important;
   padding: 10px !important;
   color: #FFFFFF !important;
 }
 
-div#\:6 .blocklyTreeRow:hover {
+div#blockly-6 .blocklyTreeRow:hover {
   background-color: #373e66 !important;
 }
 
-div#\:6 .blocklyTreeSelected {
+div#blockly-6 .blocklyTreeSelected {
   background-color: #373e66 !important;
 }
 
-div#\:7 {
+div#blockly-7 {
   background-color: #a65a80 !important;
   padding: 10px !important;
   color: #FFFFFF !important;
 }
 
-div#\:7 .blocklyTreeRow:hover {
+div#blockly-7 .blocklyTreeRow:hover {
   background-color: #723e58 !important;
 }
 
-div#\:7 .blocklyTreeSelected {
+div#blockly-7 .blocklyTreeSelected {
   background-color: #723e58 !important;
 }
 
-div#\:8 {
+div#blockly-8 {
   background-color: #E76F51 !important;
   padding: 10px !important;
   color: #FFFFFF !important;
 }
 
-div#\:8 .blocklyTreeRow:hover {
+div#blockly-8 .blocklyTreeRow:hover {
   background-color: #B2553E !important;
 }
 
-div#\:8 .blocklyTreeSelected {
+div#blockly-8 .blocklyTreeSelected {
   background-color: #B2553E !important;
+}
+
+div#blockly-9 {
+  background-color: #950740 !important;
+  padding: 10px !important;
+  color: #FFFFFF !important;
+}
+
+div#blockly-9 .blocklyTreeRow:hover {
+  background-color: #6F2232 !important;
+}
+
+div#blockly-9 .blocklyTreeSelected {
+  background-color: #6F2232 !important;
 }
 /* End block category styling */
 

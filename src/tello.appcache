@@ -12,6 +12,7 @@ blockly/generators/javascript/tello.js
 blockly/generators/python/tello.js
 blockly/msg/js/en.js
 blockly/blocks/tello/takeoff.js
+blockly/blocks/tello/takeoff_after.js
 blockly/blocks/tello/land.js
 blockly/blocks/tello/land_then_takeoff.js
 blockly/blocks/tello/speed.js
@@ -64,4 +65,4 @@ NETWORK:
 *
 
 # Auto expire app cache when deploying
-# 08-24-2020
+# 08-27-2020
