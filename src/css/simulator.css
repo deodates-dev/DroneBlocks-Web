@@ -1,6 +1,6 @@
 div#missionTitle {
   right: calc(45vw + 65px) !important;
-  top: 76px !important;
+  top: 44px !important;
 }
 
 .side-nav {
@@ -9,7 +9,7 @@ div#missionTitle {
 }
 a#hamburger {
   right: calc(45vw + 20px);
-  top: 64px !important;
+  top: 32px !important;
 }
 
 #sidenav-overlay {
@@ -93,6 +93,8 @@ div#droneArea.visible {
 }
 nav {
   background-color: black !important;
+  height: 32px !important;
+  line-height: 40px !important;
 }
 .no-click:hover {
   cursor: default !important;
@@ -100,11 +102,11 @@ nav {
 .no-click {
   cursor: default !important;
 }
-a#altitude-status:after {
+a#battery-status:after {
   content: "";
   border-right: 3px solid white;
   padding-left: 12px;
 }
 #blocklyDiv {
-  height: calc(100% - 64px) !important;
+  height: calc(100% - 32px) !important;
 }
