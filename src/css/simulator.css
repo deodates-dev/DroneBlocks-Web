@@ -1,5 +1,6 @@
 div#missionTitle {
   right: calc(45vw + 65px) !important;
+  top: 76px !important;
 }
 
 .side-nav {
@@ -8,6 +9,7 @@ div#missionTitle {
 }
 a#hamburger {
   right: calc(45vw + 20px);
+  top: 64px !important;
 }
 
 #sidenav-overlay {
@@ -88,4 +90,18 @@ div#droneArea.visible {
 
 .row .col{
   float: none !important;
+}
+nav {
+  background-color: black !important;
+}
+.no-click:hover {
+  cursor: default !important;
+}
+.no-click {
+  cursor: default !important;
+}
+a#altitude-status:after {
+  content: "";
+  border-right: 3px solid white;
+  padding-left: 12px;
 }
