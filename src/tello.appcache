@@ -36,6 +36,8 @@ blockly/blocks/tello/curve_metric.js
 blockly/blocks/tello/hover.js
 blockly/blocks/tello/yaw_right.js
 blockly/blocks/tello/yaw_left.js
+blockly/blocks/tello/photo.js
+blockly/blocks/tello/photo_interval.js
 blockly/blocks/tello/flip_forward.js
 blockly/blocks/tello/flip_backward.js
 blockly/blocks/tello/flip_right.js

@@ -78,6 +78,16 @@ Blockly.Python['yaw_left'] = function(block) {
   return 'yawLeft(' + angle + ');\n';
 };
 
+Blockly.Python['photo'] = function(block) {
+  return 'takePhoto();\n';
+};
+
+Blockly.Python['photo_interval'] = function(block) {
+  var photo_count = Blockly.Python.valueToCode(block, 'photo_count', Blockly.JavaScript.ORDER_NONE);
+  var interval = Blockly.Python.valueToCode(block, 'interval', Blockly.JavaScript.ORDER_NONE);
+  return 'takePhoto(' + photo_count + ', ' + interval + ');\n';
+};
+
 Blockly.Python['flip_forward'] = function(block) {
   return 'flipForward();\n';
 };
@@ -107,7 +117,6 @@ Blockly.Python['hover'] = function(block) {
   var duration = Blockly.Python.valueToCode(block, 'duration', Blockly.JavaScript.ORDER_NONE);
   return 'hover(' + duration + ');\n';
 };
-
 
 Blockly.Python['loop'] = function(block) {
   var loopVar = Blockly.Python.variableDB_.getDistinctName('count', Blockly.Variables.NAME_TYPE);

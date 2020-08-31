@@ -207,6 +207,33 @@ Blockly.JavaScript['yaw_left'] = function(block) {
   }
 };
 
+Blockly.JavaScript['photo'] = function(block) {
+  return 'mission+="|photo";';
+};
+
+Blockly.JavaScript['photo_interval'] = function(block) {
+  var photo_count = Blockly.JavaScript.valueToCode(block, 'photo_count', Blockly.JavaScript.ORDER_NONE);
+  var interval = Blockly.JavaScript.valueToCode(block, 'interval', Blockly.JavaScript.ORDER_NONE);
+
+  var blockString = 'mission+="|photo_interval,';
+
+  if(isNaN(parseInt(photo_count))) {
+    blockString += '" + eval(' + photo_count + ') + "';
+  } else {
+    blockString += photo_count;
+  }
+  
+  if(isNaN(parseInt(interval))) {
+    blockString += '," + eval(' + interval + ') + "';
+  } else {
+    blockString += ',' + interval;
+  }
+
+  blockString += '";';
+
+  return blockString;
+}; 
+
 Blockly.JavaScript['flip_forward'] = function(block) {
   return 'mission+="|flip_forward";';
 };
