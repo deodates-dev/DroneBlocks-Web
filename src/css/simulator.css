@@ -94,7 +94,7 @@ div#droneArea.visible {
 nav {
   background-color: black !important;
   height: 32px !important;
-  line-height: 40px !important;
+  line-height: 32px !important;
 }
 .no-click:hover {
   cursor: default !important;
