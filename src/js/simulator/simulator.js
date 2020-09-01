@@ -146,16 +146,18 @@ controls.userPanSpeed = 30;
 
 const size = 25000; //2500cm, 10cm = 100, 1 = 0.1cm
 const divisions = 250; //1 division = 10cm;
-const horizontalGridHelper = new THREE.GridHelper(size, divisions);
+const colorCenterLine  = '#444444'; // Grid Axis Color
+const colorGrid = '#888888';        // Grid Line Color
+const horizontalGridHelper = new THREE.GridHelper(size, divisions, colorCenterLine, colorGrid);
 let gridGroup = new THREE.Group();
 gridGroup.name = 'gridHelper';
 gridGroup.add(horizontalGridHelper);
 //Vertical Grid 1 XOY plane
-const verticalGridHelper1 = new THREE.GridHelper(size, divisions);
+const verticalGridHelper1 = new THREE.GridHelper(size, divisions, colorCenterLine, colorGrid);
 verticalGridHelper1.rotation.z = Math.PI / 2;
 gridGroup.add(verticalGridHelper1);
 //Vertical Grid 2 XOZ plane
-const verticalGridHelper2 = new THREE.GridHelper(size, divisions);
+const verticalGridHelper2 = new THREE.GridHelper(size, divisions, colorCenterLine, colorGrid);
 verticalGridHelper2.rotation.x = Math.PI / 2;
 gridGroup.add(verticalGridHelper2);
 scene.add(gridGroup);
