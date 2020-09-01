@@ -1285,4 +1285,12 @@ function getY(x, z) {
 function displayBattery(flyingPeriod) {
   var batteryPercent = (MAX_FLYING_PERIOD - flyingPeriod) / MAX_FLYING_PERIOD * 100;
   $("#battery-status").html(`Battery: ${Math.round(batteryPercent)} %`);
+  if(Math.round(batteryPercent) > 30) {
+    $("#battery-status").css({color: 'white'});
+  } else if(Math.round(batteryPercent) > 10) {
+    $("#battery-status").css({color: 'yellow'});
+  } else {
+    $("#battery-status").css({color: 'red'});
+    window.commands = ['land'];
+  }
 }
