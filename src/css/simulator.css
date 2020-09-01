@@ -102,11 +102,6 @@ nav {
 .no-click {
   cursor: default !important;
 }
-a#battery-status:after {
-  content: "";
-  border-right: 3px solid white;
-  padding-left: 12px;
-}
 #blocklyDiv {
   height: calc(100% - 32px) !important;
 }

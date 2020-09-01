@@ -477,7 +477,7 @@ let then = 0;
     //If model is loaded
     //camera.lookAt(drone.position);
     //Display Drone Height
-    $("#altitude-status").html(`Altitude: ${Math.round(drone.position.y)/10} Cm`);
+    $("#altitude-status").html(`Altitude: ${Math.round(drone.position.y/10)} cm`);
     displayBattery(flyingPeriod);
 
     if (isFlying) {
