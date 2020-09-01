@@ -146,8 +146,8 @@ controls.userPanSpeed = 30;
 
 const size = 25000; //2500cm, 10cm = 100, 1 = 0.1cm
 const divisions = 250; //1 division = 10cm;
-const colorCenterLine  = '#444444'; // Grid Axis Color
-const colorGrid = '#888888';        // Grid Line Color
+const colorCenterLine  = '#9C9C9C'; // Grid Axis Color
+const colorGrid = '#BABABA';        // Grid Line Color
 const horizontalGridHelper = new THREE.GridHelper(size, divisions, colorCenterLine, colorGrid);
 let gridGroup = new THREE.Group();
 gridGroup.name = 'gridHelper';
