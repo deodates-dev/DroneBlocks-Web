@@ -549,6 +549,7 @@ let then = 0;
       !isSpeedSet
     ) {
       speedControl(window.commands[0]);
+      logCommand(window.commands[0]);
       window.commands.shift();
     }
     if (window.commands[0] && window.commands[0].includes('hover')) {
@@ -557,6 +558,7 @@ let then = 0;
       hoverPeriod = subcommands[1];
       clock += delta;
       if (clock > hoverPeriod) {
+        logCommand(window.commands[0]);
         window.commands.shift();
         clock = 0;
       }
@@ -699,6 +701,7 @@ function yawRotate(delta) {
     isOnRotateTarget = true;
     isOnForwardTarget = false;
     isRotating = false;
+    logCommand(window.commands[0]);
     window.commands.shift();
     clock = 0;
   }
@@ -712,7 +715,7 @@ function flySetting(command) {
   const subcommands = command.split(',');
   const distanceUnit = subcommands[subcommands.length - 1];
   const direction = getDirection(command);
-  console.log(direction);
+  // console.log(direction);
   let distance;
   if (direction == 'xyz') {
     if (distanceUnit == 'in') {
@@ -785,13 +788,13 @@ function curveSetting(command) {
   curveInitialPhase = initialPhase;
   curveTargetPhase = targetPhase;
   curveMiddlePhase = middlePhase;
-  console.log(
+  /* console.log(
     curveInitialPhase,
     '--->',
     curveMiddlePhase,
     '---',
     curveTargetPhase,
-  );
+  ); */
 }
 function verticalFly(delta) {
   if (!isOnHeight && drone.position.y < 1524) {
@@ -800,6 +803,7 @@ function verticalFly(delta) {
     addPointToPath(drone.position);
   } else if (drone.position.y >= 1524 && !isOnHeight) {
     isOnHeight = true;
+    logCommand(window.commands[0]);
     window.commands.shift();
     clock = 0;
   }
@@ -863,6 +867,7 @@ function fly(delta) {
   ) {
     isOnForwardTarget = true;
     isFlyingForward = false;
+    logCommand(window.commands[0]);
     window.commands.shift();
     clock = 0;
   }
@@ -897,6 +902,7 @@ function flip(delta) {
       isFliping = false;
       drone.rotation.x = 0;
       drone.rotation.z = 0;
+      logCommand(window.commands[0]);
       window.commands.shift();
     }
   }
@@ -950,6 +956,7 @@ function curveFly(delta) {
     } else {
       clock = 0;
       isCurving = false;
+      logCommand(window.commands[0]);
       window.commands.shift();
     }
   }
@@ -968,6 +975,7 @@ function land(delta) {
         isFlying = false;
         isLanded = true;
         isOnHeight = false;
+        logCommand(window.commands[0]);
         window.commands.shift();
         clock = 0;
         sound.pause();
@@ -976,6 +984,7 @@ function land(delta) {
       isFlying = false;
       isLanded = true;
       isOnHeight = false;
+      logCommand(window.commands[0]);
       window.commands.shift();
       clock = 0;
       sound.pause();
