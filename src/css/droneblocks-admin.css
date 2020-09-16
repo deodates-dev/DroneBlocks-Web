@@ -3,3 +3,7 @@ label.search.active {
   -webkit-transform: translateY(0%) !important;
   transform: translateY(0%) !important;
 }
+
+label.search.active:hover {
+  cursor: pointer;
+}
