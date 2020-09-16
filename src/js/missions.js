@@ -13,6 +13,12 @@ $(document).ready(() => {
 
   const db = firebase.firestore();
 
+  const secondQuery = text => {
+    const lastLetter = String.fromCharCode(text.charCodeAt(text.length - 1) + 1);
+    const query = text.slice(0, -1) + lastLetter;
+    return query;
+  }
+
   firebase.auth().onAuthStateChanged(user => {
     new Vue({
       el: '#missions',
@@ -404,15 +410,15 @@ $(document).ready(() => {
               <div class="row">
                 <form action="#">
                   <p>
-                    <input class="with-gap" name="group1" type="radio" id="recenMissionFirst" checked />
-                    <label for="recenMissionFirst">Search Users By Email</label>
-                    <input class="with-gap" name="group1" type="radio" id="highRatingFirst" />
-                    <label for="highRatingFirst">Search Missions By Title</label>
+                    <input class="with-gap" name="group1" type="radio" id="userEmailSearch" checked />
+                    <label for="userEmailSearch">Search Users By Email</label>
+                    <input class="with-gap" name="group1" type="radio" id="missionTitleSearch" />
+                    <label for="missionTitleSearch">Search Missions By Title</label>
                   </p>
                   <div class="input-field">
                     <input id="search" type="search" required>
-                    <label class="label-icon search" for="search"><i class="material-icons">search</i></label>
-                    <i class="material-icons">close</i>
+                    <label class="label-icon search" for="search" id="searchSubmit"><i class="material-icons">search</i></label>
+                    <i class="material-icons" id="searchClose">close</i>
                   </div>
                 </form>
               </div>
@@ -462,7 +468,7 @@ $(document).ready(() => {
               window.location = `/simulator.html?share=1&missionId=${mission.id}&uid=${mission.uid}`;
             });
           });
-          $("#recenMissionFirst").on("change", function () {
+          $("#userEmailSearch").on("change", function () {
             var status = $(this).prop('checked');
             if (status === true) {
               container.missions = [];
@@ -471,7 +477,7 @@ $(document).ready(() => {
             }
           });
 
-          $("#highRatingFirst").on("change", function () {
+          $("#missionTitleSearch").on("change", function () {
             var status = $(this).prop('checked');
             if (status === true) {
               container.missions = [];
@@ -479,6 +485,19 @@ $(document).ready(() => {
               container.getData();
             }
           });
+
+          $("#searchSubmit").on("click", function () {
+            console.log('clicked search button');
+            var searchQuery = $('#search').val();
+            container.getDataByQuery(searchQuery);
+          });
+
+          $("#searchClose").on("click", function () {
+            console.log('clicked search close button');
+            $('#search').val('');
+            container.getData();
+          });
+
         })
       },
       methods: {
@@ -620,7 +639,49 @@ $(document).ready(() => {
               this.missions = [];
             }
           })
-        }
+        },
+        getDataByQuery: function (searchkey) {
+          var dataQuery;
+          const query = searchkey.charAt(0) + searchkey.slice(1);
+          const secondary = secondQuery(query);
+          if (this.filterIndex > 3) {
+            dataQuery = db.collection('missions').where('is_public', '==', true).orderBy('likeCount', 'desc');
+          } else {
+            dataQuery = db.collection('missions').where('is_public', '==', true)
+              .where('title', '>=', query)
+              .where('title', '<', secondary)
+          }
+          
+          dataQuery.get().then((v) => {
+            if (!v.empty) {
+              this.missions = v.docs
+                .map(v => ({
+                  id: v.ref.id,
+                  ...v.data()
+                }))
+                .map(v => ({
+                  ...v,
+                  createdAtTime: v.createdAt ? new Date(v.createdAt.toDate()) : new Date(),
+                  createdAt: moment(v.createdAt.toDate()).format('LLL'),
+                  createdAtShort: moment(v.createdAt.toDate()).format('l LT')
+                }))
+                .filter(v => {
+                  if (v.aircraft === aircraft) {
+                    return true;
+                  }
+                  return false;
+                });
+              if (this.filterIndex < 1) {
+                this.missions.sort((a, b) => a.createdAtTime > b.createdAtTime ? -1 : 1);
+              }
+              for (var i = 0; i < this.missions.length; i++) {
+                cardColors.push(randomColors[Math.floor(Math.random() * 8)]);
+              }
+            }else{
+              this.missions = [];
+            }
+          })
+        },
       }
     });
   })
