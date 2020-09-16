@@ -409,6 +409,11 @@ $(document).ready(() => {
                     <input class="with-gap" name="group1" type="radio" id="highRatingFirst" />
                     <label for="highRatingFirst">Search Missions By Title</label>
                   </p>
+                  <div class="input-field">
+                    <input id="search" type="search" required>
+                    <label class="label-icon search" for="search"><i class="material-icons">search</i></label>
+                    <i class="material-icons">close</i>
+                  </div>
                 </form>
               </div>
               <div class="row" v-if="missions.length">
