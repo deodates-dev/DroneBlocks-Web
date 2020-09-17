@@ -236,7 +236,7 @@ $(document).ready(() => {
           this.missions.map((mission, index) => {
             $(`#${index}`).css("background-color", cardColors[index]);
             $(`#${index}`).click(function(){
-              window.location = `/simulator.html?share=1&missionId=${mission.id}&uid=${mission.uid}`;
+              window.open(`/simulator.html?share=1&missionId=${mission.id}&uid=${mission.uid}`);
             });
           });
           $("#recenMissionFirst").on("change", function () {
@@ -465,7 +465,7 @@ $(document).ready(() => {
           this.missions.map((mission, index) => {
             $(`#${index}`).css("background-color", cardColors[index]);
             $(`#${index}`).click(function(){
-              window.location = `/simulator.html?share=1&missionId=${mission.id}&uid=${mission.uid}`;
+              window.open(`/simulator.html?share=1&missionId=${mission.id}&uid=${mission.uid}`);
             });
           });
           $("#userEmailSearch").on("change", function () {
