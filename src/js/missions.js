@@ -422,8 +422,8 @@ $(document).ready(() => {
                   </div>
                 </form>
               </div>
-              <div class="row" v-if="missions.length">
-                <table class="striped responsive highlight">
+              <div class="row" v-if="missions && missions.length">
+                <table class="striped responsive highlight" v-if="filterIndex > 0">
                   <thead>
                     <tr>
                         <th>ID</th>
@@ -445,7 +445,32 @@ $(document).ready(() => {
                   </tbody>
                 </table>
               </div>
-              <div v-else class="center-align pt-20">
+              <div class="row" v-if="users && users.length">
+                <table class="striped responsive highlight" v-if="filterIndex < 1">
+                  <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Simulator Access</th>
+                        <th>CreatedAt</th>
+                        <th>LoginAt</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr v-for="(user, index) in users" :key="user.id">
+                      <td>{{ index + 1 }}</td>
+                      <td>{{ user.displayName }}</td>
+                      <td>{{ user.email }}</td>
+                      <td>{{ user.has_simulator_access || 0 }}</td>
+                      <td>{{ user.createdAt }}</td>
+                      <td>{{ user.loginAt }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div v-if="!users" class="center-align pt-20">
                 <i v-if="filterIndex > -1" class="fa fa-spinner fa-spin fa-2x"></i>
                 <p v-else>You don't have any missions.</p>
               </div>
@@ -466,12 +491,6 @@ $(document).ready(() => {
       updated: function () {
         this.$nextTick(function () {
           var container = this;
-          this.missions.map((mission, index) => {
-            $(`#${index}`).css("background-color", cardColors[index]);
-            $(`#${index}`).click(function(){
-              window.open(`/simulator.html?share=1&missionId=${mission.id}&uid=${mission.uid}`);
-            });
-          });
           $("#userEmailSearch").on("change", function () {
             var status = $(this).prop('checked');
             if (status === true) {
@@ -609,82 +628,118 @@ $(document).ready(() => {
         getData: function () {
           var dataQuery;
           if (this.filterIndex > 0) {
-            dataQuery = db.collection('missions').where('is_public', '==', true).orderBy('likeCount', 'desc');
+            dataQuery = db.collection('missions');
+            dataQuery.get().then((v) => {
+              if (!v.empty) {
+                this.missions = v.docs
+                  .map(v => ({
+                    id: v.ref.id,
+                    ...v.data()
+                  }))
+                  .map(v => ({
+                    ...v,
+                    createdAtTime: v.createdAt ? new Date(v.createdAt.toDate()) : new Date(),
+                    createdAt: moment(v.createdAt.toDate()).format('LLL'),
+                    createdAtShort: moment(v.createdAt.toDate()).format('l LT')
+                  }))
+                  .filter(v => {
+                    if (v.aircraft === aircraft) {
+                      return true;
+                    }
+                    return false;
+                  });
+              }else{
+                this.missions = [];
+              }
+            })
           } else {
-            dataQuery = db.collection('missions').where('is_public', '==', true)
+            dataQuery = db.collection('users');
+            dataQuery.get().then((v) => {
+              if (!v.empty) {
+                this.users = v.docs
+                  .map(v => ({
+                    id: v.ref.id,
+                    ...v.data()
+                  }))
+                  .map(v => ({
+                    ...v,
+                    createdAtTime: v.createdAt ? new Date(v.createdAt.toDate()) : new Date(),
+                    createdAt: moment(v.createdAt.toDate()).format('LLL'),
+                    createdAtShort: moment(v.createdAt.toDate()).format('l LT'),
+                    loginAtTime: v.loginAt ? new Date(v.loginAt.toDate()) : new Date(),
+                    loginAt: moment(v.loginAt.toDate()).format('LLL'),
+                    loginAtShort: moment(v.loginAt.toDate()).format('l LT')
+                  }))
+              }else{
+                this.users = [];
+              }
+              console.log(this.users);
+            })
           }
-          
-          dataQuery.get().then((v) => {
-            if (!v.empty) {
-              this.missions = v.docs
-                .map(v => ({
-                  id: v.ref.id,
-                  ...v.data()
-                }))
-                .map(v => ({
-                  ...v,
-                  createdAtTime: v.createdAt ? new Date(v.createdAt.toDate()) : new Date(),
-                  createdAt: moment(v.createdAt.toDate()).format('LLL'),
-                  createdAtShort: moment(v.createdAt.toDate()).format('l LT')
-                }))
-                .filter(v => {
-                  if (v.aircraft === aircraft) {
-                    return true;
-                  }
-                  return false;
-                });
-              if (this.filterIndex < 1) {
-                this.missions.sort((a, b) => a.createdAtTime > b.createdAtTime ? -1 : 1);
-              }
-              for (var i = 0; i < this.missions.length; i++) {
-                cardColors.push(randomColors[Math.floor(Math.random() * 8)]);
-              }
-            }else{
-              this.missions = [];
-            }
-          })
+
         },
         getDataByQuery: function (searchkey) {
           var dataQuery;
           const query = searchkey.charAt(0) + searchkey.slice(1);
           const secondary = secondQuery(query);
-          if (this.filterIndex > 3) {
-            dataQuery = db.collection('missions').where('is_public', '==', true).orderBy('likeCount', 'desc');
-          } else {
-            dataQuery = db.collection('missions').where('is_public', '==', true)
+          if (this.filterIndex > 0) {
+            dataQuery = db.collection('missions')
               .where('title', '>=', query)
-              .where('title', '<', secondary)
+              .where('title', '<', secondary);
+            
+            dataQuery.get().then((v) => {
+              if (!v.empty) {
+                this.missions = v.docs
+                  .map(v => ({
+                    id: v.ref.id,
+                    ...v.data()
+                  }))
+                  .map(v => ({
+                    ...v,
+                    createdAtTime: v.createdAt ? new Date(v.createdAt.toDate()) : new Date(),
+                    createdAt: moment(v.createdAt.toDate()).format('LLL'),
+                    createdAtShort: moment(v.createdAt.toDate()).format('l LT')
+                  }))
+                  .filter(v => {
+                    if (v.aircraft === aircraft) {
+                      return true;
+                    }
+                    return false;
+                  });
+                if (this.filterIndex < 1) {
+                  this.missions.sort((a, b) => a.createdAtTime > b.createdAtTime ? -1 : 1);
+                }
+              }else{
+                this.missions = [];
+              }
+            })
+          } else {
+            dataQuery = db.collection('users')
+              .where('email', '>=', query)
+              .where('email', '<', secondary);
+            
+            dataQuery.get().then((v) => {
+              if (!v.empty) {
+                this.users = v.docs
+                  .map(v => ({
+                    id: v.ref.id,
+                    ...v.data()
+                  }))
+                  .map(v => ({
+                    ...v,
+                    createdAtTime: v.createdAt ? new Date(v.createdAt.toDate()) : new Date(),
+                    createdAt: moment(v.createdAt.toDate()).format('LLL'),
+                    createdAtShort: moment(v.createdAt.toDate()).format('l LT'),
+                    loginAtTime: v.loginAt ? new Date(v.loginAt.toDate()) : new Date(),
+                    loginAt: moment(v.loginAt.toDate()).format('LLL'),
+                    loginAtShort: moment(v.loginAt.toDate()).format('l LT')
+                  }))
+              }else{
+                this.users = [];
+              }
+            });
+            console.log(this.users);
           }
-          
-          dataQuery.get().then((v) => {
-            if (!v.empty) {
-              this.missions = v.docs
-                .map(v => ({
-                  id: v.ref.id,
-                  ...v.data()
-                }))
-                .map(v => ({
-                  ...v,
-                  createdAtTime: v.createdAt ? new Date(v.createdAt.toDate()) : new Date(),
-                  createdAt: moment(v.createdAt.toDate()).format('LLL'),
-                  createdAtShort: moment(v.createdAt.toDate()).format('l LT')
-                }))
-                .filter(v => {
-                  if (v.aircraft === aircraft) {
-                    return true;
-                  }
-                  return false;
-                });
-              if (this.filterIndex < 1) {
-                this.missions.sort((a, b) => a.createdAtTime > b.createdAtTime ? -1 : 1);
-              }
-              for (var i = 0; i < this.missions.length; i++) {
-                cardColors.push(randomColors[Math.floor(Math.random() * 8)]);
-              }
-            }else{
-              this.missions = [];
-            }
-          })
         },
       }
     });
