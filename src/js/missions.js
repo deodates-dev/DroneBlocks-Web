@@ -404,7 +404,7 @@ $(document).ready(() => {
     new Vue({
       el: '#adminSearch',
       template: `
-        <template v-if="missions">
+        <template v-if="missions || users">
           <div>
             <div class="container">
               <div class="row">
@@ -423,24 +423,27 @@ $(document).ready(() => {
                 </form>
               </div>
               <div class="row" v-if="missions.length">
-                <div class="col s12 m3" v-for="(mission, index) in missions" :key="mission.id">
-                  <div class="card small">
-                    <div class="card-image" :id="index">
-                      <h5>
-                        {{ mission.title }}
-                      </h5>
-                    </div>
-                    <div class="card-content">
-                      <p>
-                        Created : {{ mission.createdAt }}
-                      </p>
-                      <div class="publicMissionShare">
-                        <h5 class="likeCount"><small>{{ mission.likeCount || 0 }}</small></h5>
-                        <a v-on:click="likeMission(mission)" class="btn-floating halfway-fab waves-effect waves-light pink iconMission"><i class="material-icons">favorite</i>123</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <table class="striped responsive highlight">
+                  <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Likes</th>
+                        <th>Public</th>
+                        <th>CreatedAt</th>
+                    </tr>
+                  </thead>
+          
+                  <tbody>
+                    <tr v-for="(mission, index) in missions" :key="mission.id">
+                      <td>{{ index + 1 }}</td>
+                      <td>{{ mission.title }}</td>
+                      <td>{{ mission.likeCount || 0 }}</td>
+                      <td>{{ mission.is_public || false }}</td>
+                      <td>{{ mission.createdAt }}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
               <div v-else class="center-align pt-20">
                 <i v-if="filterIndex > -1" class="fa fa-spinner fa-spin fa-2x"></i>
@@ -454,6 +457,7 @@ $(document).ready(() => {
         </div>`,
       data: {
         missions: undefined,
+        users: undefined,
         filterIndex: -1,
       },
       mounted: function(){
