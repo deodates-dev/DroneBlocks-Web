@@ -375,7 +375,7 @@ function launch() {
         code += Blockly.JavaScript.workspaceToCode(blockly.workspace);
         code = eval(code);
         window.commands = code.split("|"); //Send commands to simulator
-        console.log(window.commands);
+        // console.log(window.commands);
         var os = helpers.getMobileOS();
 
         if (os == 'iOS') {
