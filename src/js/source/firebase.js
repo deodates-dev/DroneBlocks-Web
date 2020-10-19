@@ -166,6 +166,17 @@ const getPassCode = () => {
     })
 }
 
+const changePassCode = (passCode) => {
+    $("#updatePassCode").html('<i class="fa fa-spinner fa-spin fa-2x"></i>');
+    db.collection('data').doc('admin').set({
+        passCode
+    }).then(() => {
+        $("#updatePassCode").html('UPDATE');
+        window.alert("passcode changed");
+        $("#passCodeModal").closeModal();
+    })
+}
+
 const login = () => {
     // This was introduced because of Google auth requirements
     if(helpers.getMobileOS() == 'iOS') {
@@ -215,6 +226,7 @@ export {
     login,
     onAuthStateChanged,
     getPassCode,
+    changePassCode,
     db,
     auth
 };

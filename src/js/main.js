@@ -222,6 +222,17 @@ const bind = () => {
             }
         }
     })
+    $("#updatePassCode").click(() => {
+        var currentPassCode = $("#currentPassCode").val();
+        var newPassCode = $("#newPassCode").val();
+        if( currentPassCode == newPassCode) {
+            $("#passCodeModal").closeModal();
+        } else if(newPassCode.length === 0) {
+            window.alert("Minimum length of Passcode is 1");
+        } else {
+            firebase.changePassCode(newPassCode.toString());
+        }
+    });
 }
 
 

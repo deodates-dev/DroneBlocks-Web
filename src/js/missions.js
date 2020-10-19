@@ -574,6 +574,9 @@ $(document).ready(() => {
         },
         passCodeModalOpen: function () {
           $("#passCodeModal").openModal();
+          firebaseModule.getPassCode().then((v) => {
+            $("#currentPassCode").val(v.passCode);
+          })
         },
         likeMission: function (myMission) {
           if (!user) {
