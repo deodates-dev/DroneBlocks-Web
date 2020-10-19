@@ -290,12 +290,17 @@ $(document).ready(() => {
     $('.tooltipped').tooltip({ delay: 50 });
 
     if (pathname === '/simulator.html') {
-        var passCode;
+
         firebase.getPassCode().then((v) => {
-            var passCode;
+            let passCode;
+            const savedPpassCode = sessionStorage.getItem("passCode") || null;
             //console.log('entering another mission', v);
             if (v) {
+                sessionStorage.setItem("passCode", v.passCode);
                 do {
+                    if( savedPpassCode == v.passCode) {
+                        break;
+                    }
                     passCode = prompt("Please enter your code to access simulator.", "");
                     if (passCode === null) {
                         document.location.href = '/';
