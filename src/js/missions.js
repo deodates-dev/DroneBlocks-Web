@@ -1,5 +1,6 @@
 import Vue from '../lib/vue/vue.min';
 import * as moment from 'moment';
+import * as firebaseModule from './source/firebase';
 
 $(document).ready(() => {
   if(!location.pathname.match(/missions.html/) && !location.pathname.match(/code_board.html/) && !location.pathname.match(/droneblocks-admin/)){
@@ -414,7 +415,10 @@ $(document).ready(() => {
                     <label for="userEmailSearch">Search Users By Email</label>
                     <input class="with-gap" name="group1" type="radio" id="missionTitleSearch" />
                     <label for="missionTitleSearch">Search Missions By Title</label>
-                    <a class="waves-effect waves-light btn right" id="passCodeUpdateButton"><i class="material-icons left">lock_outline</i>Passcode</a>
+                    <button class="waves-effect waves-light btn right" id="passCodeUpdateButton" v-on:click="passCodeModalOpen()">
+                      <i class="material-icons left">lock_outline</i>
+                      Passcode
+                    </button>
                   </p>
                   <div class="input-field">
                     <input id="search" type="search" required>
@@ -568,6 +572,9 @@ $(document).ready(() => {
             $("#desktopShareLink").val(`https://dev.droneblocks.io?share=1&missionId=${id}&uid=${user.uid}`);
           }
         },
+        passCodeModalOpen: function () {
+          $("#passCodeModal").openModal();
+        },
         likeMission: function (myMission) {
           if (!user) {
             $("#redirectLoginModal").openModal();
@@ -627,6 +634,10 @@ $(document).ready(() => {
           }); */
         },
         getData: function () {
+          firebaseModule.getPassCode().then((v) => {
+            $("#currentPassCode").val(v.passCode);
+          })
+
           var dataQuery;
           if (this.filterIndex > 0) {
             dataQuery = db.collection('missions');
