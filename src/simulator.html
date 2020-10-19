@@ -86,6 +86,15 @@
             'tello_metric.html' + document.location.search;
         }
       }
+      var passCode; 
+      do {
+        passCode = prompt("Please enter your code to access simulator.", "");
+        if (passCode === null) {
+          document.location.href = '/';
+          break;
+        }
+      }
+      while (passCode != '123');
     </script>
     <script src="./lib/firebase/firebase.js"></script>
     <script src="./lib/firebase/firebase-firestore.js"></script>
