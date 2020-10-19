@@ -172,7 +172,7 @@ const changePassCode = (passCode) => {
         passCode
     }).then(() => {
         $("#updatePassCode").html('UPDATE');
-        window.alert("passcode changed");
+        Materialize.toast('Passcode Updated!', 3000);
         $("#passCodeModal").closeModal();
     })
 }
