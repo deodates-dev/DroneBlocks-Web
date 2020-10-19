@@ -414,6 +414,7 @@ $(document).ready(() => {
                     <label for="userEmailSearch">Search Users By Email</label>
                     <input class="with-gap" name="group1" type="radio" id="missionTitleSearch" />
                     <label for="missionTitleSearch">Search Missions By Title</label>
+                    <a class="waves-effect waves-light btn right" id="passCodeUpdateButton"><i class="material-icons left">lock_outline</i>Passcode</a>
                   </p>
                   <div class="input-field">
                     <input id="search" type="search" required>
