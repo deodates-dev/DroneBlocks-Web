@@ -160,6 +160,12 @@ const getMission = (id) => {
     })
 }
 
+const getPassCode = () => {
+    return new Promise((resolve, reject) => {
+        db.collection('data').doc('admin').get().then((v) => resolve(v.data())).catch(e => reject(e));
+    })
+}
+
 const login = () => {
     // This was introduced because of Google auth requirements
     if(helpers.getMobileOS() == 'iOS') {
@@ -208,6 +214,7 @@ export {
     getMission,
     login,
     onAuthStateChanged,
+    getPassCode,
     db,
     auth
 };

@@ -289,6 +289,25 @@ $(document).ready(() => {
     // }
     $('.tooltipped').tooltip({ delay: 50 });
 
+    if (pathname === '/simulator.html') {
+        var passCode;
+        firebase.getPassCode().then((v) => {
+            var passCode;
+            //console.log('entering another mission', v);
+            if (v) {
+                do {
+                    passCode = prompt("Please enter your code to access simulator.", "");
+                    if (passCode === null) {
+                        document.location.href = '/';
+                        break;
+                    }
+                }
+                while (passCode != v.passCode);
+            }
+        })
+
+    }
+
     if (pathname === '/chrome_app.html' || pathname === '/' || pathname === '/tello.html') {
         if (aircraft === 'DJI') {
             if (pathname !== '/') {
