@@ -13,6 +13,7 @@ $(document).ready(() => {
   var cardColors = [];
 
   const db = firebase.firestore();
+  const PAGESIZE = 20;
 
   const secondQuery = text => {
     const lastLetter = String.fromCharCode(text.charCodeAt(text.length - 1) + 1);
@@ -474,6 +475,11 @@ $(document).ready(() => {
                     </tr>
                   </tbody>
                 </table>
+                <div class="center-align pt-20">
+                  <button class="waves-effect waves-light btn" id="loadMore" v-on:click="passCodeModalOpen()">
+                    Load More Results
+                  </button>
+                </div>
               </div>
               <div v-if="!users" class="center-align pt-20">
                 <i v-if="filterIndex > -1" class="fa fa-spinner fa-spin fa-2x"></i>
