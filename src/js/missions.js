@@ -503,7 +503,7 @@ $(document).ready(() => {
           filterIndex: -1,
         },
         mounted: function(){
-          this.getData();
+          //this.getData();
         },
         updated: function () {
           this.$nextTick(function () {
