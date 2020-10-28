@@ -1173,12 +1173,14 @@ function soundIconToggle() {
 }
 //KeyPress Event
 $(document).keypress(function(e) {
-  if (e.which === 114 || e.which === 82) {
+  let isValidPassCode = !$('#passcodeUserModal').hasClass('open'); // if passcode modal is open, keypress events should not work
+
+  if (isValidPassCode && (e.which === 114 || e.which === 82)) {
     // if R or r key pressed, Reset
     window.commands = ['reset'];
   }
 
-  if (e.which === 103 || e.which === 71) {
+  if (isValidPassCode && (e.which === 103 || e.which === 71)) {
     // if G or g key pressed, toogle Grid
     var toggleGridButton = document.getElementById('toggleGrid');
     if (window.toggle === undefined) {
@@ -1193,12 +1195,12 @@ $(document).keypress(function(e) {
     }
   }
 
-  if (e.which === 108 || e.which === 76) {
+  if (isValidPassCode && (e.which === 108 || e.which === 76)) {
     // if L or l key pressed, toogle Rings
     window.ringTrigger = true;
   }
 
-  if (e.which === 115 || e.which === 83) {
+  if (isValidPassCode && (e.which === 115 || e.which === 83)) {
     // if S or s key pressed, toogle sound
     if (isFlying && !!!sound.isPlaying) {
       sound.play();
@@ -1208,11 +1210,11 @@ $(document).keypress(function(e) {
     soundIconToggle();
   }
 
-  if (e.which === 102 || e.which === 70) {
+  if (isValidPassCode && (e.which === 102 || e.which === 70)) {
     // if F or f key pressed, Full Screen
     openFullscreen();
   }
-  if (e.which === 99 || e.which === 67) {
+  if (isValidPassCode && (e.which === 99 || e.which === 67)) {
     // if C or c key pressed, Toggle Color
     colorChangeCount++;
     if (colorChangeCount > 5) {
