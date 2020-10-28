@@ -302,28 +302,27 @@ $(document).ready(() => {
 
     if (pathname === '/simulator.html') {
 
+        $("#passcodeClose").click(() => {
+            document.location.href = '/';
+        });
         firebase.getPassCode().then((v) => {
-            console.log("checking")
             let passCode;
             const savedPpassCode = sessionStorage.getItem("passCode") || null;
+            $('#passcodeModal').openModal();
             //console.log('entering another mission', v);
             if (v) {
-                do {
-                    if( savedPpassCode == v.passCode) {
-                        console.log("passed")
-                        break;
+                $("#passcodeConfirm").click(() => {
+                    passCode =  $('#passcode').val();
+                    if(passCode == v.passCode) {
+                        sessionStorage.setItem("passCode", v.passCode);
+                        Materialize.toast('Welcome! Password is correct.', 3000);
+                        $('#passcodeModal').closeModal();
+                    } else {
+                        console.log("password is not correct");
+                        Materialize.toast('Sorry! Password is incorrect. Please try again.', 3000);
+                        $('#passcodeModal').isOpen= true;
                     }
-                    passCode = prompt("The DroneBlocks Simulator is only available to members. Please enter the simulator password to continue. The current password can be found here > https://learn.droneblocks.io/courses/introduction-to-the-droneblocks-simulator/lectures/17401624", "");
-                    if (passCode === null) {
-                        document.location.href = '/';
-                        break;
-                    }
-                }
-                while (passCode != v.passCode);
-
-                if(passCode == v.passCode) {
-                    sessionStorage.setItem("passCode", v.passCode);
-                }
+                });
             }
         })
 
