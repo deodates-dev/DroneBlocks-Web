@@ -308,21 +308,25 @@ $(document).ready(() => {
         firebase.getPassCode().then((v) => {
             let passCode;
             const savedPpassCode = sessionStorage.getItem("passCode") || null;
-            $('#passcodeUserModal').openModal({dismissible:false});
             //console.log('entering another mission', v);
             if (v) {
-                $("#passcodeConfirm").click(() => {
-                    passCode =  $('#passcode').val();
-                    if(passCode == v.passCode) {
-                        sessionStorage.setItem("passCode", v.passCode);
-                        Materialize.toast('Welcome! Password is correct.', 3000);
-                        $('#passcodeUserModal').closeModal();
-                    } else {
-                        console.log("password is not correct");
-                        Materialize.toast('Sorry! Password is incorrect. Please try again.', 3000);
-                        $('#passcodeUserModal').isOpen= true;
-                    }
-                });
+                if(savedPpassCode != v.passCode) {
+                    $('#passcodeUserModal').openModal({dismissible:false});
+                    $("#passcodeConfirm").click(() => {
+                        passCode =  $('#passcode').val();
+                        if(passCode == v.passCode) {
+                            sessionStorage.setItem("passCode", v.passCode);
+                            Materialize.toast('Welcome! Password is correct.', 3000);
+                            $('#passcodeUserModal').closeModal();
+                        } else {
+                            console.log("password is not correct");
+                            Materialize.toast('Sorry! Password is incorrect. Please try again.', 3000);
+                            $('#passcodeUserModal').isOpen= true;
+                        }
+                    });
+                } else {
+                    Materialize.toast('Welcome! Password in session is correct.', 1000);
+                }
             }
         })
 
