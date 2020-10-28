@@ -308,7 +308,7 @@ $(document).ready(() => {
         firebase.getPassCode().then((v) => {
             let passCode;
             const savedPpassCode = sessionStorage.getItem("passCode") || null;
-            $('#passcodeModal').openModal({dismissible:false});
+            $('#passcodeUserModal').openModal({dismissible:false});
             //console.log('entering another mission', v);
             if (v) {
                 $("#passcodeConfirm").click(() => {
@@ -316,11 +316,11 @@ $(document).ready(() => {
                     if(passCode == v.passCode) {
                         sessionStorage.setItem("passCode", v.passCode);
                         Materialize.toast('Welcome! Password is correct.', 3000);
-                        $('#passcodeModal').closeModal();
+                        $('#passcodeUserModal').closeModal();
                     } else {
                         console.log("password is not correct");
                         Materialize.toast('Sorry! Password is incorrect. Please try again.', 3000);
-                        $('#passcodeModal').isOpen= true;
+                        $('#passcodeUserModal').isOpen= true;
                     }
                 });
             }
@@ -443,7 +443,8 @@ function launch() {
 // Otherwise this will trigger on Chrome app and possibly mobile
 if (document.location.href.includes("simulator")) {
     document.addEventListener("keypress", function (event) {
-        if ((event.keyCode == 116) || (event.keyCode == 84)) {
+        let isValidPassCode = !$('#passcodeUserModal').hasClass('open');
+        if (isValidPassCode && (event.keyCode == 116) || (event.keyCode == 84)) {
             console.log('T clicked');
             launch();
         }
