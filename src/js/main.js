@@ -308,7 +308,7 @@ $(document).ready(() => {
         firebase.getPassCode().then((v) => {
             let passCode;
             const savedPpassCode = sessionStorage.getItem("passCode") || null;
-            $('#passcodeModal').openModal();
+            $('#passcodeModal').openModal({dismissible:false});
             //console.log('entering another mission', v);
             if (v) {
                 $("#passcodeConfirm").click(() => {
