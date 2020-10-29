@@ -111,6 +111,8 @@ $(document).ready(() => {
             
             if (location.search.indexOf('simulator') > -1) {
               location.href = '/simulator.html';
+            } else if (location.pathname.indexOf('ios_missions')) {
+              location.href = '/ios.html';
             } else if (location.search.indexOf('chrome_app') > -1 || aircraft === 'Tello') {
               location.href = '/chrome_app.html';
             } else {
@@ -140,6 +142,10 @@ $(document).ready(() => {
             if (location.search.indexOf('simulator') > -1) {
               $("#iPadShareLink").val(`droneblocks://?missionId=${id}&uid=${user.uid}&aircraft=tello`);
               $("#desktopShareLink").val(`https://dev.droneblocks.io/simulator.html?share=1&missionId=${id}&uid=${user.uid}`);
+            // For iOS build 3.0 with camera blocks since we don't want camera blocks for Android or older DB versions on iOS
+            } else if (location.pathname.indexOf('ios_missions') > -1) {
+              $("#iPadShareLink").val(`droneblocks://?missionId=${id}&uid=${user.uid}&aircraft=tello`);
+              $("#desktopShareLink").val(`https://dev.droneblocks.io/ios.html?share=1&missionId=${id}&uid=${user.uid}`);
             } else if (aircraft == "Tello") {
               $("#iPadShareLink").val(`droneblocks://?missionId=${id}&uid=${user.uid}&aircraft=tello`);
               $("#desktopShareLink").val(`https://dev.droneblocks.io/tello.html?share=1&missionId=${id}&uid=${user.uid}`);
