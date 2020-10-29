@@ -222,6 +222,17 @@ const bind = () => {
             }
         }
     })
+    $("#updatePassCode").click(() => {
+        var currentPassCode = $("#currentPassCode").val();
+        var newPassCode = $("#newPassCode").val();
+        if( currentPassCode == newPassCode) {
+            $("#passCodeModal").closeModal();
+        } else if(newPassCode.length === 0) {
+            window.alert("Minimum length of Passcode is 1");
+        } else {
+            firebase.changePassCode(newPassCode.toString());
+        }
+    });
 }
 
 
@@ -288,6 +299,38 @@ $(document).ready(() => {
 
     // }
     $('.tooltipped').tooltip({ delay: 50 });
+
+    if (pathname === '/simulator.html') {
+
+        $("#passcodeClose").click(() => {
+            document.location.href = '/';
+        });
+        firebase.getPassCode().then((v) => {
+            let passCode;
+            const savedPpassCode = sessionStorage.getItem("passCode") || null;
+            //console.log('entering another mission', v);
+            if (v) {
+                if(savedPpassCode != v.passCode) {
+                    $('#passcodeUserModal').openModal({dismissible:false});
+                    $("#passcodeConfirm").click(() => {
+                        passCode =  $('#passcode').val();
+                        if(passCode == v.passCode) {
+                            sessionStorage.setItem("passCode", v.passCode);
+                            Materialize.toast('Welcome! Password is correct.', 3000);
+                            $('#passcodeUserModal').closeModal();
+                        } else {
+                            console.log("password is not correct");
+                            Materialize.toast('Sorry! Password is incorrect. Please try again.', 3000);
+                            $('#passcodeUserModal').isOpen= true;
+                        }
+                    });
+                } else {
+                    Materialize.toast('Welcome! Password in session is correct.', 1000);
+                }
+            }
+        })
+
+    }
 
     if (pathname === '/chrome_app.html' || pathname === '/' || pathname === '/tello.html') {
         if (aircraft === 'DJI') {
@@ -404,7 +447,8 @@ function launch() {
 // Otherwise this will trigger on Chrome app and possibly mobile
 if (document.location.href.includes("simulator")) {
     document.addEventListener("keypress", function (event) {
-        if ((event.keyCode == 116) || (event.keyCode == 84)) {
+        let isValidPassCode = !$('#passcodeUserModal').hasClass('open');
+        if (isValidPassCode && (event.keyCode == 116) || (event.keyCode == 84)) {
             console.log('T clicked');
             launch();
         }

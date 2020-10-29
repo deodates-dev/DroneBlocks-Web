@@ -160,6 +160,23 @@ const getMission = (id) => {
     })
 }
 
+const getPassCode = () => {
+    return new Promise((resolve, reject) => {
+        db.collection('data').doc('admin').get().then((v) => resolve(v.data())).catch(e => reject(e));
+    })
+}
+
+const changePassCode = (passCode) => {
+    $("#updatePassCode").html('<i class="fa fa-spinner fa-spin fa-2x"></i>');
+    db.collection('data').doc('admin').set({
+        passCode
+    }).then(() => {
+        $("#updatePassCode").html('UPDATE');
+        Materialize.toast('Passcode Updated!', 3000);
+        $("#passCodeModal").closeModal();
+    })
+}
+
 const login = () => {
     // This was introduced because of Google auth requirements
     if(helpers.getMobileOS() == 'iOS') {
@@ -208,6 +225,8 @@ export {
     getMission,
     login,
     onAuthStateChanged,
+    getPassCode,
+    changePassCode,
     db,
     auth
 };
