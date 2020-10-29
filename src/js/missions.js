@@ -103,23 +103,6 @@ $(document).ready(() => {
               });
             })
           })
-        })
-      },
-      methods: {
-        select: function(id) {
-          localStorage.removeItem('backup');
-          localStorage.setItem('missionId', id);
-          
-          if (location.search.indexOf('simulator') > -1) {
-            location.href = '/simulator.html';
-          } else if (location.pathname.indexOf('ios_missions')) {
-            location.href = '/ios.html';
-          } else if (location.search.indexOf('chrome_app') > -1 || aircraft === 'Tello') {
-            location.href = '/chrome_app.html';
-          } else {
-            location.href = '/';
-          }
-          
         },
         methods: {
           select: function(id) {
@@ -138,44 +121,31 @@ $(document).ready(() => {
           removeItem: function(id) {
             const that = this;
   
-          if (location.search.indexOf('simulator') > -1) {
-            $("#iPadShareLink").val(`droneblocks://?missionId=${id}&uid=${user.uid}&aircraft=tello`);
-            $("#desktopShareLink").val(`https://dev.droneblocks.io/simulator.html?share=1&missionId=${id}&uid=${user.uid}`);
-          // For iOS build 3.0 with camera blocks since we don't want camera blocks for Android or older DB versions on iOS
-          } else if (location.pathname.indexOf('ios_missions') > -1) {
-            $("#iPadShareLink").val(`droneblocks://?missionId=${id}&uid=${user.uid}&aircraft=tello`);
-            $("#desktopShareLink").val(`https://dev.droneblocks.io/ios.html?share=1&missionId=${id}&uid=${user.uid}`);
-          } else if (aircraft == "Tello") {
-            $("#iPadShareLink").val(`droneblocks://?missionId=${id}&uid=${user.uid}&aircraft=tello`);
-            $("#desktopShareLink").val(`https://dev.droneblocks.io/tello.html?share=1&missionId=${id}&uid=${user.uid}`);
-          } else {
-            $("#iPadShareLink").val(`droneblocks://?missionId=${id}&uid=${user.uid}`);
-            $("#desktopShareLink").val(`https://dev.droneblocks.io?share=1&missionId=${id}&uid=${user.uid}`);
-          }
-        },
-        getData: function() {
-          db.collection('missions').where('uid', '==', user.uid).get().then((v) => {
-            if(!v.empty){
-              this.missions = v.docs
-                .map(v => ({
-                  id: v.ref.id,
-                  ...v.data()
-                }))
-                .map(v => ({
-                  ...v,
-                  createdAtTime: v.createdAt ? new Date(v.createdAt.toDate()) : new Date(),
-                  createdAt: moment(v.createdAt.toDate()).format('LLL'),
-                  createdAtShort: moment(v.createdAt.toDate()).format('l LT')
-                }))
-                .filter(v => {
-                  if(v.aircraft === aircraft){
-                    return true;
-                  }
-                  return false;
-                })
-                .sort((a, b) => a.createdAtTime > b.createdAtTime ? -1 : 1);
-            }else{
-              this.missions = [];
+            $('#deleteMissionModal').openModal();
+  
+            $('#deleteMissionButton').off().click(() => {
+              db.collection('missions').doc(id).delete();
+  
+              $('#deleteMissionModal').closeModal();
+              that.getData();
+  
+              if(localStorage.getItem('missionId') === id){
+                localStorage.removeItem('missionId');
+              }
+            })
+          },
+          share: function(id){
+            $("#shareModal").openModal();
+    
+            if (location.search.indexOf('simulator') > -1) {
+              $("#iPadShareLink").val(`droneblocks://?missionId=${id}&uid=${user.uid}&aircraft=tello`);
+              $("#desktopShareLink").val(`https://dev.droneblocks.io/simulator.html?share=1&missionId=${id}&uid=${user.uid}`);
+            } else if (aircraft == "Tello") {
+              $("#iPadShareLink").val(`droneblocks://?missionId=${id}&uid=${user.uid}&aircraft=tello`);
+              $("#desktopShareLink").val(`https://dev.droneblocks.io/tello.html?share=1&missionId=${id}&uid=${user.uid}`);
+            } else {
+              $("#iPadShareLink").val(`droneblocks://?missionId=${id}&uid=${user.uid}`);
+              $("#desktopShareLink").val(`https://dev.droneblocks.io?share=1&missionId=${id}&uid=${user.uid}`);
             }
           },
           getData: function() {
