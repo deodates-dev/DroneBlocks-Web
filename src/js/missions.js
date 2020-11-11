@@ -111,7 +111,7 @@ $(document).ready(() => {
             
             if (location.search.indexOf('simulator') > -1) {
               location.href = '/simulator.html';
-            } else if (location.pathname.indexOf('ios_missions')) {
+            } else if (location.pathname.indexOf('ios_missions') > -1) {
               location.href = '/ios.html';
             } else if (location.search.indexOf('chrome_app') > -1 || aircraft === 'Tello') {
               location.href = '/chrome_app.html';
