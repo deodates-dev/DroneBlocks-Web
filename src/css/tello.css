@@ -135,31 +135,31 @@ div#blockly-7 .blocklyTreeSelected {
 }
 
 div#blockly-8 {
-  background-color: #E76F51 !important;
+  background-color: #995ba5 !important;
   padding: 10px !important;
   color: #FFFFFF !important;
 }
 
 div#blockly-8 .blocklyTreeRow:hover {
-  background-color: #B2553E !important;
+  background-color: #995ba5 !important;
 }
 
 div#blockly-8 .blocklyTreeSelected {
-  background-color: #B2553E !important;
+  background-color: #995ba5 !important;
 }
 
 div#blockly-9 {
-  background-color: #950740 !important;
+  background-color: #E76F51 !important;
   padding: 10px !important;
   color: #FFFFFF !important;
 }
 
 div#blockly-9 .blocklyTreeRow:hover {
-  background-color: #6F2232 !important;
+  background-color: #B2553E !important;
 }
 
 div#blockly-9 .blocklyTreeSelected {
-  background-color: #6F2232 !important;
+  background-color: #B2553E !important;
 }
 /* End block category styling */
 

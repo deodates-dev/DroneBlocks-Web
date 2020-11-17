@@ -30,6 +30,12 @@ table {
   padding: 0px !important;
 }
 
+/* This controls the category item height */
+div[role='treeitem'] {
+  height: 42px !important;
+  line-height: 20px !important;
+}
+
 div#blockly-1 {
   background-color: #264653 !important;
   padding: 10px !important;
@@ -129,16 +135,30 @@ div#blockly-7 .blocklyTreeSelected {
 }
 
 div#blockly-8 {
-  background-color: #E76F51 !important;
+  background-color: #995ba5 !important;
   padding: 10px !important;
   color: #FFFFFF !important;
 }
 
 div#blockly-8 .blocklyTreeRow:hover {
-  background-color: #B2553E !important;
+  background-color: #995ba5 !important;
 }
 
 div#blockly-8 .blocklyTreeSelected {
+  background-color: #995ba5 !important;
+}
+
+div#blockly-9 {
+  background-color: #E76F51 !important;
+  padding: 10px !important;
+  color: #FFFFFF !important;
+}
+
+div#blockly-9 .blocklyTreeRow:hover {
+  background-color: #B2553E !important;
+}
+
+div#blockly-9 .blocklyTreeSelected {
   background-color: #B2553E !important;
 }
 /* End block category styling */
