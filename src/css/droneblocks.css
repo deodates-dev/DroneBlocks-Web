@@ -36,6 +36,7 @@ div[role='treeitem'] {
   line-height: 20px !important;
 }
 
+/* Takeoff */
 div#blockly-1 {
   background-color: #264653 !important;
   padding: 10px !important;
@@ -50,6 +51,7 @@ div#blockly-1 .blocklyTreeSelected {
   background-color: #172B33 !important;
 }
 
+/* Navigation */
 div#blockly-2 {
   background-color: #2A9D8F !important;
   padding: 10px !important;
@@ -64,6 +66,7 @@ div#blockly-2 .blocklyTreeSelected {
   background-color: #1E7268 !important;
 }
 
+/* Camera */
 div#blockly-3 {
   background-color: #64c2d9 !important;
   padding: 10px !important;
@@ -78,6 +81,7 @@ div#blockly-3 .blocklyTreeSelected {
   background-color: #428a9c !important;
 }
 
+/* Loops */
 div#blockly-4 {
   background-color: #E9C46A !important;
   padding: 10px !important;
@@ -92,6 +96,7 @@ div#blockly-4 .blocklyTreeSelected {
   background-color: #AD924E !important;
 }
 
+/* Logic */
 div#blockly-5 {
   background-color: #aa3a3a !important;
   padding: 10px !important;
@@ -106,6 +111,7 @@ div#blockly-5 .blocklyTreeSelected {
   background-color: #662121 !important;
 }
 
+/* Math */
 div#blockly-6 {
   background-color: #5a65a7 !important;
   padding: 10px !important;
@@ -120,6 +126,7 @@ div#blockly-6 .blocklyTreeSelected {
   background-color: #373e66 !important;
 }
 
+/* Variables */
 div#blockly-7 {
   background-color: #a65a80 !important;
   padding: 10px !important;
@@ -134,6 +141,7 @@ div#blockly-7 .blocklyTreeSelected {
   background-color: #723e58 !important;
 }
 
+/* Functions */
 div#blockly-8 {
   background-color: #995ba5 !important;
   padding: 10px !important;
@@ -141,13 +149,14 @@ div#blockly-8 {
 }
 
 div#blockly-8 .blocklyTreeRow:hover {
-  background-color: #995ba5 !important;
+  background-color: #9400D3 !important;
 }
 
 div#blockly-8 .blocklyTreeSelected {
-  background-color: #995ba5 !important;
+  background-color: #9400D3 !important;
 }
 
+/* Land */
 div#blockly-9 {
   background-color: #E76F51 !important;
   padding: 10px !important;
