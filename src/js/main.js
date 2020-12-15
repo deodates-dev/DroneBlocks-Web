@@ -446,11 +446,12 @@ function launch() {
 // We only want to launch with the T key on simulator
 // Otherwise this will trigger on Chrome app and possibly mobile
 if (document.location.href.includes("simulator")) {
-    document.addEventListener("keypress", function (event) {
+    document.addEventListener("keydown", function (event) {
+        var activeTagName = document.activeElement.tagName;
         let isValidPassCode = !$('#passcodeUserModal').hasClass('open');
         if (isValidPassCode && (event.keyCode == 116) || (event.keyCode == 84)) {
             console.log('T clicked');
-            launch();
+            activeTagName !== 'INPUT' && launch();
         }
     });
 }
