@@ -1,4 +1,4 @@
-Blockly.Blocks['flip_backward'] = {
+Blockly.Blocks['photo'] = {
   /**
    * Show block.
    * @this Blockly.Block
@@ -6,10 +6,10 @@ Blockly.Blocks['flip_backward'] = {
   init: function() {
     this.jsonInit(
       {
-        "message0": "flip backward",
+        "message0": "take photo",
         "nextStatement": true,
         "previousStatement": true,
-        "colour": "#00688B"
+        "colour": "#64c2d9"
       });
   }
 };

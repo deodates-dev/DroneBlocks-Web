@@ -31,13 +31,15 @@
   <script src="./blockly/blocks/tello/hover.js"></script>
   <script src="./blockly/blocks/tello/yaw_right.js"></script>
   <script src="./blockly/blocks/tello/yaw_left.js"></script>
+  <script src="./blockly/blocks/tello/photo.js"></script>
+  <script src="./blockly/blocks/tello/photo_interval.js"></script>
   <script src="./blockly/blocks/tello/flip_forward.js"></script>
   <script src="./blockly/blocks/tello/flip_backward.js"></script>
   <script src="./blockly/blocks/tello/flip_right.js"></script>
   <script src="./blockly/blocks/tello/flip_left.js"></script>
   <script src="./blockly/blocks/tello/loop_with_variable.js"></script>
 
-  <link rel="stylesheet" type="text/css" href="./css/tello.css">
+  <link rel="stylesheet" type="text/css" href="./css/ios.css">
   <link rel="stylesheet" type="text/css" href="./blockly/prettify.css">
   <link rel="stylesheet" href="./css/style.css">
 
@@ -94,7 +96,7 @@
     <li class="divider" id="d1"></li>
     <li><a href="#" id="saveMissionAs">Save Mission As...</a></li>
     <li class="divider" id="d2"></li>
-    <li><a href="tello_missions.html" id="myMissions">My Missions</a></li>
+    <li><a href="ios_missions.html" id="myMissions">My Missions</a></li>
     <li class="divider" id="d3"></li>
     <li><a href="#" id="setUnits" data-units="metric">Switch to Metric Units</a></li>
     <li class="divider" id="d4"></li>
@@ -271,6 +273,21 @@
         </value>
       </block>
     </category>
+    <category name="Camera">
+      <block type="photo"></block>
+      <block type="photo_interval">
+        <value name="photo_count">
+          <shadow type="math_number">
+            <field name="NUM">5</field>
+          </shadow>
+        </value>
+        <value name="interval">
+          <shadow type="math_number">
+            <field name="NUM">5</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
     <category name="Flip">
       <block type="flip_forward"></block>
       <block type="flip_backward"></block>
@@ -314,5 +331,6 @@
       <block type="land"></block>
     </category>
   </xml>
+  <script type="text/javascript" src="./lib/materialize/js/materialize.min.js"></script>
 </body>
 </html>
