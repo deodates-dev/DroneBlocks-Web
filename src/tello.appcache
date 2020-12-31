@@ -1,6 +1,8 @@
 CACHE MANIFEST
 tello.html
 tello_missions.html
+android.html
+android_missions.html
 ios.html
 ios_missions.html
 blockly/blockly_compressed.js
@@ -40,6 +42,8 @@ blockly/blocks/tello/yaw_right.js
 blockly/blocks/tello/yaw_left.js
 blockly/blocks/tello/photo.js
 blockly/blocks/tello/photo_interval.js
+blockly/blocks/tello/video.js
+blockly/blocks/tello/video_duration.js
 blockly/blocks/tello/flip_forward.js
 blockly/blocks/tello/flip_backward.js
 blockly/blocks/tello/flip_right.js

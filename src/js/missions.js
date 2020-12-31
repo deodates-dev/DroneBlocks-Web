@@ -113,6 +113,8 @@ $(document).ready(() => {
               location.href = '/simulator.html';
             } else if (location.pathname.indexOf('ios_missions') > -1) {
               location.href = '/ios.html';
+            } else if (location.pathname.indexOf('android_missions') > -1) {
+              location.href = '/android.html';
             } else if (location.search.indexOf('chrome_app') > -1 || aircraft === 'Tello') {
               location.href = '/chrome_app.html';
             } else {
@@ -146,6 +148,9 @@ $(document).ready(() => {
             } else if (location.pathname.indexOf('ios_missions') > -1) {
               $("#iPadShareLink").val(`droneblocks://?missionId=${id}&uid=${user.uid}&aircraft=tello`);
               $("#desktopShareLink").val(`https://dev.droneblocks.io/ios.html?share=1&missionId=${id}&uid=${user.uid}`);
+            } else if (location.pathname.indexOf('android_missions') > -1) {
+              $("#iPadShareLink").val(`droneblocks://?missionId=${id}&uid=${user.uid}&aircraft=tello`);
+              $("#desktopShareLink").val(`https://dev.droneblocks.io/android.html?share=1&missionId=${id}&uid=${user.uid}`);
             } else if (aircraft == "Tello") {
               $("#iPadShareLink").val(`droneblocks://?missionId=${id}&uid=${user.uid}&aircraft=tello`);
               $("#desktopShareLink").val(`https://dev.droneblocks.io/tello.html?share=1&missionId=${id}&uid=${user.uid}`);

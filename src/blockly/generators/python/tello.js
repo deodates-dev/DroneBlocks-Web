@@ -88,6 +88,16 @@ Blockly.Python['photo_interval'] = function(block) {
   return 'takePhoto(' + photo_count + ', ' + interval + ');\n';
 };
 
+Blockly.Python['video'] = function(block) {
+  var action = block.getFieldValue("video_action");
+  return "video('" + action + "');\n";
+};
+
+Blockly.Python['video_duration'] = function(block) {
+  var duration = Blockly.JavaScript.valueToCode(block, 'duration', Blockly.JavaScript.ORDER_NONE);
+  return "video('start', " + duration + ");\n";
+};
+
 Blockly.Python['flip_forward'] = function(block) {
   return 'flipForward();\n';
 };
