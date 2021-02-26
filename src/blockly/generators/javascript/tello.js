@@ -1,14 +1,15 @@
 Blockly.JavaScript['takeoff'] = function(block) {
-  return 'mission+="takeoff";';
+  return 'mission+="takeoff,' + encodeURIComponent(block.id) + '";';
 };
 
 Blockly.JavaScript['takeoff_after'] = function(block) {
   var delay = Blockly.JavaScript.valueToCode(block, 'delay', Blockly.JavaScript.ORDER_NONE);
+  let blockId = encodeURIComponent(block.id)
 
   if(isNaN(parseInt(delay))) {
-    return 'mission+="hover," + eval(' + delay + ') + "|takeoff";';
+    return 'mission+="hover," + eval(' + delay + ') + ",' + blockId + '|takeoff,' + blockId + '";';
   } else {
-    return 'mission+="hover,' + delay + '|takeoff";';
+    return 'mission+="hover,' + delay + ',' + blockId + '|takeoff,' + blockId + '";';
   }
 };
 

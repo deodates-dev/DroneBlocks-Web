@@ -9,7 +9,13 @@ function onMessage(e) {
   console.log("got some data: " + e.data);
   
   if (e.data == "displayConnectionModal") {
+
     $('#connectToTelloModal').openModal();
+
+  } else if (e.data.command == "highlightBlock") {
+
+    Blockly.getMainWorkspace().highlightBlock(decodeURIComponent(e.data.blockId))
+
   }
 }
 
