@@ -221,7 +221,9 @@ Blockly.JavaScript['yaw_left'] = function(block) {
 };
 
 Blockly.JavaScript['photo'] = function(block) {
-  return 'mission+="|photo";';
+  return 'mission+="|photo,' + encodeURIComponent(block.id) + '";';
+
+   
 };
 
 Blockly.JavaScript['photo_interval'] = function(block) {
@@ -242,6 +244,7 @@ Blockly.JavaScript['photo_interval'] = function(block) {
     blockString += ',' + interval;
   }
 
+  blockString += "," + encodeURIComponent(block.id)
   blockString += '";';
 
   return blockString;

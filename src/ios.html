@@ -72,6 +72,11 @@
         document.location.href = "tello_metric.html" + document.location.search;
       }
     }
+
+    // Block highlighting for iOS
+    function highlightBlockFromiOS(id) {
+      Blockly.getMainWorkspace().highlightBlock(decodeURIComponent(id))
+    }
   </script>
   <script src="./lib/firebase/firebase.js"></script>
   <script src="./lib/firebase/firebase-firestore.js"></script>
