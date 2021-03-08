@@ -45,6 +45,11 @@ const MAX_FLYING_PERIOD = 600; //600s
 let pathCount = 0;
 let flyingPeriod = 0;
 
+// For block highlighting
+let blockId;
+let previousBlockId;
+
+
 
 var ringsChangeCount = 5;
 var colorChangeCount = 0;
@@ -500,6 +505,7 @@ let then = 0;
       changeRings();
     }
     if (window.commands[0] && window.commands[0].includes('takeoff')) {
+      blockId = window.commands[0].split(',')[1]
       hoverPeriod = 1; //hover 1s for every command
       clock += delta;
       if (!isFlying && clock > hoverPeriod) {
@@ -509,8 +515,7 @@ let then = 0;
         if (!sound.isPlaying) sound.play();
       }
     }
-    if (
-      window.commands[0] &&
+    if (window.commands[0] &&
       window.commands[0].includes('fly') &&
       !isFlyingForward
     ) {
@@ -525,6 +530,7 @@ let then = 0;
       window.commands[0].includes('curve') &&
       !isCurving
     ) {
+      blockId = window.commands[0].split(',')[8]
       hoverPeriod = 1; //hover 1s for every command
       clock += delta;
       if (clock > hoverPeriod) {
@@ -537,6 +543,7 @@ let then = 0;
       window.commands[0].includes('yaw') &&
       !isRotating
     ) {
+      blockId = window.commands[0].split(',')[2]
       hoverPeriod = 1; //hover 1s for every command
       clock += delta;
       if (clock > hoverPeriod) {
@@ -548,11 +555,13 @@ let then = 0;
       window.commands[0].includes('speed') &&
       !isSpeedSet
     ) {
+      blockId = window.commands[0].split(',')[3]
       speedControl(window.commands[0]);
       logCommand(window.commands[0]);
       window.commands.shift();
     }
     if (window.commands[0] && window.commands[0].includes('hover')) {
+      blockId = window.commands[0].split(',')[2]
       isOnHeight = true;
       const subcommands = window.commands[0].split(',');
       hoverPeriod = subcommands[1];
@@ -568,6 +577,7 @@ let then = 0;
       window.commands[0].includes('flip') &&
       !isFliping
     ) {
+      blockId = window.commands[0].split(',')[1]
       hoverPeriod = 1;
       clock += delta;
       const direction = getDirection(window.commands[0]);
@@ -586,6 +596,7 @@ let then = 0;
       window.commands[0].includes('land') &&
       !islanded
     ) {
+      blockId = window.commands[0].split(',')[1]
       hoverPeriod = 1;
       clock += delta;
       if (clock > hoverPeriod) {
@@ -597,6 +608,8 @@ let then = 0;
     }
 
     if (window.commands[0] && window.commands[0].includes('reset')) {
+      blockId = null;
+      highlightBlock();
       drone.position.set(0, 0, 0);
       drone.rotation.set(0, 0, 0);
       isFlying = false;
@@ -623,6 +636,11 @@ let then = 0;
   requestAnimationFrame(animate);
   render();
   update();
+
+  // Highlight the block if flying
+  if (isFlying)
+    highlightBlock();
+
 })();
 
 function update() {
@@ -713,11 +731,13 @@ function flySetting(command) {
   originPosY = drone.position.y;
   originPosZ = drone.position.z;
   const subcommands = command.split(',');
-  const distanceUnit = subcommands[subcommands.length - 1];
+  // This accounts for the blockId being the last item
+  const distanceUnit = subcommands[subcommands.length - 2];
   const direction = getDirection(command);
   // console.log(direction);
   let distance;
   if (direction == 'xyz') {
+    blockId = window.commands[0].split(',')[5]
     if (distanceUnit == 'in') {
       target = {
         x: drone.position.x + subcommands[1] * 10 * 2.54, //webGl x asix = x in real;
@@ -733,6 +753,7 @@ function flySetting(command) {
     }
     forwardDistance = distanceVector(drone.position, target);
   } else {
+    blockId = window.commands[0].split(',')[3]
     distance = subcommands[1];
     if (distanceUnit == 'in') {
       forwardDistance = distance * 10 * 2.54; // Inchi to cm;
@@ -747,7 +768,7 @@ function curveSetting(command) {
   originPosY = drone.position.y;
   originPosZ = drone.position.z;
   const subcommands = command.split(',');
-  const distanceUnit = subcommands[subcommands.length - 1];
+  const distanceUnit = subcommands[subcommands.length - 2];
   const P1x = subcommands[1];
   const P1y = subcommands[2];
   const P1z = subcommands[3];
@@ -979,6 +1000,8 @@ function land(delta) {
         window.commands.shift();
         clock = 0;
         sound.pause();
+        blockId = null;
+        highlightBlock();
       }
     } else {
       isFlying = false;
