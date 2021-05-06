@@ -39,6 +39,7 @@
     <link href="./css/tello.css" rel="stylesheet" type="text/css">
     <link href="./blockly/prettify.css" rel="stylesheet" type="text/css">
     <link href="./css/style.css" rel="stylesheet">
+    <link href="./css/tabs.css" rel="stylesheet">
 
     <!-- Material -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -63,6 +64,33 @@
     <script src="./js/firebase.js"></script>
   </head>
   <body>
+
+    <!-- Tabbed canvas -->
+    <div>
+      <ol class="tab-list">
+        <li class="tab-list-item" id="one">Mission 1</li>
+        <li class="tab-list-item tab-list-active" id="two">Mission 2</li>
+        <li class="tab-list-item" id="three">Mission 3</li>
+        <li class="tab-list-item" id="four">Mission 4</li>
+        <li class="tab-list-item" id="five">Mission 5</li>
+        <li class="tab-list-item" id="six">Mission 6</li>
+        <li class="tab-list-item" id="seven">Mission 7</li>
+      </ol>
+    </div>
+
+    <script>
+      function test() {
+        document.querySelectorAll('.tab-list-item').forEach(tab => {
+          tab.addEventListener('click', selectTab);
+        });
+      }
+
+      function selectTab(event) {
+        alert(event.target.id);
+      }
+
+      test();
+    </script>
 
     <!-- Side nav -->
     <ul class="side-nav" id="nav-mobile">
