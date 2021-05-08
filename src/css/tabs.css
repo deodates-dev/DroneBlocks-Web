@@ -17,3 +17,11 @@
     border: solid #666;
     border-width: 1px 1px 0 1px;
 }
+
+#add-new-tab {
+    display: inline-block;
+    background-color: aqua;
+    list-style: none;
+    margin-bottom: -1px;
+    padding: 0.5rem 0.75rem;
+}

@@ -1,10 +1,12 @@
-let activeTab = document.getElementById("one");
+let activeTab = document.getElementById("mission1");
 
 // Sets up the tab click listener
 function initTabs() {
     document.querySelectorAll('.tab-list-item').forEach(tab => {
         tab.addEventListener('click', selectTab);
     });
+
+    document.getElementById('add-new-tab').addEventListener('click', addNewTab);
 }
 
 // When a new tab is selected
@@ -43,6 +45,35 @@ function selectTab(event) {
         Blockly.Xml.domToWorkspace(activeTab.blocklyXML, workspace);
     }
 
+}
+
+// Create a new tab when clicked
+function addNewTab() {
+
+    // Get the tab list
+    const tabList = document.getElementById("missionTabs");
+
+    // Create the tab with className and text content
+    const tab = document.createElement("li");
+
+    // Assign the class name
+    tab.className = "tab-list-item";
+
+    // Assign the id
+    tab.id = "mission" + tabList.childElementCount;
+
+    // Create the tab label
+    const label = document.createTextNode("New Mission " + tabList.childElementCount);
+
+    // Add the click listener
+    tab.addEventListener("click", selectTab);
+
+    // Append the label to the tab
+    tab.appendChild(label);
+
+    // Insert the tab before the add button
+    tabList.insertBefore(tab, tabList.lastElementChild);
+    
 }
 
 // Initialize the tabs
