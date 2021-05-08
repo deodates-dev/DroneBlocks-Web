@@ -73,7 +73,6 @@ function addNewTab() {
 
     // Insert the tab before the add button
     tabList.insertBefore(tab, tabList.lastElementChild);
-    
 }
 
 // Initialize the tabs
