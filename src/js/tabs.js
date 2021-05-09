@@ -23,26 +23,24 @@ function selectTab(event) {
     // Get the current workspace
     let workspace = Blockly.getMainWorkspace();
 
-    console.log(Blockly.Xml.workspaceToDom(workspace));
-
-    // Count the blocks in the current workspace
-    const totalBlocks = workspace.getAllBlocks().length;
-
     // Store the previous tab
     let previousTab = activeTab
 
     // Make the new tab active
     activeTab = document.getElementById(event.target.id);
 
-    // Store the previous tab's workspace XML
-    previousTab.blocklyXML = Blockly.Xml.workspaceToDom(workspace);
+    // Store the previous tab's workspace XML as an attribute in the DOM
+    // previousTab.blocklyXML = Blockly.Xml.workspaceToDom(workspace);
+
+    // Store the previous tab's workspace XML in localStorage
+    localStorage.setItem(previousTab.id, Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace)));
 
     // Clear the workspace
     workspace.clear();
 
     // Load the workspace from the tab's stored XML
-    if(activeTab.blocklyXML) {
-        Blockly.Xml.domToWorkspace(activeTab.blocklyXML, workspace);
+    if(localStorage.getItem(activeTab.id)) {
+        Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(localStorage.getItem(activeTab.id)), workspace);
     }
 
 }
@@ -52,6 +50,13 @@ function addNewTab() {
 
     // Get the tab list
     const tabList = document.getElementById("missionTabs");
+
+    // Need to make this a modal
+    // Using 6 because the add button counts as a list item
+    if (tabList.childElementCount >= 6) {
+        alert("You can have up to 5 missions open at a time");
+        return;
+    }
 
     // Create the tab with className and text content
     const tab = document.createElement("li");
@@ -63,7 +68,7 @@ function addNewTab() {
     tab.id = "mission" + tabList.childElementCount;
 
     // Create the tab label
-    const label = document.createTextNode("New Mission " + tabList.childElementCount);
+    const label = document.createTextNode("Untitled Mission");
 
     // Add the click listener
     tab.addEventListener("click", selectTab);
@@ -73,6 +78,10 @@ function addNewTab() {
 
     // Insert the tab before the add button
     tabList.insertBefore(tab, tabList.lastElementChild);
+
+    // Make the tab active
+    tab.click();
+
 }
 
 // Initialize the tabs
