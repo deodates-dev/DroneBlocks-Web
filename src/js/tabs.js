@@ -2,11 +2,48 @@ let activeTab = document.getElementById("mission1");
 
 // Sets up the tab click listener
 function initTabs() {
-    document.querySelectorAll('.tab-list-item').forEach(tab => {
+
+    // For when the add new tab button is clicked
+    document.getElementById('add-new-tab').addEventListener('click', addNewTab);
+
+    /*document.querySelectorAll('.tab-list-item').forEach(tab => {
         tab.addEventListener('click', selectTab);
     });
 
-    document.getElementById('add-new-tab').addEventListener('click', addNewTab);
+    document.getElementById('add-new-tab').addEventListener('click', addNewTab);*/
+
+    // Add the first tab regardless of a saved mission
+    addNewTab();
+
+
+    // Let's check if there are any missions already stored
+    setTimeout(() => {
+
+        if (localStorage.getItem("mission1")) {
+            Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(localStorage.getItem("mission1")), Blockly.getMainWorkspace());
+        }
+
+        if (localStorage.getItem("mission2")) {
+            addNewTab();
+        }
+
+        if (localStorage.getItem("mission2")) {
+            addNewTab();
+        }
+
+        if (localStorage.getItem("mission3")) {
+            addNewTab();
+        }
+
+        if (localStorage.getItem("mission4")) {
+            addNewTab();
+        }
+
+        if (localStorage.getItem("mission5")) {
+            addNewTab();
+        }
+
+    }, 1000);
 }
 
 // When a new tab is selected
@@ -21,10 +58,10 @@ function selectTab(event) {
     event.target.className += " tab-list-active";
 
     // Get the current workspace
-    let workspace = Blockly.getMainWorkspace();
+    const workspace = Blockly.getMainWorkspace();
 
     // Store the previous tab
-    let previousTab = activeTab
+    const previousTab = activeTab
 
     // Make the new tab active
     activeTab = document.getElementById(event.target.id);
