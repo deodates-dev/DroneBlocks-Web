@@ -1,6 +1,6 @@
 div#missionTitle {
   right: calc(45vw + 65px) !important;
-  top: 44px !important;
+  top: 80px !important;
 }
 
 .side-nav {
@@ -9,7 +9,7 @@ div#missionTitle {
 }
 a#hamburger {
   right: calc(45vw + 20px);
-  top: 32px !important;
+  top: 70px !important;
 }
 
 #sidenav-overlay {
@@ -73,7 +73,6 @@ div#blocklyArea.full {
 }
 
 div#droneArea {
-  float: left;
   width: 45%;
   height: 100%;
   overflow: hidden;
