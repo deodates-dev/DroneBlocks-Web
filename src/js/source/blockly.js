@@ -55,6 +55,11 @@ const init = () => {
 
         if(xml !== '<xml xmlns="http://www.w3.org/1999/xhtml"></xml>'){
             localStorage.setItem('backup', xml);
+            
+            // Set the storage item for the tabbed canvas interface
+            if (typeof activeTab !== "undefined") {
+                localStorage.setItem(activeTab.id, xml);
+            }
         }
   
         if(document.getElementById("code")) {
