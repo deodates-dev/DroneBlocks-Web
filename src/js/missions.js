@@ -380,9 +380,9 @@ $(document).ready(() => {
           getData: function () {
             var dataQuery;
             if (this.filterIndex > 0) {
-              dataQuery = db.collection('missions').where('is_public', '==', true).orderBy('likeCount', 'desc').limit(50);
+              dataQuery = db.collection('missions').where('is_public', '==', true).orderBy('likeCount', 'desc').limit(100);
             } else {
-              dataQuery = db.collection('missions').where('is_public', '==', true).limit(50);
+              dataQuery = db.collection('missions').where('is_public', '==', true).orderBy('createdAt', 'desc').limit(100);
             }
             
             dataQuery.get().then((v) => {
