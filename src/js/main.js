@@ -367,9 +367,9 @@ $(document).ready(() => {
 
     // Init firebase
     firebase.init(() => {
+        //console.log("firebase init");
         if (window.Blockly) {
             firebase.onAuthStateChanged((user) => {
-                console.log('user', user);
                 if (query && query.share === '1') {
                     return;
                 }
@@ -378,11 +378,19 @@ $(document).ready(() => {
                     firebase.getMission(localStorage.getItem('missionId')).then((v) => {
                         //console.log('entering another mission', v);
                         if (v) {
+                            console.log(v.missionXML);
                             $("#missionTitle").text(v.title);
 
                             setTimeout(() => {
                                 Blockly.getMainWorkspace().clear();
                                 Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(v.missionXML), blockly.workspace);
+
+                                // For tabbed canvas let's open a new tab
+                                // We are just checking for a storage item so that we know this is the tabbed canvas
+                                if (localStorage.getItem("storedMissions") && !tabsInited) {
+                                    openTabFromCloudMission(v.title);
+                                    tabsInited = true;
+                                }
                             }, 1000);
                         }
                     })

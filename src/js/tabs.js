@@ -1,33 +1,44 @@
-let activeTabIndex;
+let activeTabIndex = 0;
 let storedMissions = loadStoredMissions();
 
+// Used in main.js 369 because authstatechanged gets called twice
+// This flag prevents a mission from getting opened twice
+let tabsInited = false;
+
+// Grab missions from local storage otherwise let's create a new untitled mission
 function loadStoredMissions() {
-    if(localStorage.getItem("storedMissions")) {
+    if(localStorage.getItem("storedMissions") != null) {
         return JSON.parse(localStorage.getItem("storedMissions"));
+    // The first time when there is nothing in storage
     } else {
         let firstMission = [{"title": "Untitled", xml: null}];
+        localStorage.setItem("activeTabIndex", activeTabIndex);
         localStorage.setItem("storedMissions", JSON.stringify(firstMission));
         return firstMission;
     }
 
 }
 
-function saveMissionToStorage(index) {
+// Update the mission in storage 
+function updateMissionInStorage(index) {
     storedMissions[index].xml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace()));
     localStorage.setItem("storedMissions", JSON.stringify(storedMissions));
 }
 
+// Add a new mission to storage
 function addMissionToStorage(mission) {
     storedMissions.push(mission);
     localStorage.setItem("storedMissions", JSON.stringify(storedMissions));
 }
 
+// Get storage data and build tabs
 function buildTabsFromStoredMissions() {
     for (let i = 0; i < storedMissions.length; i++) {
         addNewTab(storedMissions[i].title);
     }
 }
 
+// Retrieve the most recently selected tab
 function getActiveTabIndex() {
     if (localStorage.getItem("activeTabIndex")) {
         return parseInt(localStorage.getItem("activeTabIndex"));
@@ -36,7 +47,27 @@ function getActiveTabIndex() {
     }
 }
 
-// Sets up the tab click listener
+// When a user opens a mission from Firebase
+function openTabFromCloudMission(missionTitle) {
+    
+    // Increment tab index since it this will be coming from a redirect
+    activeTabIndex++;
+
+    // Store the active tab index
+    localStorage.setItem("activeTabIndex", activeTabIndex);
+
+    // Open the mission and select the tab
+    addNewTab(missionTitle)
+
+    // Add the cloud mission to storage
+    addMissionToStorage( {"title": missionTitle, "xml": Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace()))} )
+
+    // Highlight the newly opened tab
+    highlightActiveTab();
+
+}
+
+// Initialize all the tabs
 function initTabs() {
 
     activeTabIndex = getActiveTabIndex();
@@ -51,7 +82,9 @@ function initTabs() {
     highlightActiveTab();
 }
 
+// Highlight a tab when selected
 function highlightActiveTab() {
+
     // Loop through all tabs and reset
     document.querySelectorAll('.tab-list-item').forEach(tab => {
         tab.className = "tab-list-item";
@@ -70,20 +103,8 @@ function selectTab(event) {
     // Store the previous tab's workspace XML in localStorage
     const previousTab = document.getElementById("tab" + activeTabIndex);
     const previousTabIndex = activeTabIndex;
-    //const tab = { title: previousTab.textContent, mission: Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace)) };
-    saveMissionToStorage(previousTabIndex);
+    updateMissionInStorage(previousTabIndex);
     
-    //localStorage.setItem(previousTab.id, JSON.stringify(tab));
-
-    // Get the index of the tab so we can update the stored missions object
-    //console.log(event.target.id);
-    //let tabId = parseInt(event.target.id.split("tab")[1]);
-
-    //console.log(storedMissions[tabId]);
-
-    // Store the previous tab
-    //const previousTab = activeTab;
-
     // Make the new tab active
     activeTabIndex = parseInt(event.target.id.split("tab")[1]);
 
@@ -92,25 +113,19 @@ function selectTab(event) {
 
     // Load the workspace from the tab's stored XML
     if(typeof storedMissions[activeTabIndex].xml !== 'undefined') {
-        // const tab = JSON.parse(localStorage.getItem(activeTab));
         Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(storedMissions[activeTabIndex].xml), workspace);
-        console.log("in here");
     }
 
     // Store the active tab index
     localStorage.setItem("activeTabIndex", activeTabIndex);
 
+    // Highlight the tab
     highlightActiveTab();
 
 }
 
 // Create a new tab when clicked
 function addNewTab(tabTitle) {
-
-    // New tab so let's add to storage
-    if (tabTitle == null) {
-        addMissionToStorage({"title": "Untitled"});
-    }
 
     // Get the tab list
     const tabList = document.getElementById("missionTabs");
@@ -141,23 +156,15 @@ function addNewTab(tabTitle) {
     // Insert the tab before the add button
     tabList.insertBefore(tab, tabList.lastElementChild);
 
+    // New untitled tab
+    if (tabTitle == null) {
+        // Save tab info to storage
+        addMissionToStorage({"title": "Untitled"});
+        
+        // After the tab is added we want to select it
+        tab.click();
+    }
 }
-
-// So we can remember which tab to select when a user comes back
-function storeActiveTabId(tab) {
-    localStorage.setItem("activeTabIndex", tab);
-}
-
-// Listen for changes to the mission title. This means the mission has been loaded from Firebase
-// let titleObserver = new MutationObserver((mutations) => {
-//     activeTab.textContent = document.getElementById("missionTitle").textContent;
-// });
-
-// // 
-// titleObserver.observe(document.getElementById("missionTitle"), { 
-//     characterData: false,
-//     childList: true
-// });
 
 // Initialize the tabs
 initTabs();
