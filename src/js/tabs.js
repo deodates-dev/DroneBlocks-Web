@@ -31,6 +31,12 @@ function addMissionToStorage(mission) {
     localStorage.setItem("storedMissions", JSON.stringify(storedMissions));
 }
 
+// Delete a mission from storage based on index
+function deleteMissionFromStorage(index) {
+    storedMissions.splice(index, 1);
+    localStorage.setItem("storedMissions", JSON.stringify(storedMissions));
+}
+
 // Get storage data and build tabs
 function buildTabsFromStoredMissions() {
     for (let i = 0; i < storedMissions.length; i++) {
@@ -50,14 +56,17 @@ function getActiveTabIndex() {
 // When a user opens a mission from Firebase
 function openTabFromCloudMission(missionTitle) {
     
-    // Increment tab index since it this will be coming from a redirect
-    activeTabIndex++;
+    // We don't need to display the mission title since it's already in the tab
+    document.getElementById("missionTitle").textContent = "";
+    
+    // We'll open the new tab as the last one in the list
+    activeTabIndex = storedMissions.length;
 
     // Store the active tab index
     localStorage.setItem("activeTabIndex", activeTabIndex);
 
     // Open the mission and select the tab
-    addNewTab(missionTitle)
+    addNewTab(missionTitle);
 
     // Add the cloud mission to storage
     addMissionToStorage( {"title": missionTitle, "xml": Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace()))} )
@@ -70,6 +79,10 @@ function openTabFromCloudMission(missionTitle) {
 // Initialize all the tabs
 function initTabs() {
 
+    // Let's remove the mission title since it's in the tab
+    document.getElementById("missionTitle").textContent = "";
+
+    // Store the current tab index
     activeTabIndex = getActiveTabIndex();
 
     // For when the add new tab button is clicked
@@ -153,6 +166,19 @@ function addNewTab(tabTitle) {
     // Append the label to the tab
     tab.appendChild(label);
 
+    // Create the close button
+    let closeButton = document.createElement("span");
+    closeButton.className = "close-tab";
+    closeButton.id = "close" + (tabList.childElementCount-1);
+
+    // Add trhe click listener
+    closeButton.addEventListener("click", closeTab);
+    closeButton.appendChild(document.createTextNode("✖"));
+    
+    // Space before close button
+    tab.appendChild(document.createTextNode("\u00A0\u00A0"));
+    tab.appendChild(closeButton);
+
     // Insert the tab before the add button
     tabList.insertBefore(tab, tabList.lastElementChild);
 
@@ -164,6 +190,47 @@ function addNewTab(tabTitle) {
         // After the tab is added we want to select it
         tab.click();
     }
+}
+
+// When a tab is closed we want to remove it and delete the mission from storage
+function closeTab(event) {
+
+    // Don't let this bubble up to the tab select click handler
+    event.stopPropagation();
+
+    // Confirm if the user wants to close the mission
+    const confirmation = confirm("Are you sure you want to close this mission? Please be sure to save your work.");
+
+    if (confirmation) {
+        const tabId = parseInt(event.target.id.split("close")[1]);
+        
+        // Delete the mission from storage
+        deleteMissionFromStorage(tabId);
+
+        // Remove all tabs    
+        for (let i = 0; i <= storedMissions.length; i++) {
+            const tab = document.getElementById("tab" + i);
+            tab.parentElement.removeChild(tab);
+        }
+
+        // Set the new active tab id
+        activeTabIndex = 0;
+
+        // Reload the tabs
+        buildTabsFromStoredMissions();
+        
+        // Highlight first tab
+        highlightActiveTab();
+
+        // Clear the workspace
+        Blockly.getMainWorkspace().clear();
+
+        // Load first tab mission
+        Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(storedMissions[activeTabIndex].xml), Blockly.getMainWorkspace());
+        
+    }
+    
+
 }
 
 // Initialize the tabs

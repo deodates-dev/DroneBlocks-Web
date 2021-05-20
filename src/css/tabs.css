@@ -27,3 +27,9 @@
     margin-bottom: -1px;
     padding: 0.5rem 0.75rem;
 }
+
+.close-tab {
+    font-weight: bold;
+    font-size: 10px;
+    color: #4e4d4d;
+}
