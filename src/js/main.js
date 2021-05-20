@@ -60,6 +60,12 @@ const bind = () => {
         localStorage.removeItem('mission');
         $("#missionTitle").text('Untitled Mission');
         Blockly.getMainWorkspace().clear();
+
+        // For tabbed canvas
+        if (localStorage.getItem("storedMissions")) {
+            document.getElementById("missionTitle").textContent = "";
+            addNewTab(null);
+        }
     });
 
     $("#previewMission").click(() => {
