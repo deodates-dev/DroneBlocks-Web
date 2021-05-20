@@ -139,6 +139,12 @@ const saveMission = (workspace) => {
 
             if($("#title").val()){
                 $("#missionTitle").text($("#title").val());
+
+                // For tabbed canvas (chrome_app and simulator) we want to display the mission title in the tab and not next to the hamburger
+                if (localStorage.getItem("storedMissions")) {
+                    document.getElementById("missionTitle").textContent = "";
+                    document.getElementById("tab" + activeTabIndex).textContent = $("#title").val();
+                }
             }
         
             Materialize.toast(`Your mission has been ${missionId === _missionId ? 'updated' : 'created'} and saved`, 3000);
