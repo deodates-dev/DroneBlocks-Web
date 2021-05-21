@@ -1,5 +1,4 @@
 .tab-list {
-    border-bottom: 1px solid #ccc;
     padding-left: 0;
     margin: 0;
     cursor: pointer;
@@ -10,21 +9,21 @@
 .tab-list-item {
     display: inline-block;
     list-style: none;
-    margin-bottom: -1px;
     padding: 0.5rem 0.75rem;
 }
 
 .tab-list-active {
-    background-color: white;
-    border: solid #666;
-    border-width: 1px 1px 0 1px;
+    background-color: rgb(199, 199, 199);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border: 1px solid #c0c0c0;
 }
 
 #add-new-tab {
+    font-size: 16px;
+    font-weight: bold;
     display: inline-block;
-    background-color: aqua;
     list-style: none;
-    margin-bottom: -1px;
     padding: 0.5rem 0.75rem;
 }
 
