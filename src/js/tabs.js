@@ -21,6 +21,7 @@ function loadStoredMissions() {
 
 // Update the mission in storage 
 function updateMissionInStorage(index) {
+    storedMissions[index].title = document.getElementById("tab" + index).firstChild.textContent;
     storedMissions[index].xml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace()));
     localStorage.setItem("storedMissions", JSON.stringify(storedMissions));
 }
@@ -114,7 +115,6 @@ function selectTab(event) {
     const workspace = Blockly.getMainWorkspace();
 
     // Store the previous tab's workspace XML in localStorage
-    const previousTab = document.getElementById("tab" + activeTabIndex);
     const previousTabIndex = activeTabIndex;
     updateMissionInStorage(previousTabIndex);
     
@@ -139,9 +139,9 @@ function selectTab(event) {
 
 // Create a new tab when clicked
 function addNewTab(tabTitle) {
-
+    
     // Get the tab list
-    const tabList = document.getElementById("missionTabs");
+    const tabList = document.getElementById("mission-tabs");
 
     // Create the tab with className and text content
     const tab = document.createElement("li");
@@ -150,7 +150,7 @@ function addNewTab(tabTitle) {
     tab.className = "tab-list-item";
 
     // Assign the id - this is for highlighting the tab on selection
-    tab.id = "tab" + (tabList.childElementCount-1);
+    tab.id = "tab" + tabList.childElementCount;
 
     // Create the tab label
     let label;
@@ -169,7 +169,7 @@ function addNewTab(tabTitle) {
     // Create the close button
     let closeButton = document.createElement("span");
     closeButton.className = "close-tab";
-    closeButton.id = "close" + (tabList.childElementCount-1);
+    closeButton.id = "close" + tabList.childElementCount;
 
     // Add trhe click listener
     closeButton.addEventListener("click", closeTab);
@@ -180,7 +180,10 @@ function addNewTab(tabTitle) {
     tab.appendChild(closeButton);
 
     // Insert the tab before the add button
-    tabList.insertBefore(tab, tabList.lastElementChild);
+    tabList.appendChild(tab);
+
+    // Scroll the tab into view
+    tab.scrollIntoView();
 
     // New untitled tab
     if (tabTitle == null) {
@@ -198,39 +201,48 @@ function closeTab(event) {
     // Don't let this bubble up to the tab select click handler
     event.stopPropagation();
 
-    // Confirm if the user wants to close the mission
-    const confirmation = confirm("Are you sure you want to close this mission? Please be sure to save your work.");
-
-    if (confirmation) {
-        const tabId = parseInt(event.target.id.split("close")[1]);
-        
-        // Delete the mission from storage
-        deleteMissionFromStorage(tabId);
-
-        // Remove all tabs    
-        for (let i = 0; i <= storedMissions.length; i++) {
-            const tab = document.getElementById("tab" + i);
-            tab.parentElement.removeChild(tab);
-        }
-
-        // Set the new active tab id
-        activeTabIndex = 0;
-
-        // Reload the tabs
-        buildTabsFromStoredMissions();
-        
-        // Highlight first tab
-        highlightActiveTab();
-
-        // Clear the workspace
-        Blockly.getMainWorkspace().clear();
-
-        // Load first tab mission
-        Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(storedMissions[activeTabIndex].xml), Blockly.getMainWorkspace());
-        
+    // Don't allow the tab to be deleted if it's the only one in the list
+    if (document.getElementById("mission-tabs").childElementCount == 1) {
+        return;
     }
-    
 
+    // Use the Blockly style confirmation since we'll need this in the Chrome App
+    Blockly.confirm("Are you sure you want to close this mission? Please be sure to save your work.",
+        function(ok) {
+
+            if (ok) {
+
+                // Get the ID of the tab being closed
+                const tabId = parseInt(event.target.id.split("close")[1]);
+        
+                // Delete the mission from storage
+                deleteMissionFromStorage(tabId);
+
+                // Remove all tabs    
+                for (let i = 0; i <= storedMissions.length; i++) {
+                    const tab = document.getElementById("tab" + i);
+                    tab.parentElement.removeChild(tab);
+                }
+
+                // Let's set the previous tab is the active one
+                activeTabIndex--;
+
+                // Reload the tabs
+                buildTabsFromStoredMissions();
+        
+                // Highlight first tab
+                highlightActiveTab();
+
+                // Clear the workspace
+                Blockly.getMainWorkspace().clear();
+
+                // Load mission
+                if(typeof storedMissions[activeTabIndex].xml !== 'undefined') {
+                    Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(storedMissions[activeTabIndex].xml), Blockly.getMainWorkspace());
+                }
+            }
+        }
+    );
 }
 
 // Initialize the tabs

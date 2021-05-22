@@ -142,8 +142,17 @@ const saveMission = (workspace) => {
 
                 // For tabbed canvas (chrome_app and simulator) we want to display the mission title in the tab and not next to the hamburger
                 if (localStorage.getItem("storedMissions")) {
+
+                    // Null out the mission title
                     document.getElementById("missionTitle").textContent = "";
-                    document.getElementById("tab" + activeTabIndex).textContent = $("#title").val();
+
+                    // Update the label and don't mess with the X button
+                    const tab = document.getElementById("tab" + activeTabIndex);
+                    tab.firstChild.textContent = $("#title").val();
+
+                    // So we can update storage with the title of the saved mission
+                    updateMissionInStorage(activeTabIndex);
+
                 }
             }
         
