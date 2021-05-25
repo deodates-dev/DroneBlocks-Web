@@ -183,7 +183,8 @@ function addNewTab(tabTitle) {
     tabList.appendChild(tab);
 
     // Scroll the tab into view
-    tab.scrollIntoView();
+    // This causes problems with the rendering of the page and tabs get cut off
+    //tab.scrollIntoView();
 
     // New untitled tab
     if (tabTitle == null) {
