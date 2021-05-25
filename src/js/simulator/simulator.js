@@ -100,7 +100,7 @@ var worldHalfDepth = worldDepth / 2;
 var data = generateHeight(worldWidth, worldDepth);
 
 scene = new THREE.Scene();
-scene.position.y = scene.position.y - 2000; // Lower original axis
+scene.position.y = scene.position.y - 1000; // Lower original axis
 scene.background = new THREE.Color(0xcccccc);
 var SCREEN_WIDTH = window.innerWidth / 2,
   SCREEN_HEIGHT = window.innerHeight;
