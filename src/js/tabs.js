@@ -225,8 +225,10 @@ function closeTab(event) {
                     tab.parentElement.removeChild(tab);
                 }
 
-                // Let's set the previous tab is the active one
-                activeTabIndex--;
+                // Let's set the previous tab as the active one
+                // Don't decrement the active tab if the first one is currently selected
+                if (activeTabIndex != 0)
+                    activeTabIndex--;
 
                 // Reload the tabs
                 buildTabsFromStoredMissions();
