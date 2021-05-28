@@ -57,15 +57,17 @@ const bind = () => {
     });
 
     $("#newMission").click(() => {
-        localStorage.removeItem('mission');
-        $("#missionTitle").text('Untitled Mission');
-        Blockly.getMainWorkspace().clear();
 
-        // For tabbed canvas
+        // For tabbed canvas do this first. So we clear the workspace AFTER the new tab is added and selected.
         if (localStorage.getItem("storedMissions")) {
             document.getElementById("missionTitle").textContent = "";
             addNewTab(null);
         }
+
+        localStorage.removeItem('mission');
+        $("#missionTitle").text('Untitled Mission');
+        Blockly.getMainWorkspace().clear();
+
     });
 
     $("#previewMission").click(() => {
