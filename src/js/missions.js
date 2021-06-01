@@ -3,9 +3,18 @@ import * as moment from 'moment';
 import * as firebaseModule from './source/firebase';
 
 $(document).ready(() => {
+  // This line exists for the purpose of this code not being executed when minified into main.js
+  // There's got to be a better way...
   if(!location.pathname.match(/missions.html/) && !location.pathname.match(/code_board.html/) && !location.pathname.match(/droneblocks-admin/)){
     return;
   }
+
+  // This changes the HOME link to simulator instead of chrome_app
+  // We do this because by default the home link is hardcoded to chrome and in the simulator case we want to go back to sim
+  if (location.search.match(/simulator/)) {
+    $('#home-button').attr('href', '/simulator.html');
+  }
+
   var randomColors = [
     '#ddf3f5', '#a6dcef', '#f2aaaa', '#e36387',
     '#efee9d', '#d1eaa3', '#dbc6eb', '#abc2e8'
