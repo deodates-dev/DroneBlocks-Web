@@ -398,8 +398,11 @@ $(document).ready(() => {
 
                                 // For tabbed canvas let's open a new tab
                                 // We are just checking for a storage item so that we know this is the tabbed canvas
-                                if (localStorage.getItem("storedMissions") && !tabsInited) {
-                                    openTabFromCloudMission(v.title);
+                                if (localStorage.getItem('storedMissions') && !tabsInited) {
+                                    // Grab the mission ID from storage, which is set when the user opens the mission
+                                    // We need this so we can allow users to switch between tabs and click save to write
+                                    // The corresponding mission to storage. Otherwise things will get out of sync.
+                                    openTabFromCloudMission(v.title, localStorage.getItem('missionId'));
                                     tabsInited = true;
                                 }
                             }, 1000);

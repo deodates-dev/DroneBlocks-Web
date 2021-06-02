@@ -55,7 +55,8 @@ function getActiveTabIndex() {
 }
 
 // When a user opens a mission from Firebase
-function openTabFromCloudMission(missionTitle) {
+// Called from main.js : 402
+function openTabFromCloudMission(missionTitle, missionId) {
     
     // We don't need to display the mission title since it's already in the tab
     document.getElementById("missionTitle").textContent = "";
@@ -70,7 +71,7 @@ function openTabFromCloudMission(missionTitle) {
     addNewTab(missionTitle);
 
     // Add the cloud mission to storage
-    addMissionToStorage( {"title": missionTitle, "xml": Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace()))} )
+    addMissionToStorage( {"title": missionTitle, "missionId": missionId, "xml": Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace()))} )
 
     // Highlight the newly opened tab
     highlightActiveTab();
@@ -117,7 +118,7 @@ function selectTab(event) {
     // Store the previous tab's workspace XML in localStorage
     const previousTabIndex = activeTabIndex;
     updateMissionInStorage(previousTabIndex);
-    
+
     // Make the new tab active
     activeTabIndex = parseInt(event.target.id.split("tab")[1]);
 
@@ -127,6 +128,13 @@ function selectTab(event) {
     // Load the workspace from the tab's stored XML
     if(typeof storedMissions[activeTabIndex].xml !== 'undefined') {
         Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(storedMissions[activeTabIndex].xml), workspace);
+    }
+
+    // If the mission was opened from Firebase we will have saved the missionId in storedMissions
+    // Therefore we need to update the local storage missionId value when switching between tabs
+    // This will keep things in sync when users switch between tabs and try to save them to Firebase
+    if(typeof storedMissions[activeTabIndex].missionId !== 'undefined') {
+        localStorage.setItem('missionId', storedMissions[activeTabIndex].missionId);
     }
 
     // Store the active tab index
