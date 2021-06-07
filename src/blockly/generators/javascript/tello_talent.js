@@ -7,6 +7,14 @@ function hexToRgb(hex) {
   } : null;
 }
 
+Blockly.JavaScript['motors_start'] = function(block) {
+  return 'mission+="|motors_start,' + encodeURIComponent(block.id) + '";';
+};
+
+Blockly.JavaScript['motors_stop'] = function(block) {
+  return 'mission+="|motors_stop,' + encodeURIComponent(block.id) + '";';
+};
+
 Blockly.JavaScript['main_led_color'] = function(block) {
   let hexColor = block.getFieldValue('color');
   let rgbColor = hexToRgb(hexColor);

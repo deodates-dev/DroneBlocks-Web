@@ -1,3 +1,11 @@
+Blockly.Python['motors_start'] = function(block) {
+  return 'startMotors();\n';
+};
+
+Blockly.Python['motors_stop'] = function(block) {
+  return 'stopMotors();\n';
+};
+
 Blockly.Python['main_led_color'] = function(block) {
   var hexColor = block.getFieldValue('color');
   let rgbColor = hexToRgb(hexColor);

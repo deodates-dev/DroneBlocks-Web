@@ -35,7 +35,8 @@
     <script src="./blockly/blocks/tello/flip_backward.js"></script>
     <script src="./blockly/blocks/tello/flip_right.js"></script>
     <script src="./blockly/blocks/tello/flip_left.js"></script>
-    <script src="./blockly/blocks/tello/led_main.js"></script>
+    <script src="./blockly/blocks/tello_talent/led_main.js"></script>
+    <script src="./blockly/blocks/tello_talent/motors.js"></script>
     <script src="./blockly/blocks/tello/loop_with_variable.js"></script>
 
     <link href="./css/tello.css" rel="stylesheet" type="text/css">
@@ -171,6 +172,8 @@
             </shadow>
           </value>
         </block>
+        <block type="motors_start"></block>
+        <block type="motors_stop"></block>
       </category>
       <category name="Navigation">
         <block type="set_speed">
