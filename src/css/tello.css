@@ -241,3 +241,8 @@ i.medium {
   width: 100% !important;
 }
 */
+
+.led-header > .blocklyFlyoutLabelText {
+  font-size: 16px !important;
+  font-weight: bolder !important;
+}

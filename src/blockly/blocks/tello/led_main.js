@@ -55,7 +55,7 @@ Blockly.Blocks['main_led_color'] = {
     this.jsonInit(
       {
         "type": "main_led_color",
-        "message0": "LED color %1",
+        "message0": "Color %1",
         "args0": [
           {
             "type": "field_colour",
@@ -81,7 +81,7 @@ Blockly.Blocks['main_led_color_rgb'] = {
   init: function() {
     this.jsonInit(
     {
-        "message0": "LED color with red %1 green %2 blue %3",
+        "message0": "Color with red %1 green %2 blue %3",
         "args0": [
           {
             "type": "input_value",
