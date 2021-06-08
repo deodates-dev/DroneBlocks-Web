@@ -101,6 +101,10 @@
         <a data-units="metric" href="#" id="setUnits">Switch to Metric Units</a>
       </li>
       <li class="divider" id="d4"></li>
+      <li>
+        <a href="javascript:$('#selectDroneModal').openModal();">Select Drone</a>
+      </li>
+      <li class="divider" id="d5"></li>
       <li class="center-align" id="logout">
         <span class="waves-effect waves-light btn z-depth-0 light-blue">Logout</span>
       </li>
@@ -157,6 +161,18 @@
       <div class="modal-footer">
         <a class=" modal-action waves-effect waves-light btn z-depth-0" href="#!" id="connectButton">Connect</a>
         <a class=" modal-action modal-close waves-effect waves-light btn-flat" href="#!">Cancel</a>
+      </div>
+    </div>
+
+    <!-- Modal for selecting drone canvas -->
+    <div class="modal" id="selectDroneModal" style="width: 600px !important; height: 400px !important">
+      <div class="modal-content">
+        <h4>Select Your Drone Type</h4>
+        <br/>
+        <p>Before changing drones <strong></strong>please make sure you are connected to the internet</strong>. Selecting Tello Talent will give you access to additional blocks for LED control.</p>
+        <a href="tello.html"><img src="images/tello.jpg" width="250" /></a>
+        <span>&nbsp;</span>
+        <a href="tello_talent.html"><img src="images/tello-talent.jpg" width="250" /></a>
       </div>
     </div>
 
