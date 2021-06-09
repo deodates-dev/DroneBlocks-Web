@@ -321,6 +321,7 @@
       <category name="LED">
         <label text="Main LED" web-class="led-header"></label>
         <block type="main_led_color"></block>
+        
         <block type="main_led_color_rgb">
           <value name="red">
             <shadow type="math_number">
@@ -329,12 +330,25 @@
           </value>
           <value name="green">
             <shadow type="math_number">
-              <field name="NUM">255</field>
+              <field name="NUM">0</field>
             </shadow>
           </value>
           <value name="blue">
             <shadow type="math_number">
-              <field name="NUM">255</field>
+              <field name="NUM">0</field>
+            </shadow>
+          </value>
+        </block>
+
+        <block type="main_led_pulse">
+          <value name="color">
+            <shadow type="colour_picker">
+              <field name="COLOUR">#00ff00</field>
+            </shadow>
+          </value>
+          <value name="frequency">
+            <shadow type="math_number">
+              <field name="NUM">1</field>
             </shadow>
           </value>
         </block>

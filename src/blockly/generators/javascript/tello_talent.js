@@ -1,5 +1,6 @@
 function hexToRgb(hex) {
-  let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  let result = hex.replace(/'/g,''); // Remove single quotes, in value input cases Blockly will wrap in single quotes
+  result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(result);
   return result ? {
     r: parseInt(result[1], 16),
     g: parseInt(result[2], 16),
@@ -55,4 +56,26 @@ Blockly.JavaScript['main_led_color_rgb'] = function(block) {
   blockString += '";';
 
   return blockString;
+};
+
+Blockly.JavaScript['main_led_pulse'] = function(block) {
+
+  let hexColor = Blockly.JavaScript.valueToCode(block, 'color', Blockly.JavaScript.ORDER_NONE);
+  let rgbColor = hexToRgb(hexColor);
+  let frequency = Blockly.JavaScript.valueToCode(block, 'frequency', Blockly.JavaScript.ORDER_NONE);
+  let blockString = 'mission+="|main_led_pulse,';
+
+  blockString += rgbColor.r + ',' + rgbColor.g + ',' + rgbColor.b;
+
+  if(isNaN(parseInt(frequency))) {
+    blockString += '" + eval(' + frequency + ') + "';
+  } else {
+    blockString += ',' + frequency;
+  }
+
+  blockString += "," + encodeURIComponent(block.id);
+  blockString += '";';
+
+  return blockString;
+  
 };

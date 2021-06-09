@@ -1,61 +1,9 @@
-Blockly.Blocks['led_pulse'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("Pulse")
-        .appendField(new Blockly.FieldColour("#ff0000"), "NAME")
-        .appendField("with frequency:")
-        .appendField(new Blockly.FieldNumber(0, 0.1, 100), "NAME");
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(230);
-    this.setTooltip("");
-    this.setHelpUrl("");
-  }
-};
-
-Blockly.Blocks['led_pulse_components'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("Pulse")
-        .appendField("R")
-        .appendField(new Blockly.FieldNumber(0, 0, 255), "r")
-        .appendField("G")
-        .appendField(new Blockly.FieldNumber(0, 0, 255), "g")
-        .appendField("B")
-        .appendField(new Blockly.FieldNumber(0, 0, 255), "b")
-        .appendField("with frequency:")
-        .appendField(new Blockly.FieldNumber(0, 0.1, 100), "NAME");
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(230);
-    this.setTooltip("");
-    this.setHelpUrl("");
-  }
-};
-
-Blockly.Blocks['pulse_led_between'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("Pulse between")
-        .appendField(new Blockly.FieldColour("#ff0000"), "color1")
-        .appendField("and")
-        .appendField(new Blockly.FieldColour("#3333ff"), "color2")
-        .appendField("with frequency:")
-        .appendField(new Blockly.FieldNumber(0, 0.1, 100), "frequency");
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(230);
-    this.setTooltip("");
-    this.setHelpUrl("");
-  }
-};
-
 Blockly.Blocks['main_led_color'] = {
   init: function() {
     this.jsonInit(
       {
         "type": "main_led_color",
-        "message0": "Color %1",
+        "message0": "color %1",
         "args0": [
           {
             "type": "field_colour",
@@ -66,7 +14,7 @@ Blockly.Blocks['main_led_color'] = {
         "previousStatement": null,
         "nextStatement": null,
         "colour": 270,
-        "tooltip": "Set the color of the main LED",
+        "tooltip": "Set color of main LED",
         "helpUrl": ""
       }
     );
@@ -74,21 +22,17 @@ Blockly.Blocks['main_led_color'] = {
 }
 
 Blockly.Blocks['main_led_color_rgb'] = {
-  /**
-   * Show block.
-   * @this Blockly.Block
-   */
   init: function() {
     this.jsonInit(
     {
-        "message0": "Color with red %1 green %2 blue %3",
+        "message0": "color with red %1 green %2 blue %3",
         "args0": [
           {
             "type": "input_value",
             "name": "red",
-            "aligh": "RIGHT",
+            "align": "RIGHT",
             "min": 0,
-            "max": 255
+            "max": 255,
           },
           {
             "type": "input_value",
@@ -105,11 +49,40 @@ Blockly.Blocks['main_led_color_rgb'] = {
             "max": 255
           }
         ],
-        "helpUrl": "%{BKY_COLOUR_RGB_HELPURL}",
-        "tooltip": "%{BKY_COLOUR_RGB_TOOLTIP}",
+        "tooltip": "Set color of main LED using RGB values from 0-255",
         "previousStatement": true,
         "nextStatement": true,
         "colour": 270
       });
   }
 };
+
+Blockly.Blocks['main_led_pulse'] = {
+  init: function() {
+    this.jsonInit(
+    {
+        "message0": "pulse with color %1 and frequency %2",
+        "args0": [
+          {
+            "type": "input_value",
+            "name": "color",
+            "align": "RIGHT",
+            "colour": "#ff0000"
+          },
+          {
+            "type": "input_value",
+            "name": "frequency",
+            "align": "RIGHT",
+            "min": 0.1,
+            "max": 2.5
+          }
+        ],
+        "tooltip": "Pulse main LED with a frequency between 0.1 to 2.5 Hz",
+        "previousStatement": true,
+        "nextStatement": true,
+        "colour": 270
+      });
+  }
+};
+
+
