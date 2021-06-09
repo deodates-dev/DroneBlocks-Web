@@ -104,3 +104,30 @@ Blockly.JavaScript['main_led_pulse_colors'] = function(block) {
   return blockString;
   
 };
+
+Blockly.JavaScript['matrix_led_colors'] = function(block) {
+  let color = block.getFieldValue('color');
+  let blockString = 'mission+="|matrix_led_colors,';
+  let output = "";
+
+  for (let i = 1; i <= 64; i++) {
+    let color = block.getFieldValue('l' + i);
+
+    if (color.indexOf('#ff0000') > -1) {
+      output += "r";
+    } else if (color.indexOf('#0000ff') > -1) {
+      output += "b";
+    } else if (color.indexOf('#6d2aff') > -1) {
+      output += "p";
+    } else if (color.indexOf('#000000') > -1) {
+      output += "0";
+    }
+
+  }
+
+  blockString += output;
+  blockString += "," + encodeURIComponent(block.id);
+  blockString += '";';
+
+  return blockString;
+};

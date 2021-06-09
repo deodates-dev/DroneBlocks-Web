@@ -37,3 +37,28 @@ Blockly.Python['main_led_pulse_colors'] = function(block) {
   return "pulseMainLedWithColors(" + rgbColor1.r + ", " + rgbColor1.g + ", " + rgbColor1.b + ", " + rgbColor2.r + ", " + rgbColor2.g + ", " + rgbColor2.b + ", " + frequency + ");\n";
 };
 
+Blockly.Python['matrix_led_colors'] = function(block) {
+  
+  let output = "setMatrixLedColors(";
+
+  for (let i = 1; i <= 64; i++) {
+    let color = block.getFieldValue('l' + i);
+
+    if (color.indexOf('#ff0000') > -1) {
+      output += "'r', ";
+    } else if (color.indexOf('#0000ff') > -1) {
+      output += "'b', ";
+    } else if (color.indexOf('#6d2aff') > -1) {
+      output += "'p', ";
+    } else if (color.indexOf('#000000') > -1) {
+      output += "'0', ";
+    }
+
+  }
+
+  output += ");\n";
+
+  return output;
+
+};
+
