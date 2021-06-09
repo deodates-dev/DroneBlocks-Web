@@ -79,3 +79,28 @@ Blockly.JavaScript['main_led_pulse'] = function(block) {
   return blockString;
   
 };
+
+Blockly.JavaScript['main_led_pulse_colors'] = function(block) {
+
+  let hexColor1 = Blockly.JavaScript.valueToCode(block, 'color1', Blockly.JavaScript.ORDER_NONE);
+  let rgbColor1 = hexToRgb(hexColor1);
+  let hexColor2 = Blockly.JavaScript.valueToCode(block, 'color2', Blockly.JavaScript.ORDER_NONE);
+  let rgbColor2 = hexToRgb(hexColor2);
+  let frequency = Blockly.JavaScript.valueToCode(block, 'frequency', Blockly.JavaScript.ORDER_NONE);
+  let blockString = 'mission+="|main_led_pulse_colors,';
+
+  blockString += rgbColor1.r + ',' + rgbColor1.g + ',' + rgbColor1.b;
+  blockString += ','+ rgbColor2.r + ',' + rgbColor2.g + ',' + rgbColor2.b;
+
+  if(isNaN(parseInt(frequency))) {
+    blockString += '" + eval(' + frequency + ') + "';
+  } else {
+    blockString += ',' + frequency;
+  }
+
+  blockString += "," + encodeURIComponent(block.id);
+  blockString += '";';
+
+  return blockString;
+  
+};

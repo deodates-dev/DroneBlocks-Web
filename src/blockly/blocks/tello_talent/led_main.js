@@ -61,7 +61,7 @@ Blockly.Blocks['main_led_pulse'] = {
   init: function() {
     this.jsonInit(
     {
-        "message0": "pulse with color %1 and frequency %2",
+        "message0": "pulse with color %1 frequency %2",
         "args0": [
           {
             "type": "input_value",
@@ -78,6 +78,38 @@ Blockly.Blocks['main_led_pulse'] = {
           }
         ],
         "tooltip": "Pulse main LED with a frequency between 0.1 to 2.5 Hz",
+        "previousStatement": true,
+        "nextStatement": true,
+        "colour": 270
+      });
+  }
+};
+
+Blockly.Blocks['main_led_pulse_colors'] = {
+  init: function() {
+    this.jsonInit(
+    {
+        "message0": "pulse with color 1 %1 color 2 %2 frequency %3",
+        "args0": [
+          {
+            "type": "input_value",
+            "name": "color1",
+            "align": "RIGHT"
+          },
+          {
+            "type": "input_value",
+            "name": "color2",
+            "align": "RIGHT"
+          },
+          {
+            "type": "input_value",
+            "name": "frequency",
+            "align": "RIGHT",
+            "min": 0.1,
+            "max": 10
+          }
+        ],
+        "tooltip": "Pulse main LED with two colors and a frequency between 0.1 to 10 Hz",
         "previousStatement": true,
         "nextStatement": true,
         "colour": 270
