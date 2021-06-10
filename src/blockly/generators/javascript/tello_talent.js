@@ -112,6 +112,30 @@ Blockly.JavaScript['matrix_clear'] = function(block) {
   return blockString;
 };
 
+Blockly.JavaScript['matrix_scroll_text'] = function(block) {
+  let message = block.getFieldValue('message');
+  let direction = block.getFieldValue('direction');
+  let color = block.getFieldValue('color');
+  let frequency = Blockly.JavaScript.valueToCode(block, 'frequency', Blockly.JavaScript.ORDER_NONE);
+  let blockString = 'mission+="|matrix_scroll_text,' + direction + ',';
+
+  if (color.indexOf('#ff0000') > -1) {
+    blockString += 'r';
+  } else if (color.indexOf('#0000ff') > -1) {
+    blockString += 'b';
+  } else if (color.indexOf('#6d2aff') > -1) {
+    blockString += 'p';
+  }
+
+  blockString += ',' + frequency;
+  blockString += ',' + encodeURIComponent(message);
+  blockString += ',' + encodeURIComponent(block.id);
+  blockString += '";';
+  
+  return blockString;
+
+};
+
 Blockly.JavaScript['matrix_led_colors'] = function(block) {
   let color = block.getFieldValue('color');
   let blockString = 'mission+="|matrix_led_colors,';
