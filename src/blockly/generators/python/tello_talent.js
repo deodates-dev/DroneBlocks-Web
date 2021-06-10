@@ -37,6 +37,23 @@ Blockly.Python['main_led_pulse_colors'] = function(block) {
   return "pulseMainLedWithColors(" + rgbColor1.r + ", " + rgbColor1.g + ", " + rgbColor1.b + ", " + rgbColor2.r + ", " + rgbColor2.g + ", " + rgbColor2.b + ", " + frequency + ");\n";
 };
 
+Blockly.Python['matrix_clear'] = function(block) {
+  
+  return "setMatrixLedColors(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);";
+
+};
+
+Blockly.Python['matrix_scroll_text'] = function(block) {
+  let message = block.getFieldValue('message');
+  let direction = block.getFieldValue('direction');
+  let color = block.getFieldValue('color');
+  let frequency = Blockly.JavaScript.valueToCode(block, 'frequency', Blockly.JavaScript.ORDER_NONE);
+
+  return "scrollMatrixText('" + message + "', '" + direction + "', '" + color + "', " + frequency + ");\n";
+
+};
+
+
 Blockly.Python['matrix_led_colors'] = function(block) {
   
   let output = "setMatrixLedColors(";

@@ -1,3 +1,84 @@
+Blockly.Blocks['matrix_scroll_text'] = {
+	init: function() {
+		this.jsonInit(
+			{
+				"type": "matrix_scroll_text",
+				"message0": "scroll matrix text %1 %2 direction %3 %4 color %5 %6 frequency %7",
+				"args0": [
+					{
+						"type": "field_input",
+						"name": "message",
+						"text": "hello world!"
+					},
+					{
+						"type": "input_dummy"
+					},
+					{
+						"type": "field_dropdown",
+						"name": "direction",
+						"options": [
+							[
+								"left",
+								"l"
+							],
+							[
+								"right",
+								"r"
+							],
+							[
+								"up",
+								"u"
+							],
+							[
+								"down",
+								"d"
+							]
+						]
+					},
+					{
+						"type": "input_dummy",
+						"align": "RIGHT"
+					},
+					{
+						"type": "field_colour",
+						"name": "color",
+						"colour": "#ff0000",
+						"colourOptions": ['#ff0000', '#0000ff', '#6d2aff']
+					},
+					{
+						"type": "input_dummy",
+						"align": "RIGHT"
+					},
+					{
+						"type": "input_value",
+						"name": "frequency",
+						"align": "RIGHT"
+					}
+				],
+				"previousStatement": null,
+				"nextStatement": null,
+				"colour": 230,
+				"tooltip": "Scroll text a given direction with a frequency between 0.1 to 2.5 Hz. Max 70 characters.",
+			}
+		);
+	}
+};
+
+Blockly.Blocks['matrix_clear'] = {
+	init: function() {
+		this.jsonInit(
+			{
+				"type": "matrix_clear",
+				"message0": "clear matrix",
+				"previousStatement": null,
+				"nextStatement": null,
+				"colour": 230,
+				"tooltip": "Turn off all matrix LEDs"
+			}
+		);
+	}
+};
+
 Blockly.Blocks['matrix_led_colors'] = {
 	init: function() {
 		this.jsonInit(
@@ -414,8 +495,8 @@ Blockly.Blocks['matrix_led_colors'] = {
 							"colourOptions": ['#ff0000', '#0000ff', '#6d2aff', '#000000']
 						}
 					],
-					"previousStatement": true,
-					"nextStatement": true,
+					"previousStatement": null,
+					"nextStatement": null,
 					"colour": 230,
 					"tooltip": "Set the matrix LED colors to red, blue, purple or off"
 				}

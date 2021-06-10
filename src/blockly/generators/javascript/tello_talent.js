@@ -105,6 +105,13 @@ Blockly.JavaScript['main_led_pulse_colors'] = function(block) {
   
 };
 
+Blockly.JavaScript['matrix_clear'] = function(block) {
+  let blockString = 'mission+="|matrix_clear,0000000000000000000000000000000000000000000000000000000000000000';
+  blockString += "," + encodeURIComponent(block.id);
+  blockString += '";';
+  return blockString;
+};
+
 Blockly.JavaScript['matrix_led_colors'] = function(block) {
   let color = block.getFieldValue('color');
   let blockString = 'mission+="|matrix_led_colors,';

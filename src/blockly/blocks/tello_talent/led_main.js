@@ -50,8 +50,8 @@ Blockly.Blocks['main_led_color_rgb'] = {
           }
         ],
         "tooltip": "Set color of main LED using RGB values from 0-255",
-        "previousStatement": true,
-        "nextStatement": true,
+        "previousStatement": null,
+        "nextStatement": null,
         "colour": 270
       });
   }
