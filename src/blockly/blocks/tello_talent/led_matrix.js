@@ -1,3 +1,40 @@
+Blockly.Blocks['matrix_single_led'] = {
+	init: function() {
+		this.jsonInit(
+      {
+        "type": "block_type",
+        "message0": "set color %1 row %2 column %3",
+        "args0": [
+          {
+            "type": "field_colour",
+            "name": "NAME",
+            "colour": "#ff0000"
+          },
+          {
+            "type": "field_number",
+            "name": "row",
+            "value": 1,
+            "min": 1,
+            "max": 64
+          },
+          {
+            "type": "field_number",
+            "name": "column",
+            "value": 1,
+            "min": 1,
+            "max": 64
+          }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": 230,
+        "tooltip": "",
+        "helpUrl": ""
+      }
+		);
+	}
+};
+
 Blockly.Blocks['matrix_scroll_text'] = {
 	init: function() {
 		this.jsonInit(
