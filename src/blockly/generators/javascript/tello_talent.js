@@ -8,6 +8,9 @@ function hexToRgb(hex) {
   } : null;
 }
 
+// This variable is used to maintain the state of the matrix LED once we start addressing it
+let matrixLedState = "0000000000000000000000000000000000000000000000000000000000000000";
+
 Blockly.JavaScript['motors_start'] = function(block) {
   return 'mission+="|motors_start,' + encodeURIComponent(block.id) + '";';
 };
@@ -59,13 +62,12 @@ Blockly.JavaScript['main_led_color_rgb'] = function(block) {
 };
 
 Blockly.JavaScript['main_led_pulse'] = function(block) {
-
-  let hexColor = Blockly.JavaScript.valueToCode(block, 'color', Blockly.JavaScript.ORDER_NONE);
+  var hexColor = block.getFieldValue('color');
   let rgbColor = hexToRgb(hexColor);
   let frequency = Blockly.JavaScript.valueToCode(block, 'frequency', Blockly.JavaScript.ORDER_NONE);
   let blockString = 'mission+="|main_led_pulse,';
 
-  blockString += rgbColor.r + ',' + rgbColor.g + ',' + rgbColor.b;
+  blockString += rgbColor.r + ',' + rgbColor.g + ',' + rgbColor.b + ',';
 
   if(isNaN(parseInt(frequency))) {
     blockString += '" + eval(' + frequency + ') + "';
@@ -81,16 +83,15 @@ Blockly.JavaScript['main_led_pulse'] = function(block) {
 };
 
 Blockly.JavaScript['main_led_pulse_colors'] = function(block) {
-
-  let hexColor1 = Blockly.JavaScript.valueToCode(block, 'color1', Blockly.JavaScript.ORDER_NONE);
+  var hexColor1 = block.getFieldValue('color1');
   let rgbColor1 = hexToRgb(hexColor1);
-  let hexColor2 = Blockly.JavaScript.valueToCode(block, 'color2', Blockly.JavaScript.ORDER_NONE);
+  var hexColor2 = block.getFieldValue('color2');
   let rgbColor2 = hexToRgb(hexColor2);
   let frequency = Blockly.JavaScript.valueToCode(block, 'frequency', Blockly.JavaScript.ORDER_NONE);
   let blockString = 'mission+="|main_led_pulse_colors,';
 
   blockString += rgbColor1.r + ',' + rgbColor1.g + ',' + rgbColor1.b;
-  blockString += ','+ rgbColor2.r + ',' + rgbColor2.g + ',' + rgbColor2.b;
+  blockString += ','+ rgbColor2.r + ',' + rgbColor2.g + ',' + rgbColor2.b + ',';
 
   if(isNaN(parseInt(frequency))) {
     blockString += '" + eval(' + frequency + ') + "';
@@ -107,6 +108,44 @@ Blockly.JavaScript['main_led_pulse_colors'] = function(block) {
 
 Blockly.JavaScript['matrix_clear'] = function(block) {
   let blockString = 'mission+="|matrix_clear,0000000000000000000000000000000000000000000000000000000000000000';
+  blockString += "," + encodeURIComponent(block.id);
+  blockString += '";';
+  matrixLedState = "0000000000000000000000000000000000000000000000000000000000000000";
+  return blockString;
+};
+
+Blockly.JavaScript['matrix_single_led'] = function(block) {
+  let color = block.getFieldValue('color');
+  let row = Blockly.JavaScript.valueToCode(block, 'row', Blockly.JavaScript.ORDER_NONE);
+  let column = Blockly.JavaScript.valueToCode(block, 'column', Blockly.JavaScript.ORDER_NONE);
+  let blockString = 'mission+="|matrix_single_led,';
+
+  if (color.indexOf('#ff0000') > -1) {
+    blockString += 'r';
+  } else if (color.indexOf('#0000ff') > -1) {
+    blockString += 'b';
+  } else if (color.indexOf('#6d2aff') > -1) {
+    blockString += 'p';
+  } else if (color.indexOf('#000000') > -1) {
+    blockString += '0';
+  }
+
+  blockString += ',';
+
+  if(isNaN(parseInt(row))) {
+    blockString += '" + eval(' + row + ') + "';
+  } else {
+    blockString += row;
+  }
+
+  blockString += ',';
+
+  if(isNaN(parseInt(column))) {
+    blockString += '" + eval(' + column + ') + "';
+  } else {
+    blockString += column;
+  }
+
   blockString += "," + encodeURIComponent(block.id);
   blockString += '";';
   return blockString;
@@ -155,6 +194,9 @@ Blockly.JavaScript['matrix_led_colors'] = function(block) {
     }
 
   }
+
+  // Set the matrix LED state
+  matrixLedString = output;
 
   blockString += output;
   blockString += "," + encodeURIComponent(block.id);
