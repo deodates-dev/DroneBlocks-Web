@@ -25,28 +25,22 @@ Blockly.Blocks['main_led_color_rgb'] = {
   init: function() {
     this.jsonInit(
     {
-        "message0": "set color with red %1 green %2 blue %3",
+        "message0": "set color with red %1 green %2 blue %3 %4",
         "args0": [
           {
             "type": "input_value",
-            "name": "red",
-            "align": "RIGHT",
-            "min": 0,
-            "max": 255,
+            "name": "red"
           },
           {
             "type": "input_value",
-            "name": "green",
-            "align": "RIGHT",
-            "min": 0,
-            "max": 255
+            "name": "green"
           },
           {
             "type": "input_value",
-            "name": "blue",
-            "align": "RIGHT",
-            "min": 0,
-            "max": 255
+            "name": "blue"
+          },
+          {
+            "type": "input_dummy"
           }
         ],
         "tooltip": "Set color of main LED using RGB values from 0-255",
@@ -61,20 +55,19 @@ Blockly.Blocks['main_led_pulse'] = {
   init: function() {
     this.jsonInit(
     {
-        "message0": "pulse with color %1 frequency %2",
+        "message0": "pulse with color %1 frequency %2 %3",
         "args0": [
           {
-            "type": "input_value",
+            "type": "field_colour",
             "name": "color",
-            "align": "RIGHT",
             "colour": "#ff0000"
           },
           {
             "type": "input_value",
             "name": "frequency",
-            "align": "RIGHT",
-            "min": 0.1,
-            "max": 2.5
+          },
+          {
+            "type": "input_dummy"
           }
         ],
         "tooltip": "Pulse main LED with a frequency between 0.1 to 2.5 Hz",
@@ -89,24 +82,24 @@ Blockly.Blocks['main_led_pulse_colors'] = {
   init: function() {
     this.jsonInit(
     {
-        "message0": "pulse with color 1 %1 color 2 %2 frequency %3",
+        "message0": "pulse with color 1 %1 color 2 %2 frequency %3 %4",
         "args0": [
           {
-            "type": "input_value",
+            "type": "field_colour",
             "name": "color1",
-            "align": "RIGHT"
+            "colour": "#00ff00"
           },
           {
-            "type": "input_value",
+            "type": "field_colour",
             "name": "color2",
-            "align": "RIGHT"
+            "colour": "#0000ff"
           },
           {
             "type": "input_value",
             "name": "frequency",
-            "align": "RIGHT",
-            "min": 0.1,
-            "max": 10
+          },
+          {
+            "type": "input_dummy"
           }
         ],
         "tooltip": "Pulse main LED with two colors and a frequency between 0.1 to 10 Hz",

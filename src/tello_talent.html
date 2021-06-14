@@ -320,7 +320,9 @@
         <block type="flip_right"></block>
       </category>
       <category name="LED">
+        
         <label text="Main LED" web-class="led-header"></label>
+
         <block type="main_led_color"></block>
         
         <block type="main_led_color_rgb">
@@ -342,11 +344,6 @@
         </block>
 
         <block type="main_led_pulse">
-          <value name="color">
-            <shadow type="colour_picker">
-              <field name="COLOUR">#00ff00</field>
-            </shadow>
-          </value>
           <value name="frequency">
             <shadow type="math_number">
               <field name="NUM">0.5</field>
@@ -355,16 +352,6 @@
         </block>
 
         <block type="main_led_pulse_colors">
-          <value name="color1">
-            <shadow type="colour_picker">
-              <field name="COLOUR">#00ff00</field>
-            </shadow>
-          </value>
-          <value name="color2">
-            <shadow type="colour_picker">
-              <field name="COLOUR">#0000ff</field>
-            </shadow>
-          </value>
           <value name="frequency">
             <shadow type="math_number">
               <field name="NUM">0.5</field>
@@ -376,7 +363,18 @@
 
         <block type="matrix_clear"></block>
 
-        <block type="matrix_single_led"></block>
+        <block type="matrix_single_led">
+          <value name="row">
+            <shadow type="math_number">
+              <field name="NUM">1</field>
+            </shadow>
+          </value>
+          <value name="column">
+            <shadow type="math_number">
+              <field name="NUM">1</field>
+            </shadow>
+          </value>
+        </block>
 
         <block type="matrix_scroll_text">
           <value name="color">

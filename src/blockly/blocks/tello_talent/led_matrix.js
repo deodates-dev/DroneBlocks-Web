@@ -3,27 +3,34 @@ Blockly.Blocks['matrix_single_led'] = {
 		this.jsonInit(
       {
         "type": "block_type",
-        "message0": "set color %1 row %2 column %3",
+        "message0": "set color %1 row %2 column %3 %4",
         "args0": [
           {
             "type": "field_colour",
-            "name": "NAME",
-            "colour": "#ff0000"
+            "name": "color",
+			"align": "RIGHT",
+            "colour": "#ff0000",
+			"colourOptions": ['#ff0000', '#0000ff', '#6d2aff', '#000000']
           },
           {
-            "type": "field_number",
+            "type": "input_value",
             "name": "row",
+			"align": "RIGHT",
             "value": 1,
             "min": 1,
             "max": 64
           },
           {
-            "type": "field_number",
+            "type": "input_value",
             "name": "column",
+			"align": "RIGHT",
             "value": 1,
             "min": 1,
             "max": 64
-          }
+          },
+		  {
+			  "type": "input_dummy"
+		  }
         ],
         "previousStatement": null,
         "nextStatement": null,
@@ -40,15 +47,12 @@ Blockly.Blocks['matrix_scroll_text'] = {
 		this.jsonInit(
 			{
 				"type": "matrix_scroll_text",
-				"message0": "scroll matrix text %1 %2 direction %3 %4 color %5 %6 frequency %7",
+				"message0": "scroll text %1 direction %2 color %3 frequency %4 poop",
 				"args0": [
 					{
 						"type": "field_input",
 						"name": "message",
 						"text": "hello world!"
-					},
-					{
-						"type": "input_dummy"
 					},
 					{
 						"type": "field_dropdown",
@@ -73,23 +77,14 @@ Blockly.Blocks['matrix_scroll_text'] = {
 						]
 					},
 					{
-						"type": "input_dummy",
-						"align": "RIGHT"
-					},
-					{
 						"type": "field_colour",
 						"name": "color",
 						"colour": "#ff0000",
 						"colourOptions": ['#ff0000', '#0000ff', '#6d2aff']
 					},
 					{
-						"type": "input_dummy",
-						"align": "RIGHT"
-					},
-					{
 						"type": "input_value",
-						"name": "frequency",
-						"align": "RIGHT"
+						"name": "frequency"
 					}
 				],
 				"previousStatement": null,
