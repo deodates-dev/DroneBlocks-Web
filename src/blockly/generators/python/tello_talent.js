@@ -8,9 +8,7 @@ Blockly.Python['motors_stop'] = function(block) {
 
 Blockly.Python['main_led_color'] = function(block) {
   var hexColor = block.getFieldValue('color');
-  console.log(hexColor);
   let rgbColor = hexToRgb(hexColor);
-  console.log(rgbColor);
   return "setMainLedColor(" + rgbColor.r + " ," + rgbColor.g + " ," + rgbColor.b + ");\n";
 };
 
@@ -22,15 +20,15 @@ Blockly.Python['main_led_color_rgb'] = function(block) {
 };
 
 Blockly.Python['main_led_pulse'] = function(block) {
-  let hexColor = Blockly.Python.valueToCode(block, 'color', Blockly.JavaScript.ORDER_NONE);
+  var hexColor = block.getFieldValue('color');
   let rgbColor = hexToRgb(hexColor);
   let frequency = Blockly.Python.valueToCode(block, 'frequency', Blockly.JavaScript.ORDER_NONE);
   return "pulseMainLed(" + rgbColor.r + ", " + rgbColor.g + ", " + rgbColor.b + ", " + frequency + ");\n";
 };
 
 Blockly.Python['main_led_pulse_colors'] = function(block) {
-  let hexColor1 = Blockly.Python.valueToCode(block, 'color1', Blockly.JavaScript.ORDER_NONE);
-  let hexColor2 = Blockly.Python.valueToCode(block, 'color2', Blockly.JavaScript.ORDER_NONE);
+  var hexColor1 = block.getFieldValue('color1');
+  var hexColor2 = block.getFieldValue('color2');
   let rgbColor1 = hexToRgb(hexColor1);
   let rgbColor2 = hexToRgb(hexColor2);
   let frequency = Blockly.Python.valueToCode(block, 'frequency', Blockly.JavaScript.ORDER_NONE);
@@ -40,6 +38,15 @@ Blockly.Python['main_led_pulse_colors'] = function(block) {
 Blockly.Python['matrix_clear'] = function(block) {
   
   return "setMatrixLedColors(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);";
+
+};
+
+Blockly.Python['matrix_single_led'] = function(block) {
+  let row = Blockly.Python.valueToCode(block, 'row', Blockly.JavaScript.ORDER_NONE);
+  let column = Blockly.Python.valueToCode(block, 'column', Blockly.JavaScript.ORDER_NONE);
+  let color = block.getFieldValue('color');
+
+  return "setMatrixLed('" + color + "', " + row + ", " + column + ");\n";
 
 };
 

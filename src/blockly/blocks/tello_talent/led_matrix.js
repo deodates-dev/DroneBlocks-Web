@@ -47,7 +47,7 @@ Blockly.Blocks['matrix_scroll_text'] = {
 		this.jsonInit(
 			{
 				"type": "matrix_scroll_text",
-				"message0": "scroll text %1 direction %2 color %3 frequency %4 poop",
+				"message0": "scroll text %1 direction %2 color %3 frequency %4 %5",
 				"args0": [
 					{
 						"type": "field_input",
@@ -85,6 +85,9 @@ Blockly.Blocks['matrix_scroll_text'] = {
 					{
 						"type": "input_value",
 						"name": "frequency"
+					},
+					{
+						"type": "input_dummy"
 					}
 				],
 				"previousStatement": null,
