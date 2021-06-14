@@ -1,3 +1,18 @@
+Blockly.Blocks['matrix_clear'] = {
+	init: function() {
+		this.jsonInit(
+			{
+				"type": "matrix_clear",
+				"message0": "clear matrix",
+				"previousStatement": null,
+				"nextStatement": null,
+				"colour": 270,
+				"tooltip": "Turn off all matrix LEDs"
+			}
+		);
+	}
+};
+
 Blockly.Blocks['matrix_single_led'] = {
 	init: function() {
 		this.jsonInit(
@@ -34,9 +49,8 @@ Blockly.Blocks['matrix_single_led'] = {
         ],
         "previousStatement": null,
         "nextStatement": null,
-        "colour": 230,
-        "tooltip": "",
-        "helpUrl": ""
+        "colour": 270,
+        "tooltip": "Set the color of any 1 of 64 LEDs in the matrix",
       }
 		);
 	}
@@ -92,23 +106,8 @@ Blockly.Blocks['matrix_scroll_text'] = {
 				],
 				"previousStatement": null,
 				"nextStatement": null,
-				"colour": 230,
+				"colour": 270,
 				"tooltip": "Scroll text a given direction with a frequency between 0.1 to 2.5 Hz. Max 70 characters.",
-			}
-		);
-	}
-};
-
-Blockly.Blocks['matrix_clear'] = {
-	init: function() {
-		this.jsonInit(
-			{
-				"type": "matrix_clear",
-				"message0": "clear matrix",
-				"previousStatement": null,
-				"nextStatement": null,
-				"colour": 230,
-				"tooltip": "Turn off all matrix LEDs"
 			}
 		);
 	}
@@ -532,7 +531,7 @@ Blockly.Blocks['matrix_led_colors'] = {
 					],
 					"previousStatement": null,
 					"nextStatement": null,
-					"colour": 230,
+					"colour": 270,
 					"tooltip": "Set the matrix LED colors to red, blue, purple or off"
 				}
 		);
