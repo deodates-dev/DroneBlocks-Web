@@ -124,6 +124,8 @@ $(document).ready(() => {
               location.href = '/ios.html';
             } else if (location.pathname.indexOf('android_missions') > -1) {
               location.href = '/android.html';
+            } else if (location.search.indexOf('tello_talent') > -1) {
+              location.href = '/tello_talent.html';
             } else if (location.search.indexOf('chrome_app') > -1 || aircraft === 'Tello') {
               location.href = '/chrome_app.html';
             } else {

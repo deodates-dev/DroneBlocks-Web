@@ -170,7 +170,7 @@ const bind = () => {
         if ($("#login").html().includes('btn-login')) {
             // let successUrl = '/'
             let { pathname, href } = location;
-            if (pathname === '/chrome_app.html' || pathname === '/simulator.html') {
+            if (pathname === '/chrome_app.html' || pathname === '/simulator.html' || pathname === '/tello_talent.html') {
                 document.location.href = `signin.html?successUrl=${encodeURIComponent(href)}`;
             } else {
                 firebase.login();
