@@ -13,9 +13,8 @@ Blockly.Blocks['main_led_color'] = {
         ],
         "previousStatement": null,
         "nextStatement": null,
-        "colour": 270,
-        "tooltip": "Set color of main LED",
-        "helpUrl": ""
+        "colour": "#f988fd",
+        "tooltip": "Set color of main LED"
       }
     );
   }
@@ -46,7 +45,7 @@ Blockly.Blocks['main_led_color_rgb'] = {
         "tooltip": "Set color of main LED using RGB values from 0-255",
         "previousStatement": null,
         "nextStatement": null,
-        "colour": 270
+        "colour": "#f988fd"
       });
   }
 };
@@ -73,7 +72,7 @@ Blockly.Blocks['main_led_pulse'] = {
         "tooltip": "Pulse main LED with a frequency between 0.1 to 2.5 Hz",
         "previousStatement": true,
         "nextStatement": true,
-        "colour": 270
+        "colour": "#f988fd"
       });
   }
 };
@@ -105,7 +104,7 @@ Blockly.Blocks['main_led_pulse_colors'] = {
         "tooltip": "Pulse main LED with two colors and a frequency between 0.1 to 10 Hz",
         "previousStatement": true,
         "nextStatement": true,
-        "colour": 270
+        "colour": "#f988fd"
       });
   }
 };

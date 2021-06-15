@@ -45,17 +45,17 @@ div#blockly-1 {
 
   /* LED */
   div#blockly-4 {
-    background-color: #E76F51 !important;
+    background-color: #f988fd !important;
     padding: 10px !important;
     color: #FFFFFF !important;
   }
   
   div#blockly-4 .blocklyTreeRow:hover {
-    background-color: #B2553E !important;
+    background-color: #c649ca !important;
   }
   
   div#blockly-4 .blocklyTreeSelected {
-    background-color: #B2553E !important;
+    background-color: #c649ca !important;
   }
   
   /* Loops */
