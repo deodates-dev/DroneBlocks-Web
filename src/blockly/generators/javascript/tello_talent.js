@@ -69,7 +69,7 @@ Blockly.JavaScript['main_led_pulse'] = function(block) {
   if(isNaN(parseInt(frequency))) {
     blockString += '" + eval(' + frequency + ') + "';
   } else {
-    blockString += ',' + frequency;
+    blockString += frequency;
   }
 
   blockString += "," + encodeURIComponent(block.id);
@@ -93,7 +93,7 @@ Blockly.JavaScript['main_led_pulse_colors'] = function(block) {
   if(isNaN(parseInt(frequency))) {
     blockString += '" + eval(' + frequency + ') + "';
   } else {
-    blockString += ',' + frequency;
+    blockString += frequency;
   }
 
   blockString += "," + encodeURIComponent(block.id);
