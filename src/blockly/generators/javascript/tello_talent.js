@@ -8,9 +8,6 @@ function hexToRgb(hex) {
   } : null;
 }
 
-// This variable is used to maintain the state of the matrix LED once we start addressing it
-let matrixLedState = "0000000000000000000000000000000000000000000000000000000000000000";
-
 Blockly.JavaScript['motors_start'] = function(block) {
   return 'mission+="|motors_start,' + encodeURIComponent(block.id) + '";';
 };
@@ -110,7 +107,6 @@ Blockly.JavaScript['matrix_clear'] = function(block) {
   let blockString = 'mission+="|matrix_clear,0000000000000000000000000000000000000000000000000000000000000000';
   blockString += "," + encodeURIComponent(block.id);
   blockString += '";';
-  matrixLedState = "0000000000000000000000000000000000000000000000000000000000000000";
   return blockString;
 };
 
@@ -176,7 +172,6 @@ Blockly.JavaScript['matrix_scroll_text'] = function(block) {
 };
 
 Blockly.JavaScript['matrix_led_colors'] = function(block) {
-  let color = block.getFieldValue('color');
   let blockString = 'mission+="|matrix_led_colors,';
   let output = "";
 
