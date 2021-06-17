@@ -13,6 +13,8 @@ $(document).ready(() => {
   // We do this because by default the home link is hardcoded to chrome and in the simulator case we want to go back to sim
   if (location.search.match(/simulator/)) {
     $('#home-button').attr('href', '/simulator.html');
+  } else if (location.search.match(/tello_talent/)) {
+    $('#home-button').attr('href', '/tello_talent.html');
   }
 
   var randomColors = [
