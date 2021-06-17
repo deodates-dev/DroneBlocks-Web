@@ -62,7 +62,7 @@ const bind = () => {
         $("#missionTitle").text('Untitled Mission');
 
         // For tabbed canvas do this first. So we clear the workspace AFTER the new tab is added and selected.
-        if (localStorage.getItem("storedMissions")) {
+        if (localStorage.getItem("storedMissions") && document.location.href.match(/simulator/i)) {
             // We don't want the mission title next to the hamburger since it's displayed in the tabs
             document.getElementById("missionTitle").textContent = "";
             addNewTab(null);
