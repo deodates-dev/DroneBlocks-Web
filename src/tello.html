@@ -31,14 +31,19 @@
   <script src="./blockly/blocks/tello/hover.js"></script>
   <script src="./blockly/blocks/tello/yaw_right.js"></script>
   <script src="./blockly/blocks/tello/yaw_left.js"></script>
+  <script src="./blockly/blocks/tello/photo.js"></script>
+  <script src="./blockly/blocks/tello/photo_interval.js"></script>
   <script src="./blockly/blocks/tello/flip_forward.js"></script>
   <script src="./blockly/blocks/tello/flip_backward.js"></script>
   <script src="./blockly/blocks/tello/flip_right.js"></script>
   <script src="./blockly/blocks/tello/flip_left.js"></script>
   <script src="./blockly/blocks/tello/loop_with_variable.js"></script>
 
-  <link rel="stylesheet" type="text/css" href="./css/tello.css">
-  <link rel="stylesheet" type="text/css" href="./css/tello_categories.css">
+  <!--
+      Using iOS category colors for now as it appears that tello.html is not currently being used and
+      that iOS and Android both send users to tello_metric.html
+  -->
+  <link rel="stylesheet" type="text/css" href="./css/ios.css">
   <link rel="stylesheet" type="text/css" href="./blockly/prettify.css">
   <link rel="stylesheet" href="./css/style.css">
 
@@ -268,6 +273,21 @@
         <value name="angle">
           <shadow type="math_number">
             <field name="NUM">90</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <category name="Camera">
+      <block type="photo"></block>
+      <block type="photo_interval">
+        <value name="photo_count">
+          <shadow type="math_number">
+            <field name="NUM">5</field>
+          </shadow>
+        </value>
+        <value name="interval">
+          <shadow type="math_number">
+            <field name="NUM">5</field>
           </shadow>
         </value>
       </block>
