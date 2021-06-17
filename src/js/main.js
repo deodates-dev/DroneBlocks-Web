@@ -221,6 +221,7 @@ const bind = () => {
             if (document.location.href.match(/chrome_app/i)) {
                 document.location.href = "chrome_app_metric.html";
             } else {
+                // This canvas works for both iOS and Android
                 document.location.href = "tello_metric.html";
             }
         } else if (units == 'standard') {
@@ -340,7 +341,6 @@ $(document).ready(() => {
                 }
             }
         })
-
     }
 
     if (pathname === '/chrome_app.html' || pathname === '/' || pathname === '/tello.html') {
