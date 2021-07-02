@@ -56,7 +56,7 @@
     if(localStorage.getItem('units') != null) {
       var units = localStorage.getItem('units');
       if (units == "metric") {
-        document.location.href = "chrome_app_metric.html" + document.location.search;
+        document.location.href = "tello_metric.html" + document.location.search;
       }
     }
 
@@ -106,7 +106,7 @@
       </li>
       <li class="divider" id="d2"></li>
       <li>
-        <a href="tello_missions.html?chrome_app=1&tello_talent=1" id="myMissions">My Missions</a>
+        <a href="tello_missions.html?tello_talent=1" id="myMissions">My Missions</a>
       </li>
       <li class="divider" id="d3"></li>
       <li>
@@ -185,7 +185,7 @@
         <p>Before changing drones <strong></strong>please make sure you are connected to the internet</strong>. Selecting Tello Talent will give you access to additional blocks for LED control.</p>
         
         <div style="float: left; margin-right: 30px;">
-          <a href="tello.html">
+          <a href="tello_mobile.html">
             <img src="images/tello.jpg" width="250" />
             <div style="text-align: center;">Tello & Tello EDU</div>
           </a>
@@ -466,8 +466,6 @@
         <block type="land"></block>
       </category>
     </xml>
-
-    <script src="./js/chrome_app.js?n=1" type="text/javascript"></script>
-    <script src="./js/dialogs.js" type="text/javascript"></script>
+    <script type="text/javascript" src="./lib/materialize/js/materialize.min.js"></script>
   </body>
 </html>
