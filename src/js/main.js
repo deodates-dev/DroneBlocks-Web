@@ -391,7 +391,7 @@ $(document).ready(() => {
                     firebase.getMission(localStorage.getItem('missionId')).then((v) => {
                         //console.log('entering another mission', v);
                         if (v) {
-                            console.log(v.missionXML);
+                            //console.log(v.missionXML);
                             $("#missionTitle").text(v.title);
 
                             setTimeout(() => {
