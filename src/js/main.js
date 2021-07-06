@@ -343,23 +343,25 @@ $(document).ready(() => {
         })
     }
 
-    if (pathname === '/chrome_app.html' || pathname === '/' || pathname === '/tello.html') {
-        if (aircraft === 'DJI') {
-            if (pathname !== '/') {
-                location.href = '/' + search;
-            }
-        } else {
-            if (helpers.getMobileOS() !== 'unknown') {
-                if (pathname !== '/tello.html') {
-                    location.href = '/tello.html' + search;
-                }
-            } else {
-                if (pathname !== '/chrome_app.html') {
-                    location.href = '/chrome_app.html' + search;
-                }
-            }
-        }
-    }
+    // Removed 6/30/2021 when adding tello talent canvas for ios/android
+    
+    // if (pathname === '/chrome_app.html' || pathname === '/' || pathname === '/tello.html') {
+    //     if (aircraft === 'DJI') {
+    //         if (pathname !== '/') {
+    //             location.href = '/' + search;
+    //         }
+    //     } else {
+    //         if (helpers.getMobileOS() !== 'unknown') {
+    //             if (pathname !== '/tello.html') {
+    //                 location.href = '/tello.html' + search;
+    //             }
+    //         } else {
+    //             if (pathname !== '/chrome_app.html') {
+    //                 location.href = '/chrome_app.html' + search;
+    //             }
+    //         }
+    //     }
+    // }
 
 
     if (window.Blockly) {
@@ -389,7 +391,7 @@ $(document).ready(() => {
                     firebase.getMission(localStorage.getItem('missionId')).then((v) => {
                         //console.log('entering another mission', v);
                         if (v) {
-                            console.log(v.missionXML);
+                            //console.log(v.missionXML);
                             $("#missionTitle").text(v.title);
 
                             setTimeout(() => {

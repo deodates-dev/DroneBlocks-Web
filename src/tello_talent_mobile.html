@@ -11,7 +11,9 @@
     <script src="./blockly/python_compressed.js"></script>
     <script src="./blockly/run_prettify.js"></script>
     <script src="./blockly/generators/javascript/tello.js"></script>
+    <script src="./blockly/generators/javascript/tello_talent.js"></script>
     <script src="./blockly/generators/python/tello.js"></script>
+    <script src="./blockly/generators/python/tello_talent.js"></script>
     <script src="./blockly/msg/js/en.js"></script>
     <script src="./blockly/blocks/tello/takeoff.js"></script>
     <script src="./blockly/blocks/tello/takeoff_after.js"></script>
@@ -29,14 +31,19 @@
     <script src="./blockly/blocks/tello/hover.js"></script>
     <script src="./blockly/blocks/tello/yaw_right.js"></script>
     <script src="./blockly/blocks/tello/yaw_left.js"></script>
+    <script src="./blockly/blocks/tello/photo.js"></script>
+    <script src="./blockly/blocks/tello/photo_interval.js"></script>
     <script src="./blockly/blocks/tello/flip_forward.js"></script>
     <script src="./blockly/blocks/tello/flip_backward.js"></script>
     <script src="./blockly/blocks/tello/flip_right.js"></script>
     <script src="./blockly/blocks/tello/flip_left.js"></script>
+    <script src="./blockly/blocks/tello_talent/led_main.js"></script>
+    <script src="./blockly/blocks/tello_talent/led_matrix.js"></script>
+    <script src="./blockly/blocks/tello_talent/motors.js"></script>
     <script src="./blockly/blocks/tello/loop_with_variable.js"></script>
 
     <link href="./css/tello.css" rel="stylesheet" type="text/css">
-    <link href="./css/tello_chrome_categories.css" rel="stylesheet" type="text/css">
+    <link href="./css/tello_talent_mobile_categories.css" rel="stylesheet" type="text/css">
     <link href="./blockly/prettify.css" rel="stylesheet" type="text/css">
     <link href="./css/style.css" rel="stylesheet">
 
@@ -51,8 +58,18 @@
     if(localStorage.getItem('units') != null) {
       var units = localStorage.getItem('units');
       if (units == "metric") {
-        document.location.href = "chrome_app_metric.html" + document.location.search;
+        document.location.href = "tello_metric.html" + document.location.search;
       }
+    }
+
+    // Block highlighting for iOS
+    function highlightBlockFromiOS(id) {
+      Blockly.getMainWorkspace().highlightBlock(decodeURIComponent(id))
+    }
+
+    // Block highlighting for Android
+    function highlightBlockFromAndroid(id) {
+      Blockly.getMainWorkspace().highlightBlock(decodeURIComponent(id))
     }
   </script>
     <script src="./lib/firebase/firebase.js"></script>
@@ -91,7 +108,7 @@
       </li>
       <li class="divider" id="d2"></li>
       <li>
-        <a href="tello_missions.html?chrome_app=1" id="myMissions">My Missions</a>
+        <a href="tello_missions.html?referrer=tello_talent_mobile" id="myMissions">My Missions</a>
       </li>
       <li class="divider" id="d3"></li>
       <li>
@@ -170,13 +187,13 @@
         <p>Before changing drones <strong></strong>please make sure you are connected to the internet</strong>. Selecting Tello Talent will give you access to additional blocks for LED control.</p>
         
         <div style="float: left; margin-right: 30px;">
-          <a href="chrome_app.html">
+          <a href="tello_mobile.html">
             <img src="images/tello.jpg" width="250" />
             <div style="text-align: center;">Tello & Tello EDU</div>
           </a>
         </div>
         <div>
-          <a href="tello_talent.html">
+          <a href="tello_talent_mobile.html">
             <img src="images/tello-talent.jpg" width="250" />
             <div style="text-align: center;">Tello Talent</div>
           </a>
@@ -196,6 +213,8 @@
             </shadow>
           </value>
         </block>
+        <block type="motors_start"></block>
+        <block type="motors_stop"></block>
       </category>
       <category name="Navigation">
         <block type="set_speed">
@@ -318,11 +337,99 @@
           </value>
         </block>
       </category>
+      <category name="Camera">
+        <block type="photo"></block>
+        <block type="photo_interval">
+          <value name="photo_count">
+            <shadow type="math_number">
+              <field name="NUM">5</field>
+            </shadow>
+          </value>
+          <value name="interval">
+            <shadow type="math_number">
+              <field name="NUM">5</field>
+            </shadow>
+          </value>
+        </block>
+      </category>
       <category name="Flip">
         <block type="flip_forward"></block>
         <block type="flip_backward"></block>
         <block type="flip_left"></block>
         <block type="flip_right"></block>
+      </category>
+      <category name="LED">
+        
+        <label text="Main LED" web-class="led-header"></label>
+
+        <block type="main_led_color"></block>
+        
+        <block type="main_led_color_rgb">
+          <value name="red">
+            <shadow type="math_number">
+              <field name="NUM">255</field>
+            </shadow>
+          </value>
+          <value name="green">
+            <shadow type="math_number">
+              <field name="NUM">0</field>
+            </shadow>
+          </value>
+          <value name="blue">
+            <shadow type="math_number">
+              <field name="NUM">0</field>
+            </shadow>
+          </value>
+        </block>
+
+        <block type="main_led_pulse">
+          <value name="frequency">
+            <shadow type="math_number">
+              <field name="NUM">0.5</field>
+            </shadow>
+          </value>
+        </block>
+
+        <block type="main_led_pulse_colors">
+          <value name="frequency">
+            <shadow type="math_number">
+              <field name="NUM">0.5</field>
+            </shadow>
+          </value>
+        </block>
+
+        <label text="Matrix LEDs" web-class="led-header"></label>
+
+        <block type="matrix_clear"></block>
+
+        <block type="matrix_single_led">
+          <value name="row">
+            <shadow type="math_number">
+              <field name="NUM">1</field>
+            </shadow>
+          </value>
+          <value name="column">
+            <shadow type="math_number">
+              <field name="NUM">1</field>
+            </shadow>
+          </value>
+        </block>
+
+        <block type="matrix_scroll_text">
+          <value name="color">
+            <shadow type="colour_picker">
+              <field name="COLOUR">#ff0000</field>
+            </shadow>
+          </value>
+          <value name="frequency">
+            <shadow type="math_number">
+              <field name="NUM">0.5</field>
+            </shadow>
+          </value>
+        </block>
+        
+        <block type="matrix_led_colors"></block>
+
       </category>
       <category name="Loops">
         <block type="loop">
@@ -361,8 +468,6 @@
         <block type="land"></block>
       </category>
     </xml>
-
-    <script src="./js/chrome_app.js?n=1" type="text/javascript"></script>
-    <script src="./js/dialogs.js" type="text/javascript"></script>
+    <script type="text/javascript" src="./lib/materialize/js/materialize.min.js"></script>
   </body>
 </html>

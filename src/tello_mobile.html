@@ -39,13 +39,10 @@
   <script src="./blockly/blocks/tello/flip_left.js"></script>
   <script src="./blockly/blocks/tello/loop_with_variable.js"></script>
 
-  <!--
-      Using iOS category colors for now as it appears that tello.html is not currently being used and
-      that iOS and Android both send users to tello_metric.html
-  -->
-  <link rel="stylesheet" type="text/css" href="./css/ios.css">
-  <link rel="stylesheet" type="text/css" href="./blockly/prettify.css">
-  <link rel="stylesheet" href="./css/style.css">
+  <link href="./css/tello.css" rel="stylesheet" type="text/css">
+  <link href="./css/tello_mobile_categories.css" rel="stylesheet" type="text/css">
+  <link href="./blockly/prettify.css" rel="stylesheet" type="text/css">
+  <link href="./css/style.css" rel="stylesheet">
 
   <!-- Material -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -53,21 +50,6 @@
 
   <script>
     var aircraft = "Tello";
-    // Initialize Firebase
-    // var config = {
-    //   apiKey: "AIzaSyBcbAt69BGUjPiOucQbkcNNbcdaSmE-G0o",
-    //   authDomain: "fiery-inferno-4972.firebaseapp.com",
-    //   databaseURL: "https://fiery-inferno-4972.firebaseio.com",
-    //   storageBucket: "",
-    // };
-    // var config = {
-    //   apiKey: "AIzaSyAGgqla_TWV4wVgaQ87HG3VDT0igLA8KhU",
-    //   authDomain: "droneblocks-staging.firebaseapp.com",
-    //   databaseURL: "https://droneblocks-staging.firebaseio.com",
-    //   projectId: "droneblocks-staging",
-    //   storageBucket: "droneblocks-staging.appspot.com",
-    // };
-    // firebase.initializeApp(config);
 
     // For Tello metric/standard units
     if(localStorage.getItem('units') != null) {
@@ -75,6 +57,16 @@
       if (units == "metric") {
         document.location.href = "tello_metric.html" + document.location.search;
       }
+    }
+
+    // Block highlighting for iOS
+    function highlightBlockFromiOS(id) {
+      Blockly.getMainWorkspace().highlightBlock(decodeURIComponent(id))
+    }
+
+    // Block highlighting for Android
+    function highlightBlockFromAndroid(id) {
+      Blockly.getMainWorkspace().highlightBlock(decodeURIComponent(id))
     }
   </script>
   <script src="./lib/firebase/firebase.js"></script>
@@ -100,12 +92,16 @@
     <li class="divider" id="d1"></li>
     <li><a href="#" id="saveMissionAs">Save Mission As...</a></li>
     <li class="divider" id="d2"></li>
-    <li><a href="tello_missions.html?referrer=tello" id="myMissions">My Missions</a></li>
+    <li><a href="tello_missions.html?referrer=tello_mobile" id="myMissions">My Missions</a></li>
     <li class="divider" id="d3"></li>
     <li><a href="#" id="setUnits" data-units="metric">Switch to Metric Units</a></li>
     <li class="divider" id="d4"></li>
     <li><a href="#" id="connectTo">DJI Blocks</a></li>
     <li class="divider" id="d5"></li>
+    <li>
+      <a href="javascript:$('#selectDroneModal').openModal();">Select Drone Type</a>
+    </li>
+    <li class="divider" id="d6"></li>
     <li class="center-align" id="logout"><span class="waves-effect waves-light btn z-depth-0 light-blue">Logout</span></li>
   </ul>
 
@@ -141,6 +137,29 @@
   <!-- Code preview -->
   <div id="codeView">
     <pre id="code" class="prettyprint linenums"></pre>
+  </div>
+
+  <!-- Modal for selecting drone canvas -->
+  <div class="modal" id="selectDroneModal" style="width: 600px !important; height: 400px !important">
+    <div class="modal-content">
+    
+      <h4>Select Your Drone Type</h4>
+      <br/>
+      <p>Before changing drones <strong></strong>please make sure you are connected to the internet</strong>. Selecting Tello Talent will give you access to additional blocks for LED control.</p>
+      
+      <div style="float: left; margin-right: 30px;">
+        <a href="tello.html">
+          <img src="images/tello.jpg" width="250" />
+          <div style="text-align: center;">Tello & Tello EDU</div>
+        </a>
+      </div>
+      <div>
+        <a href="tello_talent_mobile.html">
+          <img src="images/tello-talent.jpg" width="250" />
+          <div style="text-align: center;">Tello Talent</div>
+        </a>
+      </div>
+    </div>
   </div>
 
   <div id="blocklyDiv" style="position: absolute"></div>
@@ -335,5 +354,6 @@
       <block type="land"></block>
     </category>
   </xml>
+  <script type="text/javascript" src="./lib/materialize/js/materialize.min.js"></script>
 </body>
 </html>
