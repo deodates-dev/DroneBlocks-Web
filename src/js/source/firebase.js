@@ -140,8 +140,8 @@ const saveMission = (workspace) => {
             if($("#title").val()){
                 $("#missionTitle").text($("#title").val());
 
-                // For tabbed canvas (chrome_app and simulator) we want to display the mission title in the tab and not next to the hamburger
-                if (localStorage.getItem("storedMissions")) {
+                // For tabbed canvas (simulator) we want to display the mission title in the tab and not next to the hamburger
+                if (localStorage.getItem("storedMissions") && document.location.href.match(/simulator/i)) {
 
                     // Null out the mission title
                     document.getElementById("missionTitle").textContent = "";
